@@ -29,9 +29,14 @@ const addBook = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json(errors.array());
   }
-  const newBook = new Book(req.body);
+  try {
+    const newBook = new Book(req.body);
   await newBook.save();
   res.status(201).json(newBook);
+  } catch (error) {
+    return res.status(400).json({ msg: error });
+    
+  }
 };
 
 const updateBook = async (req, res) => {
