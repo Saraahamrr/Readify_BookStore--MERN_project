@@ -1,0 +1,93 @@
+/* تحسين مظهر النافبار */
+.navbar {
+  background-color: #f8f9fa; /* لون الخلفية */
+  padding: 10px 20px;
+ 
+}
+
+
+.navbar-brand img {
+  width: 180px;
+  height: auto;
+}
+
+/* تنسيق الأزرار */
+.custom-btn, .sign-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  text-align: center;
+  margin-left: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-btn:hover, .sign-btn:hover {
+  transform: scale(1.1);
+}
+
+/* تنسيق الروابط داخل النافبار */
+.navbar-nav .nav-link {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.3s ease-in-out;
+
+}
+
+
+.navbar-nav .nav-link:hover {
+  color: rgb(16, 127, 187);
+}
+
+/* ✅✅✅ Media Queries لجعلها أكثر استجابة ✅✅✅ */
+@media (max-width: 992px) {
+  .navbar-nav {
+      text-align: center; /* توسيط العناصر في القائمة */
+  }
+
+  .nav-item {
+      margin-bottom: 10px;
+  }
+
+  /* جعل الأزرار تأخذ عرض الشاشة */
+  .custom-btn, .sign-btn {
+      width: 100%;
+      margin: 5px 0;
+      font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand img {
+      width: 150px; /* تصغير اللوجو */
+  }
+
+  .navbar-toggler {
+      border: none; /* إزالة الحدود */
+  }
+
+  .navbar-toggler:focus {
+      outline: none; /* إزالة الحدود عند التركيز */
+      box-shadow: none;
+  }
+
+  .navbar-nav {
+      background-color: #f8f9fa; /* خلفية للقائمة */
+      padding: 15px;
+      border-radius: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand img {
+      width: 120px; /* تصغير اللوجو أكثر */
+  }
+
+  .navbar-nav .nav-link {
+      font-size: 16px;
+  }
+
+  .custom-btn, .sign-btn {
+      font-size: 16px;
+  }
+}
