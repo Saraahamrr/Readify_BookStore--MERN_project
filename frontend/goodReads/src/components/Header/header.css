@@ -39,7 +39,7 @@
   color: rgb(16, 127, 187);
 }
 
-/* ✅✅✅ Media Queries لجعلها أكثر استجابة ✅✅✅ */
+
 @media (max-width: 992px) {
   .navbar-nav {
       text-align: center; /* توسيط العناصر في القائمة */

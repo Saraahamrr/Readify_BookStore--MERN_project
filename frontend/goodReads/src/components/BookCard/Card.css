@@ -1,0 +1,32 @@
+.card{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.custom-btn{
+    background-color: rgb(16, 127, 187);
+}
+
+
+.custom-btn:hover {
+    color: rgb(124, 174, 201);
+  }
+  
+
+  .like-button {
+    margin-top: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+    margin-left: 5px;
+  }
+  
+  .like-button:hover {
+    background-color: #ffcccc;
+  }
