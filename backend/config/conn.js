@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-import { process } from '../node_modules/ipaddr.js/lib/ipaddr.js.d';
+require("dotenv").config();
+
 const conn = async () => {
     try{
         await mongoose.connect(`${process.env.URI}`)
@@ -9,4 +10,4 @@ const conn = async () => {
         
     }
 };
-conn();
+module.exports = conn;
