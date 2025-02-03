@@ -1,66 +1,107 @@
 const { validationResult } = require("express-validator");
 const Book = require("../models/book");
+const httpStatusText = require("../utils/httpStatusText");
+const asyncWrapper = require("../middleWare/asyncWrapper");
+const appError = require("../utils/appError");
+const getAllBooks = asyncWrapper(async (req, res, next) => {
+  //for pagination
+  const query = req.query;
+  const limit = query.limit || 8;
+  const page = query.page || 1;
+  const skip = (page - 1) * limit;
 
-const getAllBooks = async (req, res) => {
-  try {
-    const books = await Book.find();
-    res.json(books);
-  } catch (error) {
-    res.status(500).json({ msg: "Server error" });
+  const books = await Book.find({}, { __v: false }).limit(limit).skip(skip);
+  res.json({ status: httpStatusText.SUCCESS, books });
+});
+
+const getBook = asyncWrapper(async (req, res, next) => {
+  const book = await Book.find(
+    {
+      id: req.params.bookId,
+    },
+    { __v: false }
+  );
+
+  if (book.length < 1) {
+    const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
+    return next(error);
   }
-};
+  res.json({ status: httpStatusText.SUCCESS, book });
+});
 
-const getBook = async (req, res) => {
-  try {
-    const book = await Book.find({
-      title: new RegExp(req.params.bookTitle, "i"),
-    });
-    if (!book) {
-      return res.status(404).json({ msg: "Book not found" });
-    }
-    res.json(book);
-  } catch (error) {
-    return res.status(400).json({ msg: "Invalid obj id" });
-  }
-};
-
-const addBook = async (req, res) => {
+const addBook = asyncWrapper(async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array());
+    const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
+    return next(error);
   }
-  try {
-    const newBook = new Book(req.body);
+  const newBook = new Book(req.body);
   await newBook.save();
-  res.status(201).json(newBook);
-  } catch (error) {
-    return res.status(400).json({ msg: error });
-    
-  }
-};
+  res
+    .status(201)
+    .json({ status: httpStatusText.SUCCESS, data: { book: newBook } });
+});
 
-const updateBook = async (req, res) => {
-  try {
-    const updatedBook = await Book.updateOne(
-      { title: req.params.bookTitle },
-      { $set: { ...req.body } }
-    );
-    return res.status(200).json({ msg: updatedBook });
-  } catch (error) {
-    return res.status(400).json({ errors: error });
-  }
-};
+const updateBook = asyncWrapper(async (req, res, next) => {
+  const book = await Book.findOne({ id: req.params.bookId });
 
-const deleteBook = async (req, res) => {
-  try {
-    const deletedcount = await Book.deleteOne({
-      title: req.params.bookTitle,
-    });
-    return res.status(200).json({ msg: deletedcount });
-  } catch (error) {
-    return res.status(400).json({ errors: error });
+  if (!book) {
+    const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
+    return next(error);
   }
-};
+  const updatedBook = await Book.updateOne(
+    { id: req.params.bookId },
+    { $set: { ...req.body } }
+  );
+  return res
+    .status(200)
+    .json({ status: httpStatusText.SUCCESS, data: { bookLog: updatedBook } });
+});
+
+const deleteBook = asyncWrapper(async (req, res,next) => {
+  const book = await Book.findOne({ id: req.params.bookId });
+
+  if (!book) {
+      const error = appError.create('Book NOT FOUND!', 404, httpStatusText.FAIL);
+      return next(error);
+  }
+
+  const deletedcount = await Book.deleteOne({
+    id: req.params.bookId,
+  });
+  res.json({ status: httpStatusText.SUCCESS, data: null });
+});
+
+const addRating = asyncWrapper(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
+      return next(error);
+  }
+
+  const { userId, ratingValue } = req.body;
+  const { bookId } = req.params;
+
+  const book = await Book.findById(bookId);
+  if (!book) {
+      const error = appError.create('Book NOT FOUND!', 404, httpStatusText.FAIL);
+      return next(error);
+  }
+
+  // Check if user already rated
+  const existingRating = book.ratings.find(r => r.userId.toString() === userId);
+  if (existingRating) {
+      existingRating.rating = ratingValue; // Update rating
+  } else {
+      book.ratings.push({ userId, rating: ratingValue });
+  }
+
+  // Recalculate average rating
+  book.calculateAverageRating();
+  await book.save();
+
+  res.status(200).json({ status: httpStatusText.SUCCESS, data: { book } });
+});
 
 module.exports = {
   getAllBooks,
@@ -68,4 +109,5 @@ module.exports = {
   addBook,
   updateBook,
   deleteBook,
+  addRating,
 };
