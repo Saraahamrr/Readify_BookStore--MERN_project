@@ -1,10 +1,22 @@
 /* تحسين مظهر النافبار */
-.navbar {
-  background-color: #f8f9fa; /* لون الخلفية */
-  padding: 10px 20px;
- 
+
+* {
+  box-sizing: border-box;
 }
 
+.navbar {
+  background-color: #f8f9fa; 
+  width: 100%;
+  margin: 0;
+  padding: 0;  /* تأكد إن مفيش padding */
+}
+
+
+.container-fluid {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
 .navbar-brand img {
   width: 180px;
