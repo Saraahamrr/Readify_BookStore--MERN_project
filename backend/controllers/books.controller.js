@@ -109,5 +109,6 @@ module.exports = {
   addBook,
   updateBook,
   deleteBook,
+  searchBooks,  
   addRating,
 };

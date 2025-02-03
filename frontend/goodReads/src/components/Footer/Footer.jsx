@@ -1,10 +1,13 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "./Footer.css"
 export default function Footer() {
     return (
         <div>
             
-            <footer className="text-center text-lg-start bg-body-tertiary text-muted">
+            <footer className="bg-dark text-white text-center p-3 w-100">
+
+
                 
                 <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
                    

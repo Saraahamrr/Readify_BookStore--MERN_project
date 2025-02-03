@@ -1,0 +1,68 @@
+/* تحسين تصميم البطاقة */
+.card {
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+/* زر More Details بلون محدد */
+.details-btn {
+  background-color: rgb(16, 127, 187);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
+  width: 100%;
+  margin-bottom: 10px;
+  margin: auto;
+}
+
+.details-btn:hover {
+  background-color: rgb(12, 100, 150);
+  transform: scale(1.05);
+ 
+}
+
+/* تحسين ترتيب الأزرار */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+/* زر الإعجاب والسلة */
+.like-button, .cart-button {
+  border: none;
+  background: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.like-button {
+  color: red;
+}
+
+.cart-button {
+  color: rgb(85, 85, 168);
+}
+
+.like-button:hover, .cart-button:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}

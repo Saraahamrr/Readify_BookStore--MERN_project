@@ -8,7 +8,11 @@ const ratingSchema = new mongoose.Schema({
 
 const bookSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  authors: { type: Array, required: true },
+  authors: [{
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Author',  
+    required: true
+  }],
   description: { type: String, required: true },
   coverImage: { type: String, required: true },
   freePages: { type: Number, default: 10 },

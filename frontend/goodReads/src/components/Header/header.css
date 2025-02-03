@@ -1,10 +1,36 @@
 /* تحسين مظهر النافبار */
-.navbar {
-  background-color: #f8f9fa; /* لون الخلفية */
-  padding: 10px 20px;
- 
+
+* {
+  box-sizing: border-box;
+}
+body, html {
+  height: 100%;
+  margin: 0;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* خلي الصفحة تاخد طول الشاشة بالكامل */
+}
+
+.main-content {
+  flex: 1; /* يخلي المحتوى يتمدد وياخد المساحة الفاضية */
+}
+
+.navbar {
+  background-color: #f8f9fa; 
+  width: 100%;
+  margin: 0;
+  padding: 0;  /* تأكد إن مفيش padding */
+}
+
+
+.container-fluid {
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
 .navbar-brand img {
   width: 180px;
@@ -39,7 +65,7 @@
   color: rgb(16, 127, 187);
 }
 
-/* ✅✅✅ Media Queries لجعلها أكثر استجابة ✅✅✅ */
+
 @media (max-width: 992px) {
   .navbar-nav {
       text-align: center; /* توسيط العناصر في القائمة */
