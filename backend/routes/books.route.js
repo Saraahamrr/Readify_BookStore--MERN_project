@@ -53,4 +53,5 @@ router.route("/:bookTitle")
     .get(bookController.getBook)
     .patch(bookController.updateBook)
     .delete(bookController.deleteBook);
+    router.get("/search", bookController.searchBooks);
 module.exports = router;

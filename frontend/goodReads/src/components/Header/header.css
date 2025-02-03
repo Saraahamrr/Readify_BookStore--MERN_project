@@ -3,6 +3,20 @@
 * {
   box-sizing: border-box;
 }
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* خلي الصفحة تاخد طول الشاشة بالكامل */
+}
+
+.main-content {
+  flex: 1; /* يخلي المحتوى يتمدد وياخد المساحة الفاضية */
+}
 
 .navbar {
   background-color: #f8f9fa; 
