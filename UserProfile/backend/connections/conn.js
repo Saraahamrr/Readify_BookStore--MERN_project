@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-//const mongoose = require('mongoose');
 import dotenv from 'dotenv';
 dotenv.config();
 const conn = async () => {
