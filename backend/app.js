@@ -12,10 +12,9 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.get("/test", (req, res) => {
-    res.json({msg:"test worked"});
-});
 app.use('/api/books',bookRouter);
+app.use ("/api", userRouter);
+app.use ("/api", favouriteRouter);
 app.listen(process.env.port, () => {
     console.log(`Server is running on port ${process.env.port}`);
 });
