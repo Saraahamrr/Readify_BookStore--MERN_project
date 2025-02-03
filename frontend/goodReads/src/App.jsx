@@ -11,6 +11,7 @@ import Cart from './pages/Cart'
 import Profile from './pages/Profile'
 import BookDetails from './pages/BookDetails'
 import NotFound from './pages/NotFound'
+import AddBook from './pages/AddBook'
 function App() {
 
 
@@ -29,6 +30,7 @@ function App() {
      <Route  path='/signup' element={<Signup/>}></Route>
      <Route  path='/cart' element={<Cart/>}></Route>
      <Route  path='/profile' element={<Profile/>}></Route>
+     <Route  path='/add-book' element={<AddBook/>}></Route>
      <Route path="*" element={<NotFound />} />
     </Routes>
 

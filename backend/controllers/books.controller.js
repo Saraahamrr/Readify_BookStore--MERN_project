@@ -29,7 +29,7 @@ const getBook = asyncWrapper(async (req, res, next) => {
   res.json({ status: httpStatusText.SUCCESS, book });
 });
 
-const addBook = asyncWrapper(async (req, res) => {
+const addBook = asyncWrapper(async (req, res,next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = appError.create(errors.array(), 400, httpStatusText.FAIL);

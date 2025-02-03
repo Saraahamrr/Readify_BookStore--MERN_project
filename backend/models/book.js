@@ -25,11 +25,11 @@ const bookSchema = new mongoose.Schema({
 bookSchema.plugin(AutoIncrement, { inc_field: "id", start_seq: 6 });
 
 bookSchema.methods.calculateAverageRating = function () {
-  if (this.ratings.length === 0) {
+  if (this.rates.length === 0) {
     this.averageRating = 0;
   } else {
-    const total = this.ratings.reduce((sum, r) => sum + r.rating, 0);
-    this.averageRating = total / this.ratings.length;
+    const total = this.rates.reduce((sum, r) => sum + r.rates, 0);
+    this.averageRating = total / this.rates.length;
   }
   return this.averageRating;
 };

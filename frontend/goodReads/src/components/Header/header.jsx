@@ -30,8 +30,11 @@ export default function Header() {
                         <li className="nav-item">
                             <Link className="nav-link" to="/profile">Profile</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/add-book">Add Book</Link>
+                        </li>
                         {/* <Link type="button" className="btn btn-primary custom-btn" style={{ backgroundColor: "gray" }} to="/login">login</Link> */}
-                        <Link type="button" className="btn btn-primary sign-btn" style={{ backgroundColor: "rgb(16, 127, 187)" }} to="/signup">sign up</Link>
+                        <Link type="button" className="btn btn-primary sign-btn" style={{ backgroundColor: "rgb(16, 127, 187)" }} to="/signup">sign in</Link>
                     </ul>
                 </div>
             </nav>
