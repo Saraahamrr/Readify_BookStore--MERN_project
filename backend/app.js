@@ -12,7 +12,6 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
-const bookRouter = require('./routes/books.route');
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
 });
