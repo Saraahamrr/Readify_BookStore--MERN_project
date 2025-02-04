@@ -24,7 +24,7 @@ export default function RecentlyAdded() {
             <h4 className='title'>Popular Books</h4>
 
             <div className="row">
-                {Data.length > 0 ? Data.filter(book => book.rating > 6).map((book) => (
+                {Data.length > 0 ? Data.filter(book => book.rating > 3).map((book) => (
                     <Card key={book._id} book={book} /> 
                 )) : <Loader />}
             </div>

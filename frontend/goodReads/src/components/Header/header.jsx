@@ -1,82 +1,60 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../../assets/logo-removebg-preview.png';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/logo-removebg-preview.png";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import "../Header/header.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
-    const [searchQuery, setSearchQuery] = useState(""); // Store the search query
-    const navigate = useNavigate(); // For navigation after search
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
-    // Handle search when the button is clicked
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        if (searchTerm.trim()) {
-          try {
-            const res = await axios.get(`http://localhost:3000/api/books?search=${query}`);
-            setBooks(res.data); // عرض البيانات الخاصة بالبحث
-          } catch (err) {
-            console.error('Error during search:', err);
-          }
-        }
-      };
-      
-    
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?query=${searchTerm}`);
+    } else {
+      navigate("/");
+    }
+  };
 
-    return (
-        <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light w-100">
-                <div className="container-fluid">
-                    <img className="navbar-brand" src={logo} alt="Logo" style={{ width: "180px", height: "80px", marginLeft: "20px" }} />
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
+  return (
+    <nav className="navbar navbar-expand-lg navbar-light bg-light w-100">
+      <div className="container-fluid">
+        <img className="navbar-brand" src={logo} alt="Logo" style={{ width: "180px", height: "80px", marginLeft: "20px" }} />
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav d-flex justify-content-end w-100">
 
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav me-auto">
-                            <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to="/">Home</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/allbooks">Books</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/cart">Cart</Link>
-                            </li>
-                        </ul>
-
-                        {/* Search Bar */}
-                        <form className="d-flex mx-auto search-bar" style={{backgroundColor:"#f8f9fa"}} onSubmit={handleSearch}>
-                            <input 
-                                className="form-control me-2" 
-                                type="search" 
-                                placeholder="Search..." 
-                                aria-label="Search" 
-                                value={searchQuery} 
-                                onChange={(e) => setSearchQuery(e.target.value)} // Update search query value
-                            />
-                            <button 
-                                className="btn btn-primary sign-btn" 
-                                type="submit" 
-                                style={{backgroundColor:"rgb(16, 127, 187)"}}
-                            >
-                                Search
-                            </button>
-                        </form>
-
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">About-us</a>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/profile">Profile</Link>
-                            </li>
-                            <Link type="button" className="btn btn-primary sign-btn" style={{ backgroundColor: "rgb(16, 127, 187)" }} to="/signup">Sign up</Link>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </>
-    );
+            <form className="input-group" onSubmit={handleSearch}>
+              <div className="form-outline" data-mdb-input-init>
+                <input
+                  type="search"
+                  id="form1"
+                  className="form-control"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <label className="form-label" htmlFor="form1">Search</label>
+              </div>
+              <button type="submit" className="btn btn-primary" data-mdb-ripple-init>
+                <i className="fas fa-search"></i>
+              </button>
+            </form>
+            <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/allbooks">Books</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/cart">Cart</Link></li>
+            <li className="nav-item"><a className="nav-link" href="#">About-us</a></li>
+            <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
+            <li className="nav-item"><Link className="btn btn-primary sign-btn" to="/signup">Sign up</Link></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
 }
