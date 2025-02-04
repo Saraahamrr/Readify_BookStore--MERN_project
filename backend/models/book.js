@@ -6,22 +6,30 @@ const ratingSchema = new mongoose.Schema({
   rating: { type: Number, required: true, min: 1, max: 5 },
 });
 
-const bookSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  authors: { type: Array, required: true },
-  description: { type: String, required: true },
-  coverImage: { type: String, required: true },
-  freePages: { type: Number, default: 10 },
-  fullContent: { type: String, required: true },
-  publisher: {type: String, required: true},
-  publishedDate: {type: Date, required:true},
-  categories: { type: Array, required: true },
-  language: {type: String, required: true},
-  rates: [ratingSchema],
-  averageRating: { type: Number, default: 0 },
-   }, {
-  timestamps: true,
-});
+const bookSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    authors: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Author", required: true },
+    ],
+    categories: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Category", required: true },
+    ],
+    description: { type: String, required: true },
+    coverImage: { type: String, required: true },
+    freePages: { type: Number, default: 10 },
+    fullContent: { type: String, required: true },
+    publisher: { type: String, required: true },
+    publishedDate: { type: Date, required: true },
+    language: { type: String, required: true },
+    rates: [ratingSchema],
+    averageRating: { type: Number, default: 0 },
+    price: {type: Number, default: 0 }
+  },
+  {
+    timestamps: true,
+  }
+);
 bookSchema.plugin(AutoIncrement, { inc_field: "id", start_seq: 6 });
 
 bookSchema.methods.calculateAverageRating = function () {

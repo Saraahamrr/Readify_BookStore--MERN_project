@@ -11,7 +11,7 @@ export default function RecentlyAdded() {
         const fetchData = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/books");
-                setData(response.data); 
+                setData(response.data.books); 
             } catch (error) {
                 console.error("Error fetching books:", error);
             }
