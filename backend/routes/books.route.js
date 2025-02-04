@@ -60,6 +60,38 @@ router
   res.status(500).json({msg: "Internal server error"});
 }});
 
+router.delete("/:bookId",authToken ,async (req, res) => {
+  try {
+  const {id} = req.headers;
+  if (!id) {
+    return res.status(400).json({msg: "User ID is required"});
+  }
+  const user = await User.findById(id);
+  if (user.role !== "admin" ){
+    return res.status(401).json({msg: "Unauthorized"});
+  }
+  bookController.deleteBook(req, res);
+} catch (error) {
+console.log(error);
+res.status(500).json({msg: "Internal server error"});
+}});
+
+router.patch("/:bookId",authToken ,async (req, res) => {
+  try {
+  const {id} = req.headers;
+  if (!id) {
+    return res.status(400).json({msg: "User ID is required"});
+  }
+  const user = await User.findById(id);
+  if (user.role !== "admin" ){
+    return res.status(401).json({msg: "Unauthorized"});
+  }
+  bookController.updateBook(req, res);
+} catch (error) {
+console.log(error);
+res.status(500).json({msg: "Internal server error"});
+}});
+
 router
   .route("/:bookId")
   .get(bookController.getBook)
