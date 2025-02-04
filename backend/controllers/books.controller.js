@@ -43,16 +43,14 @@ const addBook = asyncWrapper(async (req, res,next) => {
 });
 
 const updateBook = asyncWrapper(async (req, res, next) => {
-  const book = await Book.findOne({ id: req.params.bookId });
+  const updatedBook = await Book.findOneAndUpdate({ id: req.params.categoryId },
+    req.body,
+    { new: true, runValidators: true });
 
-  if (!book) {
+  if (!updatedBook) {
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
     return next(error);
   }
-  const updatedBook = await Book.updateOne(
-    { id: req.params.bookId },
-    { $set: { ...req.body } }
-  );
   return res
     .status(200)
     .json({ status: httpStatusText.SUCCESS, data: { bookLog: updatedBook } });

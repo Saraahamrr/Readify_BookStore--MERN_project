@@ -34,6 +34,7 @@ router
         .isArray()
         .withMessage("Categories must be an array"),
       body("language").notEmpty().withMessage("Language is required"),
+      body("price").notEmpty().withMessage("Price is required").isFloat({ gt: 0 }).withMessage("Price must be a positive number"),
     ],
     bookController.addBook
   );
