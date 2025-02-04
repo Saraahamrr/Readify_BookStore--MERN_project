@@ -7,7 +7,7 @@ import {BrowserRouter  ,Routes,Route } from "react-router-dom"
 import AllBooks from './pages/AllBooks'
 import Login from './pages/Login'
 import Signup from './pages/SignUp/Signup'
-import Cart from './pages/Cart'
+import Cart from './pages/Cart/Cart'
 import Profile from './pages/Profile'
 import BookDetails from './pages/BookDetails'
 import NotFound from './pages/NotFound'
