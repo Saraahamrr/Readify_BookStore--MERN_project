@@ -2,7 +2,7 @@ const express = require("express");
 const { body } = require("express-validator");
 const bookController = require("../controllers/books.controller.js");
 const router = express.Router();
-console.log("+++++++++++++++++++++++++", bookController);
+//console.log("+++++++++++++++++++++++++", bookController);
 router
   .route("/")
   .get(bookController.getAllBooks)
