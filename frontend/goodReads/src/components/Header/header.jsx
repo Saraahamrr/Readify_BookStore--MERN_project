@@ -30,20 +30,17 @@ export default function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav d-flex justify-content-end w-100">
 
-            <form className="input-group" onSubmit={handleSearch}>
-              <div className="form-outline" data-mdb-input-init>
-                <input
-                  type="search"
-                  id="form1"
-                  className="form-control"
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <label className="form-label" htmlFor="form1">Search</label>
-              </div>
-              <button type="submit" className="btn btn-primary" data-mdb-ripple-init>
-                <i className="fas fa-search"></i>
+            <form className="d-flex" role="search" style={{  backgroundColor:"#f8f9fa" }} onSubmit={handleSearch}>
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search..."
+                aria-label="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm state on input change
+              />
+              <button className="btn btn-warning custom-btn mx-3" type="submit" style={{ marginBottom: '20px' , backgroundColor:"rgb(16, 127, 187)",border:"1px solid rgb(16, 127, 187 " }}>
+                Search
               </button>
             </form>
             <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>

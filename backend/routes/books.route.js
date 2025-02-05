@@ -57,5 +57,5 @@ router.post(
   bookController.addRating
 );
 
-    router.get("/search", bookController.searchBooks);
+  
 module.exports = router;
