@@ -10,6 +10,8 @@ import Signup from './pages/SignUp/Signup'
 import Cart from './pages/Cart/Cart'
 import Profile from './pages/Profile'
 import BookDetails from './pages/BookDetails'
+import SearchResult from './pages/SearchResult'
+import Checkout from './checkout/Checkout'
 import NotFound from './pages/NotFound'
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
      <Route  path='/signup' element={<Signup/>}></Route>
      <Route  path='/cart' element={<Cart/>}></Route>
      <Route  path='/profile' element={<Profile/>}></Route>
+     <Route path="/search/:query" element={<SearchResult />} />
+     <Route path="/checkout" element={<Checkout />} />
      <Route path="*" element={<NotFound />} />
     </Routes>
 

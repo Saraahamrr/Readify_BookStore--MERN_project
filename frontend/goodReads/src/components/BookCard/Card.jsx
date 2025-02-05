@@ -22,11 +22,15 @@ export default function Card({ book }) {
             />
             <div className="card-body">
                 <h5 className="card-title">{book.title}</h5>
+                
+                {/* Loop through authors and display each name */}
                 <p className="card-text">
-                    <strong>Author:</strong> {book.authors?.join(", ") || "Unknown"}
+                    <strong>Authors:</strong> {book.authors?.map(author => author.Name).join(", ") || "Unknown"}
+                </p>
+                <p className="card-text">
+                    <strong>Rating:</strong> {book.rating}
                 </p>
                 
-                {/* زر More Details بلون محدد */}
                 <button 
                     type="button"
                     onClick={() => handleRedirectDetails(book.id)}
@@ -35,13 +39,12 @@ export default function Card({ book }) {
                     More Details
                 </button>
 
-                {/* أزرار الإعجاب والسلة */}
                 <div className="btn-group">
                     <button className="like-button">
                         <FontAwesomeIcon icon={faHeart} /> Like
                     </button>
                     <button className="cart-button">
-                        <FontAwesomeIcon icon={faShoppingCart} style={{fontSize:"20px" , color:"rgb(12, 100, 150)"}} /> 
+                        <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "rgb(12, 100, 150)" }} /> 
                     </button>
                 </div>
             </div>

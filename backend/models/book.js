@@ -1,9 +1,18 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose); // Import mongoose-sequence
+
+const ratingSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  rating: { type: Number, required: true, min: 1, max: 5 },
+});
 
 const bookSchema = new mongoose.Schema({
-  id: { type: String, required: true },
   title: { type: String, required: true },
-  authors: { type: Array, required: true },
+  authors: [{
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Author',  
+    required: true
+  }],
   description: { type: String, required: true },
   coverImage: { type: String, required: true },
   freePages: { type: Number, default: 10 },
@@ -12,8 +21,21 @@ const bookSchema = new mongoose.Schema({
   publishedDate: {type: Date, required:true},
   categories: { type: Array, required: true },
   language: {type: String, required: true},
-}, {
+  rates: [ratingSchema],
+  averageRating: { type: Number, default: 0 },
+   }, {
   timestamps: true,
 });
+bookSchema.plugin(AutoIncrement, { inc_field: "id", start_seq: 6 });
+
+bookSchema.methods.calculateAverageRating = function () {
+  if (this.ratings.length === 0) {
+    this.averageRating = 0;
+  } else {
+    const total = this.ratings.reduce((sum, r) => sum + r.rating, 0);
+    this.averageRating = total / this.ratings.length;
+  }
+  return this.averageRating;
+};
 
 module.exports = mongoose.model("Book", bookSchema);

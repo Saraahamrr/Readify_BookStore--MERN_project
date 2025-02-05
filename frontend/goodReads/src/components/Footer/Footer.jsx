@@ -1,5 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "./Footer.css"
 export default function Footer() {
     return (
         <div>
@@ -37,7 +38,7 @@ export default function Footer() {
                    
                 </section>
 
-                <section className="">
+                <section className="foot">
                     <div className="container text-center text-md-start mt-5">
                         
                         <div className="row mt-3">
