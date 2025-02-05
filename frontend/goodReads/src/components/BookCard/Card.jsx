@@ -39,7 +39,7 @@ export default function Card({ book }) {
 
                     <div className="btn-group">
                         <button className="like-button">
-                            <FontAwesomeIcon icon={faHeart} /> Like
+                            <FontAwesomeIcon icon={faHeart} />
                         </button>
                         <button className="cart-button">
                             <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />

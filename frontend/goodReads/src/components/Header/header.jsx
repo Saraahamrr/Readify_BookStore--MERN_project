@@ -31,7 +31,7 @@ export default function Header() {
           <ul className="navbar-nav d-flex justify-content-end w-100">
 
             <form className="d-flex" role="search" style={{ backgroundColor: "#f8f9fa", justifyContent: "center", position: "relative", width: "100%" }} onSubmit={handleSearch}>
-              <div style={{ position: "relative", width: "50%" }}>
+              <div style={{ position: "relative", width: "60%" }}>
                 <input
                   className="form-control"
                   type="search"
@@ -62,7 +62,7 @@ export default function Header() {
             <li className="nav-item"><Link className="nav-link" to="/cart">Cart</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/add-book">Add book</Link></li>
-            <li className="nav-item"><Link className="btn  sign-btn" to="/signup" style={{ backgroundColor: "#fbb02d", marginRight: "20px" }}>Sign up</Link></li>
+            <li className="nav-item"><Link className="btn  sign-btn" to="/signup" style={{ backgroundColor: "#fbb02d", marginRight: "25px" }}>Sign up</Link></li>
           </ul>
         </div>
       </div>

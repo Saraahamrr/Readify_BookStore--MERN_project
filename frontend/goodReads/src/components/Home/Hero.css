@@ -47,7 +47,7 @@
     margin-top: 20px;
     padding: 12px 24px;
     background-color: #f8f5f2;
-    color: rgb(233, 144, 19);
+    color: rgb(17, 17, 16);
     font-weight: bold;
     border-radius: 15px;
     text-decoration: none;
@@ -74,6 +74,7 @@
   .image img {
     width: 100%;
     height: 100%;
+  
     object-fit: contain; /* Ensures full image fits inside without cropping */
     transition: opacity 0.5s ease-in-out;
     border-radius: 15px;
