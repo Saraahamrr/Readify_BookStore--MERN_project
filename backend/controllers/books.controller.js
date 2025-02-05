@@ -102,20 +102,6 @@ const addRating = asyncWrapper(async (req, res, next) => {
 
   res.status(200).json({ status: httpStatusText.SUCCESS, data: { book } });
 });
-const searchBooks = async (req, res) => {
-  const query = req.query.query;  // أخذ الـ query من الـ URL
-  if (!query) return res.status(400).send('Query is required');
-
-  try {
-    // البحث في قاعدة البيانات باستخدام $text (لو فيه text index موجود)
-    const books = await Book.find({
-      $text: { $search: query }  // لو عندك text index في الـ database
-    });
-    res.json({ results: books });
-  } catch (err) {
-    res.status(500).send('Error fetching books');
-  }
-};
 
 const searchBooks = async (req, res) => {
   const query = req.query.query;  // أخذ الـ query من الـ URL
