@@ -35,9 +35,6 @@ function App() {
      <Route  path='/add-book' element={<AddBook/>}></Route>
      <Route path="/search" element={<SearchResult />} />
 
-
-
-
      <Route path="*" element={<NotFound />} />
     </Routes>
 

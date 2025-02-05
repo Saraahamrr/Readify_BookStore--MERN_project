@@ -34,7 +34,8 @@ export default function SearchPage() {
                   <h5 className="card-title">{book.title}</h5>
                   <p className="card-text">{book.description}</p>
                   <p><strong>Publisher:</strong> {book.publisher}</p>
-                  <p><strong>Categories:</strong> {book.categories.join(", ")}</p>
+                  <p><strong>Categories:</strong> {book.categories?.join(", ") || "No categories available"}</p>
+
                 </div>
               </div>
             </div>

@@ -26,7 +26,7 @@ export default function BookDetails() {
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
         <button className="like-button">
-          <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} /> Like
+          <FontAwesomeIcon icon={faHeart} style={{ color: "red" }} /> 
         </button>
       </div>
     </div>
