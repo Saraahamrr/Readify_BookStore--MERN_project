@@ -10,6 +10,8 @@ export default function AllBooks() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/books");
+        console.log(response.data.books);
+        
         setData(response.data.books);
       } catch (error) {
         console.error("Error fetching books:", error);

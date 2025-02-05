@@ -8,7 +8,7 @@ const Category = require("../models/category");
 const getAllBooks = asyncWrapper(async (req, res, next) => {
   //for pagination
   const query = req.query;
-  const limit = query.limit || 8;
+  const limit = query.limit || 12;
   const page = query.page || 1;
   const skip = (page - 1) * limit;
 
