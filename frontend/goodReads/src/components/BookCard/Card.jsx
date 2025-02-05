@@ -6,17 +6,10 @@ import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Card.css";
 import { Link } from "react-router-dom";
 export default function Card({ book }) {
-    const navigate = useNavigate();
-
-    const handleRedirectDetails = (id) => {
-        navigate(`/BookDetails/${id}`);
-    };
-
-
 
     const posterURL = book.coverImage || "placeholder.jpg";  // التأكد من وجود الصورة
     const bookTitle = book.title || "Unknown Title";
-    const authors = book.authors?.map(author => author.Name).join(", ") || "Unknown";
+    const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
     const rating = book.rating || "Not rated yet";
 
 
@@ -44,26 +37,16 @@ export default function Card({ book }) {
                         More Details
                     </Link>
 
-
-
-
-
                     <div className="btn-group">
                         <button className="like-button">
                             <FontAwesomeIcon icon={faHeart} /> Like
                         </button>
                         <button className="cart-button">
-                            <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "rgb(12, 100, 150)" }} />
+                            <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                         </button>
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
 
         </>
 

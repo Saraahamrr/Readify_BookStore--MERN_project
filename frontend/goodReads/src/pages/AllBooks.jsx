@@ -19,7 +19,7 @@ export default function AllBooks() {
   }, []);
   return (
     <div>
-      <h4 className='title'>All Books</h4>
+      <h4 className='title' style={{marginTop:"20px"}}>All Books</h4>
 
       <div className="row">
         {Data.length > 0 ? Data.map((book) => (

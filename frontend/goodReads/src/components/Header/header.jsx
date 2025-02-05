@@ -30,7 +30,7 @@ export default function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav d-flex justify-content-end w-100">
 
-            <form className="d-flex" role="search" style={{  backgroundColor:"#f8f9fa" }} onSubmit={handleSearch}>
+            <form className="d-flex" role="search" style={{  backgroundColor:"#f8f9fa" ,justifyContent:"center" }} onSubmit={handleSearch}>
               <input
                 className="form-control me-2"
                 type="search"
@@ -39,7 +39,7 @@ export default function Header() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm state on input change
               />
-              <button className="btn btn-warning custom-btn mx-3" type="submit" style={{ marginBottom: '20px' , backgroundColor:"rgb(16, 127, 187)",border:"1px solid rgb(16, 127, 187 " }}>
+              <button className="btn btn-warning custom-btn mx-3" type="submit" style={{ marginBottom: '20px' , backgroundColor:"#fbb02d",border:"1px solid #fbb02d" }}>
                 Search
               </button>
             </form>
@@ -48,7 +48,7 @@ export default function Header() {
             <li className="nav-item"><Link className="nav-link" to="/cart">Cart</Link></li>
             <li className="nav-item"><a className="nav-link" href="#">About-us</a></li>
             <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
-            <li className="nav-item"><Link className="btn btn-primary sign-btn" to="/signup">Sign up</Link></li>
+            <li className="nav-item"><Link className="btn  sign-btn" to="/signup" style={{backgroundColor:"#fbb02d" , marginRight:"20px"}}>Sign up</Link></li>
           </ul>
         </div>
       </div>
