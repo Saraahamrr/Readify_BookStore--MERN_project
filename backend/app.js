@@ -4,26 +4,25 @@ const cors = require('cors');
 require("dotenv").config();
 const httpStatusText = require('./utils/httpStatusText')
 const searchRouter = require("./routes/search")
+const bookRouter = require('./routes/books.route');
+const userRouter = require('./routes/userControl');
+const favouriteRouter = require('./routes/favourites');
 
 const app = express();
 connectDB();
 
 app.use(cors());
 app.use(express.json());
-<<<<<<< HEAD
 app.use('/api/books',bookRouter);
 app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
-=======
 
-const bookRouter = require('./routes/books.route');
 const authorRouter = require("./routes/authors.route");
 const categoryRouter = require("./routes/categories.route");
 
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
 });
-app.use('/api/books',bookRouter);
 app.use("/api/authors", authorRouter);
 app.use("/api/categories", categoryRouter);
 app.use('/api/search',searchRouter);
@@ -42,7 +41,6 @@ app.use((error,req,res,next) => {
         data: null
     })
 });
->>>>>>> b255def94d527184c9b10eb57245992d238f9316
 app.listen(process.env.port, () => {
     console.log(`Server is running on port ${process.env.port}`);
 });

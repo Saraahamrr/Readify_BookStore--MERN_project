@@ -62,7 +62,6 @@ export default function Signup() {
         address: "",
       });
       console.log(formValues);
-      const response = await axios.post("http://localhost:3000/api/sign-up",formValues);
       console.log(response);
       navigate("/sign-in");
     } else {
