@@ -10,7 +10,7 @@ const getAllCategories = asyncWrapper(async (req, res, next) => {
 });
 
 const getCategory = asyncWrapper(async (req, res, next) => {
-  const category = await Category.findOne({ catId: req.params.categoryId }, { __v: false });
+  const category = await Category.findById(req.params.categoryId, { __v: 0 });
 
   if (!category) {
     return next(appError.create("Category NOT FOUND!", 404, httpStatusText.FAIL));
@@ -36,7 +36,7 @@ const addCategory = asyncWrapper(async (req, res, next) => {
 
 const updateCategory = asyncWrapper(async (req, res, next) => {
   const updatedCategory = await Category.findOneAndUpdate(
-    { catId: req.params.categoryId },
+    { _id: req.params.categoryId },
     req.body,
     { new: true, runValidators: true }
   );
@@ -52,13 +52,13 @@ const updateCategory = asyncWrapper(async (req, res, next) => {
 });
 
 const deleteCategory = asyncWrapper(async (req, res, next) => {
-  const category = await Category.findOne({ catId: req.params.categoryId });
+  const category = await Category.findOne({ _id: req.params.categoryId });
 
   if (!category) {
     return next(appError.create("Category NOT FOUND!", 404, httpStatusText.FAIL));
   }
 
-  await Category.deleteOne({ catId: req.params.categoryId });
+  await Category.deleteOne({ _id: req.params.categoryId });
 
   res.json({
     status: httpStatusText.SUCCESS,

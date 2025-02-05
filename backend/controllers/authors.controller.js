@@ -10,7 +10,7 @@ const getAllAuthors = asyncWrapper(async (req, res, next) => {
 });
 
 const getAuthor = asyncWrapper(async (req, res, next) => {
-  const author = await Author.findOne({ authorId: req.params.authorId }, { __v: false });
+  const author = await Author.findById(req.params.authorId, { __v: 0 });
 
   if (!author) {
     return next(appError.create("Author NOT FOUND!", 404, httpStatusText.FAIL));
@@ -36,7 +36,7 @@ const addAuthor = asyncWrapper(async (req, res, next) => {
 
 const updateAuthor = asyncWrapper(async (req, res, next) => {
   const updatedAuthor = await Author.findOneAndUpdate(
-    { authorId: req.params.authorId }, 
+    { _id: req.params.authorId }, 
     req.body, 
     { new: true, runValidators: true }
   );
@@ -52,13 +52,13 @@ const updateAuthor = asyncWrapper(async (req, res, next) => {
 });
 
 const deleteAuthor = asyncWrapper(async (req, res, next) => {
-  const author = await Author.findOne({ authorId: req.params.authorId });
+  const author = await Author.findOne({ _id: req.params.authorId });
 
   if (!author) {
     return next(appError.create("Author NOT FOUND!", 404, httpStatusText.FAIL));
   }
 
-  await Author.deleteOne({ authorId: req.params.authorId });
+  await Author.deleteOne({ _id: req.params.authorId });
 
   res.json({
     status: httpStatusText.SUCCESS,

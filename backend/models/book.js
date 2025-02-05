@@ -36,7 +36,7 @@ bookSchema.methods.calculateAverageRating = function () {
   if (this.rates.length === 0) {
     this.averageRating = 0;
   } else {
-    const total = this.rates.reduce((sum, r) => sum + r.rates, 0);
+    const total = this.rates.reduce((sum, r) => sum + r.rating, 0);
     this.averageRating = total / this.rates.length;
   }
   return this.averageRating;
