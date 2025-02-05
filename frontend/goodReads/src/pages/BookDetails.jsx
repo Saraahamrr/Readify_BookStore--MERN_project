@@ -18,7 +18,7 @@ export default function BookDetails() {
 
       <div className="book-info">
         <h3>{book.title || "Unknown Title"}</h3>
-        <p><strong>Author(s):</strong> {book.authors?.join(", ") || "Unknown"}</p>
+        <p><strong>Author(s):</strong> {book.authors.name?.join(", ") || "Unknown"}</p>
         <p><strong>Description:</strong> {book.description || "No description available."}</p>
         <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
         <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
