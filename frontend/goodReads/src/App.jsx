@@ -12,6 +12,7 @@ import Profile from './pages/Profile'
 import BookDetails from './pages/BookDetails'
 import SearchResult from './pages/SearchResult'
 import NotFound from './pages/NotFound'
+import AddBook from './pages/AddBook'
 function App() {
 
 
@@ -31,6 +32,7 @@ function App() {
      <Route  path='/signup' element={<Signup/>}></Route>
      <Route  path='/cart' element={<Cart/>}></Route>
      <Route  path='/profile' element={<Profile/>}></Route>
+     <Route  path='/add-book' element={<AddBook/>}></Route>
      <Route path="/search" element={<SearchResult />} />
 
 

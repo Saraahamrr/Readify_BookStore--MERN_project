@@ -12,11 +12,15 @@ app.use(cors());
 app.use(express.json());
 
 const bookRouter = require('./routes/books.route');
+const authorRouter = require("./routes/authors.route");
+const categoryRouter = require("./routes/categories.route");
 
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
 });
 app.use('/api/books',bookRouter);
+app.use("/api/authors", authorRouter);
+app.use("/api/categories", categoryRouter);
 app.use('/api/search',searchRouter);
 
 // global middle ware for not found router

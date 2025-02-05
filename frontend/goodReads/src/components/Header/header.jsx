@@ -48,6 +48,7 @@ export default function Header() {
             <li className="nav-item"><Link className="nav-link" to="/cart">Cart</Link></li>
             <li className="nav-item"><a className="nav-link" href="#">About-us</a></li>
             <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/add-book">Add book</Link></li>
             <li className="nav-item"><Link className="btn  sign-btn" to="/signup" style={{backgroundColor:"#fbb02d" , marginRight:"20px"}}>Sign up</Link></li>
           </ul>
         </div>
