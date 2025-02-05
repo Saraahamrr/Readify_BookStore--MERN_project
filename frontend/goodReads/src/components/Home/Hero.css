@@ -1,62 +1,94 @@
 .hero {
-    height: 75vh;
-    background-color: rgb(137, 190, 206);
+    height: 82vh;
+    /* https://images.pexels.com/photos/267586/pexels-photo-267586.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1 */
+    background: url('https://images.pexels.com/photos/267586/pexels-photo-267586.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') center center/cover no-repeat;
+    background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     text-align: center;
     padding: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
-.hero .word,
-.hero .image {
-    width: 50%;
+.hero * {
+    z-index: 10;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 0;
 }
 
 .hero .word {
-    font-size: 50px;
+    font-size: 60px;
     color: antiquewhite;
     font-weight: bold;
-    margin-top: 100px;
     padding: 20px;
+    width: 45%;
+    max-width: 600px;
 }
 
 .hero .para {
-    font-size: 25px;
-    color: rgb(21, 20, 20);
-    margin: 20px auto;
+    font-size: 22px;
+    color: #101010;
+    margin: 15px auto;
     max-width: 80%;
+    font-weight: 700;
 }
 
 .hero .books-btn {
-    padding: 15px 25px;
-    border: 2px solid rgb(16, 127, 187);
+    padding: 12px 22px;
+    border: 2px solid #fbb02d;
     border-radius: 25px;
     text-decoration: none;
-    color: #fff;
+    color: #000;
     font-weight: bold;
-    background-color: rgb(16, 127, 187);
-    font-size: 20px;
-    transition: all 0.4s ease-in-out;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+    background-color: #fbb02d;
+    font-size: 18px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .hero .books-btn:hover {
-    transform: scale(1.1);
-    background-color: rgb(140, 185, 210);
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+    background-color: rgb(243, 224, 105);
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* ✅ ضبط الصور وجعل التغيير سلس */
 .hero .image {
-    max-width: 100%;
-    height: auto;
-    text-align: center;
+    width: 45%;
+    max-width: 500px;
+    height: 500px; /* حجم موحد لكل الصور */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
 }
 
-/* ✅ Media Query للأجهزة اللوحية */
+.hero .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* ✅ تحسين استجابة الأجهزة اللوحية */
 @media (max-width: 1024px) {
     .hero {
         flex-direction: column;
@@ -66,41 +98,18 @@
 
     .hero .word,
     .hero .image {
-        width: 100%;
+        width: 90%;
         text-align: center;
     }
 
     .hero .word {
-        font-size: 40px;
-        margin-top: 50px;
-    }
-
-    .hero .para {
-        font-size: 22px;
-        max-width: 90%;
-    }
-
-    .hero .books-btn {
-        font-size: 18px;
-        padding: 12px 20px;
-    }
-
-    .hero .image {
-        max-width: 70%;
-        margin: 20px auto;
-    }
-}
-
-/* ✅ Media Query للجوالات */
-@media (max-width: 768px) {
-    .hero .word {
-        font-size: 32px;
+        font-size: 38px;
         margin-top: 30px;
     }
 
     .hero .para {
-        font-size: 18px;
-        margin: 15px auto;
+        font-size: 20px;
+        max-width: 90%;
     }
 
     .hero .books-btn {
@@ -109,7 +118,31 @@
     }
 
     .hero .image {
-        max-width: 90%;
+        max-width: 80%;
+        height: auto;
+        margin: 20px auto;
+    }
+}
+
+/* ✅ تحسين استجابة الجوال */
+@media (max-width: 768px) {
+    .hero .word {
+        font-size: 28px;
+        margin-top: 20px;
+    }
+
+    .hero .para {
+        font-size: 16px;
+        margin: 10px auto;
+    }
+
+    .hero .books-btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .hero .image {
+        max-width: 95%;
         height: auto;
     }
 }

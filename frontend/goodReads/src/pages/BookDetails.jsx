@@ -1,35 +1,19 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import "./BookDetails.css"; 
-import "../components/Loader/Loader";
 
 export default function BookDetails() {
-  const [book, setBook] = useState(null); 
-  const { id } = useParams();
+  const location = useLocation();
+  const book = location.state?.book; 
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/books/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        setBook(res.data);
-      })
-      .catch((rej) => console.log("Error fetching data:", rej));
-  }, [id]);
-
-  // لو الكتاب مش متاح بعد أو لسة ما اتحملش، عرض "Loading..."
-  if (!book) return <div>Loading...</div>; // أو استخدم Loader الخاص بك هنا
+  if (!book) return <div>Loading...</div>; 
 
   return (
     <div className="book-details-container">
       <div className="book-image">
-        <img
-          src={book.coverImage || "placeholder.jpg"} // التأكد أن الصورة موجودة
-          alt={book.title || "Unknown Title"} // التأكد من وجود العنوان
-        />
+        <img src={book.coverImage || "placeholder.jpg"} alt={book.title || "Unknown Title"} />
       </div>
 
       <div className="book-info">
