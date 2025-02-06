@@ -12,8 +12,9 @@ import BookDetails from './pages/BookDetails';
 import SearchResult from './pages/SearchResult';
 import NotFound from './pages/NotFound';
 import AddBook from './pages/AddBook';
-import { BooksProvider } from './context/books'; // Import BooksProvider
+import { BooksProvider } from './context/books'; 
 import BookManagement from './pages/BookManagement/BookManagement';
+import UpdateBook from './pages/UpdateBook';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='/cart' element={<Cart />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/add-book' element={<BookManagement />} />
+          <Route path='/update-book/:id' element={<UpdateBook />} />
           <Route path="/search" element={<SearchResult />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
