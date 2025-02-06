@@ -4,50 +4,55 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Card.css";
+import { Link } from "react-router-dom";
+import StarRating from "../StarRate";
 
 export default function Card({ book }) {
-    const navigate = useNavigate();
 
-    const handleRedirectDetails = (id) => {
-        navigate(`/BookDetails/${id}`);
-    };
+    const posterURL = book.coverImage || "placeholder.jpg";  // التأكد من وجود الصورة
+    const bookTitle = book.title || "Unknown Title";
+    const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
+    // const rating = book.averageRating > 0 ? book.averageRating.toFixed(1) : "Not rated yet";
+
+
 
     return (
-        <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
-            <img
-                src={book.coverImage || "placeholder.jpg"}
-                className="card-img-top"
-                alt={book.title}
-                style={{ height: "250px", objectFit: "cover" }}
-            />
-            <div className="card-body">
-                <h5 className="card-title">{book.title}</h5>
-                
-                {/* Loop through authors and display each name */}
-                <p className="card-text">
-                    <strong>Authors:</strong> {book.authors?.map(author => author.Name).join(", ") || "Unknown"}
-                </p>
-                <p className="card-text">
-                    <strong>Rating:</strong> {book.rating}
-                </p>
-                
-                <button 
-                    type="button"
-                    onClick={() => handleRedirectDetails(book.id)}
-                    className="details-btn"
-                >
-                    More Details
-                </button>
 
-                <div className="btn-group">
-                    <button className="like-button">
-                        <FontAwesomeIcon icon={faHeart} /> Like
-                    </button>
-                    <button className="cart-button">
-                        <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "rgb(12, 100, 150)" }} /> 
-                    </button>
+        <>
+
+            <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
+                <img
+                    src={posterURL}
+                    className="card-img-top"
+                    alt={bookTitle}
+                    style={{ height: "250px", objectFit: "cover" }}
+                />
+                <div className="card-body">
+                    <h5 className="card-title">{bookTitle}</h5>
+
+                    <p className="card-text">
+                        <strong>Authors:</strong> {authors}
+                    </p>
+
+                    <p className="card-text">
+                        <strong>Rating:</strong> <StarRating rating={book.averageRating} />
+                    </p>
+                    <Link className="details-btn" to="/BookDetails" state={{ book }}>
+                        More Details
+                    </Link>
+
+                    <div className="btn-group">
+                        <button className="like-button">
+                            <FontAwesomeIcon icon={faHeart} />
+                        </button>
+                        <button className="cart-button">
+                            <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+
+        </>
+
     );
 }

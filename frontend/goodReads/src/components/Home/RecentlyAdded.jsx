@@ -11,7 +11,7 @@ export default function RecentlyAdded() {
         const fetchData = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/books");
-                setData(response.data); 
+                setData(response.data.books); 
             } catch (error) {
                 console.error("Error fetching books:", error);
             }
@@ -24,7 +24,7 @@ export default function RecentlyAdded() {
             <h4 className='title'>Popular Books</h4>
 
             <div className="row">
-                {Data.length > 0 ? Data.filter(book => book.rating > 6).map((book) => (
+                {Data.length > 0 ? Data.filter(book => book.averageRating > 3).map((book) => (
                     <Card key={book._id} book={book} /> 
                 )) : <Loader />}
             </div>

@@ -5,19 +5,19 @@ const {authToken} = require("./userAuth");
 // add book to favourites
 router.put("/add-favourite", authToken, async (req, res) => {
     try {
-        const {bookId,id} = req.headers;
-        if (!bookId) {
+        const {bookid,id} = req.headers;
+        if (!bookid) {
             return res.status(400).json({msg: "BookId is required"});
         };
         if (!id) {
             return res.status(400).json({msg: "UserId is required"});
         };
         const user = await User.findById(id);
-        const bookexist = user.favourites.includes(bookId);
+        const bookexist = user.favourites.includes(bookid);
         if (bookexist) {
             return res.status(400).json({msg: "Book already in favourites"});
         };
-        await User.findByIdAndUpdate(id, {$push: {favourites: bookId}});
+        await User.findByIdAndUpdate(id, {$push: {favourites: bookid}});
         res.status(200).json({msg: "Book added to favourites"});
     } catch (error) {
         console.log(error);
@@ -25,4 +25,49 @@ router.put("/add-favourite", authToken, async (req, res) => {
     }
 });
 
+// remove book to favourites
+router.delete("/remove-favourite", authToken, async (req, res) => {
+    try {
+        const {bookid,id} = req.headers;
+        if (!bookid) {
+            return res.status(400).json({msg: "BookId is required"});
+        };
+        if (!id) {
+            return res.status(400).json({msg: "UserId is required"});
+        };
+        const user = await User.findById(id);
+        const bookexist = user.favourites.includes(bookid);
+        if (!bookexist) {
+            return res.status(400).json({msg: "Book is not in favourites"});
+        }
+        await User.findByIdAndUpdate(id, {$pull: {favourites: bookid}});
+        res.status(200).json({msg: "removed book from favourites"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg: "Internal server error"});
+    }
+});
+
+//get all favourites
+router.get("/get-favourite", authToken, async (req, res) => {
+    try {
+        const {id} = req.headers;
+        if (!id) {
+            return res.status(400).json({msg: "UserId is required"});
+        };
+        const user = await User.findById(id).populate();
+        const favourites = user.favourites;
+        if (!favourites ) {
+            return res.status(400).json({ msg: "No favourite feild exists" });
+        }
+        if (favourites.length === 0) {
+            return res.status(404).json({ msg: "No favourites found" });
+        }
+        res.status(200).json({ data: favourites });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg: "Internal server error"});
+    }
+});
 module.exports = router;

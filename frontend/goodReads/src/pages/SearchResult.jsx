@@ -1,70 +1,51 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation ,Link } from "react-router-dom";
 import axios from "axios";
 
-function SearchResult() {
+export default function SearchPage() {
   const [books, setBooks] = useState([]);
-  const { query } = useParams(); // Extract query parameter from URL
-
+  const location = useLocation();
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const query = searchParams.get("query");
+
     if (query) {
-        console.log("Searching for:", query);  
-        axios
-        axios
-        .get(`http://localhost:3000/api/books/search?query=${query}`)
-        .then((res) => {
-            console.log("API Response:", res.data);
-            setBooks(res.data.results);
+      axios.get(`http://localhost:3000/api/search?query=${query}`)
+        .then(response => {
+          console.log("API Response:", response.data);
+          setBooks(response.data.results || []);
         })
-        .catch((err) => console.log("Error fetching data:", err));
-    
+        .catch(error => console.error("Error fetching books:", error));
     }
-}, [query]);
+  }, [location.search]);
 
-
-
-  // Check if no books were found and display a message
-  if (!books || !books.length) {
-    return <div>No books found for "{query}"</div>;
-  }
 
   return (
-    <div style={{ textAlign: "center", margin: "20px" }}>
-      <h1>Search Results for "{query}"</h1>
-
-      <div className="row row-cols-1 row-cols-md-3 g-4">
-        {books.map((book) => (
-          <div className="col" key={book._id}>
-            <div className="card">
-              <img
-                src={book.coverImage}
-                className="card-img-top"
-                alt={book.title}
-              />
-
-              <div className="card-body">
-                <h5 className="card-title">{book.title}</h5>
-                <p className="card-text">
-                  <strong>Author(s):</strong> {book.authors.join(", ")}
-                </p>
-                <p className="card-text">
-                  <strong>Category:</strong> {book.categories.join(", ")}
-                </p>
-                <p className="card-text">
-                  <strong>Rating:</strong> {book.rate}
-                </p>
-                <p className="card-text">{book.description}</p>
-                <a href={`/books-details/${book._id}`} className="btn btn-warning">
-                  View Details
-                </a>
+    <div className="container mt-4">
+      <h2>Search Results</h2>
+      {books.length > 0 ? (
+        <div className="row">
+          {books.map((book) => (
+            <div key={book._id} className="col-md-4">
+              <div className="card mb-4">
+                <img src={book.coverImage} className="card-img-top" alt={book.title} />
+                <div className="card-body">
+                  <h5 className="card-title">{book.title}</h5>
+                  {/* <p className="card-text">{book.description}</p> */}
+                  <p><strong>Publisher:</strong> {book.publisher}</p>
+                  <p><strong>Categories:</strong> {book.categories?.join(", ") || "No categories available"}</p>
+                  <Link className="details-btn" to="/BookDetails" state={{ book }}>
+                    More Details
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p>No books found.</p>
+      )}
     </div>
   );
 }
-
-export default SearchResult;

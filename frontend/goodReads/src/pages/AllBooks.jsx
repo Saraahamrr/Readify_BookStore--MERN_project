@@ -10,7 +10,7 @@ export default function AllBooks() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/books");
-        setData(response.data);
+        setData(response.data.books);
       } catch (error) {
         console.error("Error fetching books:", error);
       }
@@ -19,7 +19,7 @@ export default function AllBooks() {
   }, []);
   return (
     <div>
-      <h4 className='title'>All Books</h4>
+      <h4 className='title' style={{marginTop:"20px" , fontSize:"40px"}}>All Books</h4>
 
       <div className="row">
         {Data.length > 0 ? Data.map((book) => (
