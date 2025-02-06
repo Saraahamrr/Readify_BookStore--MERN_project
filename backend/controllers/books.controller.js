@@ -12,7 +12,11 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
   const page = query.page || 1;
   const skip = (page - 1) * limit;
 
-  const books = await Book.find({}, { __v: false }).limit(limit).skip(skip);
+  // const books = await Book.find({}, { __v: false }).limit(limit).skip(skip) .populate('category', 'name').populate('author', 'name');;
+
+  const books = await Book.find({}, { __v: false })
+    .populate("categories", "name")
+    .populate("authors", "name");
   res.json({ status: httpStatusText.SUCCESS, books });
 });
 
@@ -81,9 +85,11 @@ const addBook = asyncWrapper(async (req, res, next) => {
 });
 
 const updateBook = asyncWrapper(async (req, res, next) => {
-  const updatedBook = await Book.findOneAndUpdate({ id: req.params.bookId },
+  const updatedBook = await Book.findOneAndUpdate(
+    { id: req.params.bookId },
     req.body,
-    { new: true, runValidators: true });
+    { new: true, runValidators: true }
+  );
 
   if (!updatedBook) {
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
@@ -94,49 +100,76 @@ const updateBook = asyncWrapper(async (req, res, next) => {
     .json({ status: httpStatusText.SUCCESS, data: { bookLog: updatedBook } });
 });
 
-const deleteBook = asyncWrapper(async (req, res,next) => {
+const deleteBook = asyncWrapper(async (req, res, next) => {
   const book = await Book.findOne({ id: req.params.bookId });
 
   if (!book) {
-      const error = appError.create('Book NOT FOUND!', 404, httpStatusText.FAIL);
-      return next(error);
+    const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
+    return next(error);
   }
 
   const deletedcount = await Book.deleteOne({
     id: req.params.bookId,
   });
-  res.json({ status: httpStatusText.SUCCESS, data: null });
+  res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
 });
 
 const addRating = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-      const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
-      return next(error);
+    const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
+    return next(error);
   }
 
-  const { userId, ratingValue } = req.body;
+  const { userId, ratingValue, review } = req.body;
   const { bookId } = req.params;
 
-  const book = await Book.findById(bookId);
+  console.log("Start processing rating");
+
+  // Check if the book exists
+  const book = await Book.findOne({ id: bookId });
   if (!book) {
-      const error = appError.create('Book NOT FOUND!', 404, httpStatusText.FAIL);
-      return next(error);
+    const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
+    return next(error);
   }
 
-  // Check if user already rated
-  const existingRating = book.ratings.find(r => r.userId.toString() === userId);
+  console.log("Book fetched, checking if user has already rated");
+
+  const existingRating = book.rates.find((r) => r.userId.toString() === userId);
+
+  let updateQuery;
   if (existingRating) {
-      existingRating.rating = ratingValue; // Update rating
+    console.log("Updating existing rating");
+    updateQuery = {
+      $set: {
+        "rates.$.rating": ratingValue,
+        "rates.$.review": review || "",
+      },
+    };
   } else {
-      book.ratings.push({ userId, rating: ratingValue });
+    console.log("Adding new rating");
+    updateQuery = {
+      $push: {
+        rates: { userId, rating: ratingValue, review: review || "" },
+      },
+    };
   }
 
-  // Recalculate average rating
-  book.calculateAverageRating();
-  await book.save();
+  console.log("Recalculating average rating");
 
-  res.status(200).json({ status: httpStatusText.SUCCESS, data: { book } });
+  await Book.updateOne({ id: bookId, "rates.userId": userId }, updateQuery);
+
+  await Book.updateOne(
+    { id: bookId },
+    { $set: { averageRating: book.calculateAverageRating() } }
+  );
+
+  res.status(200).json({
+    status: httpStatusText.SUCCESS,
+    data: { book },
+  });
+
+  console.log("Response sent");
 });
 
 module.exports = {
