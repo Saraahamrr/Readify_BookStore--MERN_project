@@ -22,7 +22,7 @@ const getBook = asyncWrapper(async (req, res, next) => {
       id: req.params.bookId,
     },
     { __v: false }
-  );
+  ).populate("author")
 
   if (book.length < 1) {
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);

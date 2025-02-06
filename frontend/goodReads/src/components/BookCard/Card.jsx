@@ -5,12 +5,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Card.css";
 import { Link } from "react-router-dom";
+import StarRating from "../StarRate";
+
 export default function Card({ book }) {
 
     const posterURL = book.coverImage || "placeholder.jpg";  // التأكد من وجود الصورة
     const bookTitle = book.title || "Unknown Title";
     const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
-    const rating = book.rating || "Not rated yet";
+    // const rating = book.averageRating > 0 ? book.averageRating.toFixed(1) : "Not rated yet";
+
 
 
     return (
@@ -30,8 +33,9 @@ export default function Card({ book }) {
                     <p className="card-text">
                         <strong>Authors:</strong> {authors}
                     </p>
+
                     <p className="card-text">
-                        <strong>Rating:</strong> {rating}
+                        <strong>Rating:</strong> <StarRating rating={book.averageRating} />
                     </p>
                     <Link className="details-btn" to="/BookDetails" state={{ book }}>
                         More Details
