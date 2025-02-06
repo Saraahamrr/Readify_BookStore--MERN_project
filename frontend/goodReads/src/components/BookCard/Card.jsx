@@ -12,8 +12,7 @@ export default function Card({ book }) {
     const posterURL = book.coverImage || "placeholder.jpg";  // التأكد من وجود الصورة
     const bookTitle = book.title || "Unknown Title";
     const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
-    // const rating = book.averageRating > 0 ? book.averageRating.toFixed(1) : "Not rated yet";
-
+    const rating = book.averageRating || "Not rated yet";
 
 
     return (
