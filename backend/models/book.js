@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 const AutoIncrement = require("mongoose-sequence")(mongoose); // Import mongoose-sequence
 
 const ratingSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   rating: { type: Number, required: true, min: 1, max: 5 },
+  review: {type: String}
 });
 
 const bookSchema = new mongoose.Schema(
@@ -30,7 +32,8 @@ const bookSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-bookSchema.plugin(AutoIncrement, { inc_field: "id", start_seq: 6 });
+bookSchema.plugin(AutoIncrement, { inc_field: "id" });
+bookSchema.index({ id: 1 });
 
 bookSchema.methods.calculateAverageRating = function () {
   if (this.rates.length === 0) {

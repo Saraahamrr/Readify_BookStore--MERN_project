@@ -7,6 +7,8 @@ const searchRouter = require("./routes/search")
 const bookRouter = require('./routes/books.route');
 const userRouter = require('./routes/userControl');
 const favouriteRouter = require('./routes/favourites');
+const authorRouter = require("./routes/authors.route");
+const categoryRouter = require("./routes/categories.route");
 
 const app = express();
 connectDB();
@@ -16,16 +18,14 @@ app.use(express.json());
 app.use('/api/books',bookRouter);
 app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
-
-const authorRouter = require("./routes/authors.route");
-const categoryRouter = require("./routes/categories.route");
-
-app.get("/test", (req, res) => {
-    res.json({msg:"test worked"});
-});
 app.use("/api/authors", authorRouter);
 app.use("/api/categories", categoryRouter);
 app.use('/api/search',searchRouter);
+
+// app.get("/test", (req, res) => {
+//     res.json({msg:"test worked"});
+// });
+
 
 // global middle ware for not found router
 app.all('*',(req,res,next)=>{

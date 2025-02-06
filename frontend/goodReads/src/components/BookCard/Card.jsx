@@ -14,7 +14,9 @@ export default function Card({ book }) {
 
     const posterURL = book.coverImage || "placeholder.jpg";  // Make sure to handle undefined image
     const bookTitle = book.title || "Unknown Title";
-    const authorName = book.authors && book.authors.length > 0 ? book.authors[0].name : 'Unknown';
+    const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
+    const rating = book.averageRating || "Not rated yet";
+
 
     return (
         <>
