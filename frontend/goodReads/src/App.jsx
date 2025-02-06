@@ -11,7 +11,7 @@ import Cart from './pages/Cart/Cart'
 import Profile from './pages/Profile'
 import BookDetails from './pages/BookDetails'
 import SearchResult from './pages/SearchResult'
-import Checkout from './checkout/Checkout'
+import Checkout from './pages/checkout/Checkout'
 import NotFound from './pages/NotFound'
 function App() {
 
