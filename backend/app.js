@@ -9,6 +9,8 @@ const searchRouter = require("./routes/search");
 const bookRouter = require('./routes/books.route');
 const userRouter = require('./routes/userControl');
 const favouriteRouter = require('./routes/favourites');
+const authorRouter = require("./routes/authors.route");
+const categoryRouter = require("./routes/categories.route");
 
 // Import cart earlier to avoid circular dependency issues
 const Cart = require('./routes/cart.js');
@@ -24,6 +26,7 @@ connectDB();
 app.use('/api/books', bookRouter);
 app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
+
 app.use('/api/cart', Cart); // Ensure Cart is correctly required
 
 const authorRouter = require("./routes/authors.route");
@@ -32,17 +35,19 @@ const categoryRouter = require("./routes/categories.route");
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
 });
+
 app.use("/api/authors", authorRouter);
 app.use("/api/categories", categoryRouter);
 app.use('/api/search', searchRouter);
 
-// Global middleware for handling not found routes
-app.all('*', (req, res, next) => {
-    res.status(404).json({ 
-        status: httpStatusText.ERROR, 
-        message: 'This resource is not available', 
-        code: 404 
-    });
+// app.get("/test", (req, res) => {
+//     res.json({msg:"test worked"});
+// });
+
+
+// global middle ware for not found router
+app.all('*',(req,res,next)=>{
+    res.status(404).json({ status: httpStatusText.ERROR, message: 'This resource is not available', code: 404 });
 });
 
 // Global error handler
