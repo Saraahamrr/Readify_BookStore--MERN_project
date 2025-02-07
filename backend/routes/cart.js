@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 router.put('/add-to-cart', authToken, async (req, res) => {
 
     try {
-        const { bookid, id } = req.query;
+        const { bookid, id } = req.headers || req.query;
 
         // Validate id and bookid
         if (!id || !bookid) {

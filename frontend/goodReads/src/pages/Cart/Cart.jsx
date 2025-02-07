@@ -7,9 +7,9 @@ const Cart = () => {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
 
-    const userId = '67a52c22f14e9ddd97fff3ab'; // Replace with actual logged-in user ID, probably from context or auth state
+    const userId = '67a61dfbbe531e522e1dc956'; // Replace with actual logged-in user ID, probably from context or auth state
     //const token = localStorage.getItem("auth-token"); // Assuming JWT is stored in localStorage
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJTYXJhYWhhbXJyIiwiZW1haWwiOiJzYXJhYWhhbXJyOThAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzM4ODc5NzYyLCJleHAiOjE3NDE0NzE3NjJ9.L8OMBtD4Ta2flh8aB9PwNUnXkHhY8wRsrx_UCvP4nAI';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJTYXJhYWhhbXJyIiwiZW1haWwiOiJzYXJhYWhhbXJyOThAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzM4OTQwMDIxLCJleHAiOjE3NDE1MzIwMjF9.0pFqYTKqAhaDkIdvluMUuhtcq3VIDbkNqosCoDW4HDY';
     
     const addToCart = async (bookId) => {
         try {
@@ -58,7 +58,7 @@ const Cart = () => {
             const response = await fetch(`/api/cart/remove-from-cart/${bookId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'auth-token': `bearer ${token}`,
                     'id': userId,
                 },
             });
