@@ -7,17 +7,7 @@ import BooksContext from '../context/books';
 export default function AllBooks() {
   const { books, loading } = useContext(BooksContext);
   if (loading) return <Loader />;
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:3000/api/books");
-  //       setBooks(response.data.books);
-  //     } catch (error) {
-  //       console.error("Error fetching books:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+
   return (
     <div>
       <h4 className='title' style={{marginTop:"20px" , fontSize:"40px"}}>All Books</h4>

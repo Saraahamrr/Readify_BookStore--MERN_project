@@ -1,42 +1,50 @@
-import Header from './components/Header/header';
-import Footer from './components/Footer/Footer';
-import './App.css';
-import Home from './pages/Home';
+import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AllBooks from './pages/AllBooks';
-import Login from './pages/Login';
-import Signup from './pages/SignUp/Signup';
-import Cart from './pages/Cart';
-import Profile from './pages/Profile';
-import BookDetails from './pages/BookDetails';
-import SearchResult from './pages/SearchResult';
-import NotFound from './pages/NotFound';
-import AddBook from './pages/AddBook';
-import { BooksProvider } from './context/books'; 
-import BookManagement from './pages/BookManagement/BookManagement';
-import UpdateBook from './pages/UpdateBook';
+import Header from "./components/Header/header";
+import Footer from "./components/Footer/Footer";
+import "./App.css";
+import { BooksProvider } from "./context/books";
+import { AuthorsProvider } from "./context/authors";
+
+const Home = lazy(() => import("./pages/Home"));
+const AllBooks = lazy(() => import("./pages/AllBooks"));
+const BookDetails = lazy(() => import("./pages/BookDetails"));
+const AuthorDetails = lazy(() => import("./pages/AuthorDetails"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/SignUp/Signup"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Profile = lazy(() => import("./pages/Profile"));
+const SearchResult = lazy(() => import("./pages/SearchResult"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const BookManagement = lazy(() => import("./pages/BookManagement/BookManagement"));
+const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
   return (
-    <BooksProvider> 
-      <BrowserRouter>
-        <Header />
-        
-        <Routes>
-          <Route exact path='/' element={<Home />} />
-          <Route path='/allbooks' element={<AllBooks />} />
-          <Route path="/BookDetails" element={<BookDetails />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/cart' element={<Cart />} />
-          <Route path='/profile' element={<Profile />} />
-          <Route path='/add-book' element={<BookManagement />} />
-          <Route path='/update-book/:id' element={<UpdateBook />} />
-          <Route path="/search" element={<SearchResult />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+    <BooksProvider>
+      <AuthorsProvider>
+        <BrowserRouter>
+          <Header />
 
-        <Footer />
-      </BrowserRouter>
+          <Suspense fallback={<div className="loading">Loading...</div>}>
+            <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route path="/allbooks" element={<AllBooks />} />
+              <Route path="/BookDetails/:id" element={<BookDetails />} />
+              <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/add-book" element={<BookManagement />} />
+              <Route path="/update-book/:id" element={<UpdateBook />} />
+              <Route path="/search" element={<SearchResult />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+
+          <Footer />
+        </BrowserRouter>
+      </AuthorsProvider>
     </BooksProvider>
   );
 }

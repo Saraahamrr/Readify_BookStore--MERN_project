@@ -26,7 +26,8 @@ const getBook = asyncWrapper(async (req, res, next) => {
       id: req.params.bookId,
     },
     { __v: false }
-  ).populate("author")
+  ).populate("authors") 
+  .populate("categories");
 
   if (book.length < 1) {
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
@@ -114,6 +115,8 @@ const deleteBook = asyncWrapper(async (req, res, next) => {
   res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
 });
 
+
+
 const addRating = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -162,6 +165,7 @@ const addRating = asyncWrapper(async (req, res, next) => {
   });
   console.log("Response sent!");
 });
+
 
 module.exports = {
   getAllBooks,
