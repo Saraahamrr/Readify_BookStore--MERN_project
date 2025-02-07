@@ -11,9 +11,9 @@ const AddBook = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/categories");
-        console.log(response.data);
-        setCategories(response.data.categories);
+        const responseCat = await axios.get("http://localhost:3000/api/categories");
+        console.log(responseCat.data);
+        setCategories(responseCat.data.categories);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -28,7 +28,7 @@ const AddBook = () => {
       coverImage: "",
       fullContent: "",
       publisher: "",
-      publishedDate: new Date().toISOString().split("T")[0], // Current date in ISO 8601 format
+      publishedDate: new Date().toISOString().split("T")[0], // ISO 8601 
       categories: [],
       language: "",
       price: 0,
@@ -61,7 +61,6 @@ const AddBook = () => {
         .positive("Price must be a positive number"),
     }),
     onSubmit: async (values) => {
-      // Convert authors and categories to arrays
       const authorsArray = values.authors
         .split(",")
         .map((author) => author.trim());
@@ -69,7 +68,7 @@ const AddBook = () => {
         ...values,
         authors: authorsArray,
       };
-      console.log("Submitting book data:", bookData); // Debugging  
+      console.log("Submitting book data:", bookData);   
 
       try {
         const response = await axios.post(
@@ -77,7 +76,7 @@ const AddBook = () => {
           bookData,
           {headers: { "auth-token": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJtZW5uYSIsImVtYWlsIjoiZW1haWxtYWVubmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTczODc4NjA2MiwiZXhwIjoxNzQxMzc4MDYyfQ.GIZD47utk9sEgH4eHEOBWzW1LX2131yW3UYgQz4jIdE`, id:"67a0ff2e2bd5b05cb1cc4f07" }}
         );
-        console.log(response) // Debugging
+        console.log(response);
         if (response.status === 201) {
           alert("Book added successfully!");
           formik.resetForm(); // Reset form

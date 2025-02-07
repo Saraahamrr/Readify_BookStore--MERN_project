@@ -5,6 +5,7 @@ import Footer from "./components/Footer/Footer";
 import "./App.css";
 import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
+import AddBook from "./pages/AddBook";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -35,7 +36,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/add-book" element={<BookManagement />} />
+              <Route path="/add-book" element={<AddBook />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
               <Route path="/search" element={<SearchResult />} />
               <Route path="*" element={<NotFound />} />

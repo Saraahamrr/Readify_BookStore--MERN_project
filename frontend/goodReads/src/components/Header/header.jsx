@@ -77,6 +77,11 @@ export default function Header() {
                 Sign in
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="btn sign-btn" to="/add-book">
+                add book
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
