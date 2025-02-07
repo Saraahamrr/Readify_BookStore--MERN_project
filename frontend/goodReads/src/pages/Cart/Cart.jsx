@@ -7,15 +7,16 @@ const Cart = () => {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
 
-    const userId = 'USER_ID'; // Replace with actual logged-in user ID, probably from context or auth state
-    const token = localStorage.getItem("auth-token"); // Assuming JWT is stored in localStorage
-
+    const userId = '67a52c22f14e9ddd97fff3ab'; // Replace with actual logged-in user ID, probably from context or auth state
+    //const token = localStorage.getItem("auth-token"); // Assuming JWT is stored in localStorage
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJTYXJhYWhhbXJyIiwiZW1haWwiOiJzYXJhYWhhbXJyOThAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzM4ODc5NzYyLCJleHAiOjE3NDE0NzE3NjJ9.L8OMBtD4Ta2flh8aB9PwNUnXkHhY8wRsrx_UCvP4nAI';
+    
     const addToCart = async (bookId) => {
         try {
             const response = await fetch('/api/cart/add-to-cart', {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'auth-token': `bearer ${token}`,
                     'id': userId,
                     'bookid': bookId,
                 }
@@ -34,13 +35,12 @@ const Cart = () => {
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const response = await fetch('/api/cart/get-user-cart', {
+                const response = await fetch(`http://localhost:5000/api/cart/get-user-cart?userId=${userId}`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'id': userId, // Pass user ID to identify which cart to fetch
+                        'auth-token': `bearer ${token}`
                     }
-                });
+                });                
                 const data = await response.json();
                 if (data.status === 'success') {
                     setCart(data.data);

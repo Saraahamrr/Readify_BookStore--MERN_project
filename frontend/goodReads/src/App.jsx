@@ -14,12 +14,13 @@ import SearchResult from './pages/SearchResult'
 import Checkout from './pages/checkout/Checkout'
 import NotFound from './pages/NotFound'
 import AddBook from './pages/AddBook'
+import { CartProvider } from './contexts/CartContext'; 
 function App() {
 
 
   return (
     <>
-
+<CartProvider>
     <BrowserRouter>
 
     <Header/>
@@ -42,7 +43,7 @@ function App() {
     <Footer/>
     </BrowserRouter>
 
-      
+</CartProvider>    
     </>
   )
 }

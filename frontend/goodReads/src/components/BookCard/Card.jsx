@@ -5,9 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Card.css";
 import { Link } from "react-router-dom";
+import { useCart } from '../../contexts/CartContext';
 import StarRating from "../StarRate";
 
 export default function Card({ book }) {
+
+    const navigate = useNavigate();
+    const { addToCart } = useCart(); // Access addToCart from context
+
+    // const handleRedirectDetails = (id) => {
+    //     navigate(`/BookDetails/${id}`);
+    // };
 
     const posterURL = book.coverImage || "placeholder.jpg";  // التأكد من وجود الصورة
     const bookTitle = book.title || "Unknown Title";
@@ -45,7 +53,7 @@ export default function Card({ book }) {
                         <button className="like-button">
                             <FontAwesomeIcon icon={faHeart} />
                         </button>
-                        <button className="cart-button">
+                        <button className="cart-button" onClick={() => addToCart(book.id)}>
                             <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                         </button>
                     </div>
