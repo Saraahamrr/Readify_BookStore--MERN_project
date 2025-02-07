@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/Header/Header";
+import Header from "./components/Header/header";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
 import { BooksProvider } from "./context/books";
