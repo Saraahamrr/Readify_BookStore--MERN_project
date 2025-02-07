@@ -23,6 +23,10 @@ router
       body("dateOfBirth")
         .isISO8601()
         .withMessage("Date of Birth must be a valid ISO 8601 date"),
+      body("image")
+        .optional()
+        .isString()
+        .withMessage("Please provide image URL")
     ],
     authorController.addAuthor
   );
@@ -46,6 +50,10 @@ router
       body("dateOfBirth")
         .isISO8601()
         .withMessage("Date of Birth must be a valid ISO 8601 date"),
+      body("image")
+        .optional()
+        .isString()
+        .withMessage("Please provide image URL")
     ],
     authorController.updateAuthor
   )
