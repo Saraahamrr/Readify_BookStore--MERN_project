@@ -20,8 +20,6 @@ app.use('/api/books',bookRouter);
 app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
 
-const authorRouter = require("./routes/authors.route");
-const categoryRouter = require("./routes/categories.route");
 const { cookie } = require("express-validator");
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
