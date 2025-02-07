@@ -33,12 +33,9 @@ export default function Header() {
         <Link to="/" className="navbar-brand">
           <img src={logo} alt="Logo" style={{ width: "100px", height: "100px", marginLeft: "20px" }} />
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span className="navbar-toggler-icon"></span>
-        </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <form className="d-flex" role="search" style={{ backgroundColor: "#f8f9fa", justifyContent: "center", position: "relative", width: "100%" }} onSubmit={handleSearch}>
-            <div style={{ position: "relative", width: "60%" }}>
+            <div style={{ position: "relative", width: "60%", display:"flex"}}>
               <input
                 className="form-control"
                 type="search"
@@ -46,17 +43,15 @@ export default function Header() {
                 aria-label="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ paddingRight: "40px" }}  
+                style={{ paddingRight: "40px", borderTopRightRadius:0,borderBottomRightRadius:0 }}  
               />
               <button type="submit" style={{
-                position: "absolute",
-                right: "-30px",  
-                top: "13%",
-                transform: "translateY(-50%)",
                 backgroundColor: "#fbb02d",
                 border: "none",
                 cursor: "pointer",
-                padding: "5px",
+                padding: "10px",
+                borderTopRightRadius:"1em",
+                borderBottomRightRadius:"1em"
               }}>
                 <FontAwesomeIcon icon={faSearch} style={{ color: "#111111", fontSize: "20px" }} />
               </button>
@@ -75,11 +70,6 @@ export default function Header() {
             <li className="nav-item">
               <Link className="btn sign-btn" to="/signup">
                 Sign in
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="btn sign-btn" to="/add-book">
-                add book
               </Link>
             </li>
           </ul>
