@@ -3,11 +3,16 @@ const Author = require("../models/author");
 const httpStatusText = require("../utils/httpStatusText");
 const asyncWrapper = require("../middleWare/asyncWrapper");
 const appError = require("../utils/appError");
+const Book = require("../models/book")
+
+
 
 const getAllAuthors = asyncWrapper(async (req, res, next) => {
   const authors = await Author.find({}, { __v: false });
   res.json({ status: httpStatusText.SUCCESS, authors });
 });
+
+
 
 const getAuthor = asyncWrapper(async (req, res, next) => {
   const author = await Author.findById(req.params.authorId, { __v: 0 });
@@ -16,8 +21,17 @@ const getAuthor = asyncWrapper(async (req, res, next) => {
     return next(appError.create("Author NOT FOUND!", 404, httpStatusText.FAIL));
   }
 
-  res.json({ status: httpStatusText.SUCCESS, author });
+  const books = await Book.find({ authors: author._id }).select("title coverImage");
+
+  res.json({
+    status: httpStatusText.SUCCESS,
+    author,
+    books, 
+  });
 });
+
+
+
 
 const addAuthor = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
