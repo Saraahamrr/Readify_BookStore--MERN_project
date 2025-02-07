@@ -46,11 +46,11 @@ export default function Header() {
                 aria-label="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ paddingRight: "40px" }}  // Space for the button
+                style={{ paddingRight: "40px" }}  
               />
               <button type="submit" style={{
                 position: "absolute",
-                right: "-30px",  // Slightly closer to the edge
+                right: "-30px",  
                 top: "13%",
                 transform: "translateY(-50%)",
                 backgroundColor: "#fbb02d",
@@ -74,7 +74,7 @@ export default function Header() {
             ))}
             <li className="nav-item">
               <Link className="btn sign-btn" to="/signup">
-                Sign up
+                Sign in
               </Link>
             </li>
           </ul>
