@@ -34,9 +34,8 @@
     font-size: 20px;
 }
 
-/* 🌟 تحسين مظهر قائمة الكتب */
 .author-books {
-    max-width: 650px;
+    max-width: 750px;
     margin: 30px auto;
     padding: 20px;
     background: #fff;
@@ -67,6 +66,4 @@
     border-bottom: none;
 }
 
-.author-books li:hover {
-    background: rgba(0, 0, 0, 0.05);
-}
+

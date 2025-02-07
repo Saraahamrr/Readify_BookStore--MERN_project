@@ -46,6 +46,10 @@ export default function Header() {
                 style={{ paddingRight: "40px", borderTopRightRadius:0,borderBottomRightRadius:0 }}  
               />
               <button type="submit" style={{
+                position: "absolute",
+                right: "-0.1px", 
+                top: "50%",
+                transform: "translateY(-50%)",
                 backgroundColor: "#fbb02d",
                 border: "none",
                 cursor: "pointer",
