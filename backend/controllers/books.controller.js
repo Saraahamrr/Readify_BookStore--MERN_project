@@ -115,63 +115,57 @@ const deleteBook = asyncWrapper(async (req, res, next) => {
   res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
 });
 
+
+
 const addRating = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
-    return next(error);
+    return next(appError.create(errors.array(), 400, httpStatusText.FAIL));
   }
 
   const { userId, ratingValue, review } = req.body;
   const { bookId } = req.params;
 
-  console.log("Start processing rating");
-
-  // Check if the book exists
+  console.log("Fetching book...");
   const book = await Book.findOne({ id: bookId });
   if (!book) {
-    const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
-    return next(error);
+    return next(appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL));
   }
 
-  console.log("Book fetched, checking if user has already rated");
-
+  console.log("Checking existing rating...");
   const existingRating = book.rates.find((r) => r.userId.toString() === userId);
 
-  let updateQuery;
-  if (existingRating) {
-    console.log("Updating existing rating");
-    updateQuery = {
-      $set: {
-        "rates.$.rating": ratingValue,
-        "rates.$.review": review || "",
-      },
-    };
-  } else {
-    console.log("Adding new rating");
-    updateQuery = {
-      $push: {
-        rates: { userId, rating: ratingValue, review: review || "" },
-      },
-    };
-  }
+  console.log("Updating rating...");
+  await Book.updateOne(
+    { id: bookId },
+    existingRating
+      ? { $set: { "rates.$.rating": ratingValue, "rates.$.review": review || "" } } 
+      : { $push: { rates: { userId, rating: ratingValue, review: review || "" } } }
+  );
+  
+  console.log("Fetching updated book...");
+  const updatedBook = await Book.findOne({ id: bookId });
 
-  console.log("Recalculating average rating");
+  console.log("Calculating new average rating...");
+  const newAvgRating = updatedBook.rates.length > 0
+    ? updatedBook.rates.reduce((sum, r) => sum + r.rating, 0) / updatedBook.rates.length
+    : 0;
 
-  await Book.updateOne({ id: bookId, "rates.userId": userId }, updateQuery);
+  console.log("New average rating:", newAvgRating);
 
   await Book.updateOne(
     { id: bookId },
-    { $set: { averageRating: book.calculateAverageRating() } }
+    { $set: { averageRating: newAvgRating } }
   );
 
+  console.log("Sending response now...");
   res.status(200).json({
     status: httpStatusText.SUCCESS,
-    data: { book },
+    data: { book: updatedBook },
   });
-
-  console.log("Response sent");
+  console.log("Response sent!");
 });
+
 
 module.exports = {
   getAllBooks,

@@ -15,7 +15,7 @@ export default function Card({ book }) {
     const posterURL = book.coverImage || "placeholder.jpg";  // Make sure to handle undefined image
     const bookTitle = book.title || "Unknown Title";
     const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
-    const rating = book.averageRating || "Not rated yet";
+    // const rating = book.averageRating || "Not rated yet";
 
 
     return (
@@ -31,13 +31,14 @@ export default function Card({ book }) {
                     <h5 className="card-title">{bookTitle}</h5>
 
                     <p className="card-text">
-                        <strong>Authors:</strong> {authorName}
+                        <strong>Authors:</strong> {authors}
                     </p>
 
                     <p className="card-text">
                         <strong>Rating:</strong> <StarRating rating={book.averageRating} />
                     </p>
-                    <Link className="details-btn" to="/BookDetails" state={{ book }}>
+
+                    <Link className="details-btn" to={`/BookDetails/${book.id}`} state={{ book }}>
                         More Details
                     </Link>
 
