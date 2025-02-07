@@ -1,23 +1,34 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo3.png";
+import logo from "../../assets/logo-removebg-preview.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "../Header/header.css";
+import "../Header/Header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-
+import { use } from "react";
+import { useSelector } from "react-redux";
 export default function Header() {
-  const links = [
-    { title: "Home", link: "/" },
-    { title: "Books", link: "/allbooks" },
-    { title: "Cart", link: "/cart" },
-    { title: "Profile", link: "/profile" },
-  ];
-
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
+  const links = [
+    {
+      title: "Home",
+      link: "/",
+    },
+    {
+      title: "Books",
+      link: "/allbooks",
+    },
+    {
+      title: "Cart",
+      link: "/cart",
+    },
+    {
+      title: "Profile",
+      link: "/profile",
+    },
+  ];
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -26,7 +37,8 @@ export default function Header() {
       navigate("/");
     }
   };
-
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  console.log("logeinState: ", isLoggedIn);
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light w-100">
       <div className="container-fluid">
@@ -37,6 +49,14 @@ export default function Header() {
             style={{ width: "100px", height: "100px", marginLeft: "20px" }}
           />
         </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <form
             className="d-flex"
@@ -49,9 +69,7 @@ export default function Header() {
             }}
             onSubmit={handleSearch}
           >
-            <div
-              style={{ position: "relative", width: "60%", display: "flex" }}
-            >
+            <div style={{ position: "relative", width: "60%" }}>
               <input
                 className="form-control"
                 type="search"
@@ -59,25 +77,19 @@ export default function Header() {
                 aria-label="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{
-                  paddingRight: "40px",
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
-                }}
+                style={{ paddingRight: "40px" }} // Space for the button
               />
               <button
                 type="submit"
                 style={{
                   position: "absolute",
-                  right: "-0.1px",
-                  top: "50%",
+                  right: "-30px", // Slightly closer to the edge
+                  top: "13%",
                   transform: "translateY(-50%)",
                   backgroundColor: "#fbb02d",
                   border: "none",
                   cursor: "pointer",
-                  padding: "10px",
-                  borderTopRightRadius: "1em",
-                  borderBottomRightRadius: "1em",
+                  padding: "5px",
                 }}
               >
                 <FontAwesomeIcon
@@ -98,7 +110,7 @@ export default function Header() {
             ))}
             <li className="nav-item">
               <Link className="btn sign-btn" to="/signup">
-                Sign in
+                Sign up
               </Link>
             </li>
           </ul>

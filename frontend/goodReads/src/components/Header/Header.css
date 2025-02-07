@@ -1,4 +1,3 @@
-
 .navbar-nav {
   display: flex;
   justify-content: center;
@@ -13,12 +12,11 @@
   z-index: 1000;
 }
 
-
 .navbar-nav .nav-link {
   font-size: 18px;
   font-weight: bold;
   color: #333;
-  margin-left: 15px; 
+  margin-left: 15px;
   transition: color 0.3s ease-in-out;
 }
 
@@ -37,8 +35,8 @@
   height: auto;
 }
 
-
-.custom-btn, .sign-btn {
+.custom-btn,
+.sign-btn {
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 25px;
@@ -47,28 +45,29 @@
   transition: all 0.3s ease-in-out;
 }
 
-.custom-btn:hover, .sign-btn:hover {
+.custom-btn:hover,
+.sign-btn:hover {
   transform: scale(1.1);
 }
 
 .sign-btn {
   display: block;
   margin: auto;
-  background-color:#fbb02d ;
+  background-color: #fbb02d;
   border-radius: 10px;
 }
 
-
 @media (max-width: 992px) {
   .navbar-nav {
-    text-align: center; 
+    text-align: center;
   }
 
   .nav-item {
     margin-bottom: 10px;
   }
 
-  .custom-btn, .sign-btn {
+  .custom-btn,
+  .sign-btn {
     width: 100%;
     margin: 5px 0;
     font-size: 18px;
@@ -81,16 +80,16 @@
   }
 
   .navbar-toggler {
-    border: none; 
+    border: none;
   }
 
   .navbar-toggler:focus {
-    outline: none; 
+    outline: none;
     box-shadow: none;
   }
 
   .navbar-nav {
-    background-color: #f8f9fa; 
+    background-color: #f8f9fa;
     padding: 15px;
     border-radius: 10px;
   }
@@ -105,11 +104,8 @@
     font-size: 16px;
   }
 
-  .custom-btn, .sign-btn {
+  .custom-btn,
+  .sign-btn {
     font-size: 16px;
   }
 }
-
-
-
-

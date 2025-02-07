@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/Header/header";
+import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
 import { BooksProvider } from "./context/books";
@@ -26,27 +26,24 @@ function App() {
   return (
     <BooksProvider>
       <AuthorsProvider>
-        <BrowserRouter>
-          <Header />
+        <Header />
 
-          <Suspense fallback={<div className="loading">Loading...</div>}>
-            <Routes>
-              <Route exact path="/" element={<Home />} />
-              <Route path="/allbooks" element={<AllBooks />} />
-              <Route path="/BookDetails/:id" element={<BookDetails />} />
-              <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/add-book" element={<AddBook />} />
-              <Route path="/update-book/:id" element={<UpdateBook />} />
-              <Route path="/search" element={<SearchResult />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-
-          <Footer />
-        </BrowserRouter>
+        <Suspense fallback={<div className="loading">Loading...</div>}>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/allbooks" element={<AllBooks />} />
+            <Route path="/BookDetails/:id" element={<BookDetails />} />
+            <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/add-book" element={<AddBook />} />
+            <Route path="/update-book/:id" element={<UpdateBook />} />
+            <Route path="/search" element={<SearchResult />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+        <Footer />
       </AuthorsProvider>
     </BooksProvider>
   );
