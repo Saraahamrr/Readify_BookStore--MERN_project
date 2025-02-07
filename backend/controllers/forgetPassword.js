@@ -7,13 +7,13 @@ const forgetPassword = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-        return res.status(400).json({ status: "error", message: "Email is required" });
+        return res.status(400).json({ status: "error", msg: "Email is required" });
     }
     try {
 
     const user = await User.findOne({ email });
     if (!user) {
-        return res.status(400).json({ status: "error", message: "user not found" });
+        return res.status(400).json({ status: "error", msg: "user not found" });
     }
     const username = user.username;
     const otp = String(Math.floor(Math.random()*900000+100000));
@@ -23,14 +23,14 @@ const forgetPassword = async (req, res) => {
 
     const recipients = email;
     const subject = `Password Reset OTP`;
-    const message = `Hello ${username}!
+    const msg = `Hello ${username}!
     Please Enter the OTP to reset your password,
     This is your OTP : ${otp}`;
-    await sendEmail(recipients , subject , message);
-    res.status(200).json({ status: "success", message: "OTP sent to your email to reset your password" });
+    await sendEmail(recipients , subject , msg);
+    res.status(200).json({ status: "success", msg: "OTP sent to your email to reset your password" });
 }
     catch (error) {
-        res.status(500).json({ status: "error", message: error.message });
+        res.status(500).json({ status: "error", msg: error.msg });
     }
 
 };
@@ -39,36 +39,36 @@ const resetPassword = async (req, res) => {
     const { id, otp, password } = req.body;
 
     if (!otp ) {
-        return res.status(400).json({ status: "error", message: "otp is required" });
+        return res.status(400).json({ status: "error", msg: "otp is required" });
     }
     if (!id) {
-        return res.status(400).json({ status: "error", message: "id is required" });
+        return res.status(400).json({ status: "error", msg: "id is required" });
     }
     if (!password) {
-        return res.status(400).json({ status: "error", message: "password is required" });
+        return res.status(400).json({ status: "error", msg: "password is required" });
     }
     try {
 
     const user = await User.findById(id);
     if (!user) {
-        return res.status(400).json({ status: "error", message: "user not found" });
+        return res.status(400).json({ status: "error", msg: "user not found" });
     }                   
     if (user.resetOTP === "" || user.resetOTP !== otp) {
-        return res.status(400).json({ status: "error", message: "Invalid OTP" });       
+        return res.status(400).json({ status: "error", msg: "Invalid OTP" });       
 
     }
     if (user.resetOTPExpires < Date.now()) {
-        return res.status(400).json({ status: "error", message: "OTP expired" });
+        return res.status(400).json({ status: "error", msg: "OTP expired" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
     user.resetOTP = "";
     user.resetOTPExpires = Date.now();
     await user.save();
-    res.status(200).json({ status: "success", message: "Password reset successfully" });
+    res.status(200).json({ status: "success", msg: "Password reset successfully" });
     }
     catch (error) {
-        res.status(500).json({ status: "error", message: error.message });
+        res.status(500).json({ status: "error", msg: error.msg });
     }
 }
 

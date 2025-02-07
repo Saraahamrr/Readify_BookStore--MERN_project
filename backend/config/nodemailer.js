@@ -18,7 +18,8 @@ var transporter = nodemailer.createTransport({
 const sendEmail = async (recipients , subject , message) => {
    return await transporter.sendMail(
     {
-        from: 'Readify@demomailtrap.com',
+        from: process.env.SENDER_EMAIL,
+        name: "Readify",
         to: recipients,
         subject : subject,
         text: message,

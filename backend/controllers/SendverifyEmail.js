@@ -30,7 +30,8 @@ const SendverifyEmail = async (req, res) => {
         await sendEmail(recipients , subject , message);
         res.status(200).json({ status: "success", msg: "User signed-up successfully,please Verify Your email" });
     } catch (error) {
-        res.status(500).json({ status: "error", msg: error.msg });
+        res.status(500).json({ status: "error", msg: error });
+        console.log(error);
     }
 }
 
