@@ -12,24 +12,30 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
   const page = query.page || 1;
   const skip = (page - 1) * limit;
 
-  const books = await Book.find({}, { __v: false }).limit(limit).skip(skip);
+  // const books = await Book.find({}, { __v: false }).limit(limit).skip(skip) .populate('category', 'name').populate('author', 'name');;
+
+  const books = await Book.find({}, { __v: false })
+    .populate("categories", "name")
+    .populate("authors", "name");
   res.json({ status: httpStatusText.SUCCESS, books });
 });
 
 const getBook = asyncWrapper(async (req, res, next) => {
-  const book = await Book.find(
-    {
-      id: req.params.bookId,
-    },
+  const book = await Book.findOne(
+    { _id: req.params.bookId }, 
     { __v: false }
-  );
+  )
+  .populate("authors")
+  .populate("categories");
 
-  if (book.length < 1) {
+  if (!book) { 
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
     return next(error);
   }
+  
   res.json({ status: httpStatusText.SUCCESS, book });
 });
+
 
 const addBook = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
@@ -81,9 +87,11 @@ const addBook = asyncWrapper(async (req, res, next) => {
 });
 
 const updateBook = asyncWrapper(async (req, res, next) => {
-  const updatedBook = await Book.findOneAndUpdate({ id: req.params.bookId },
+  const updatedBook = await Book.findOneAndUpdate(
+    { id: req.params.bookId },
     req.body,
-    { new: true, runValidators: true });
+    { new: true, runValidators: true }
+  );
 
   if (!updatedBook) {
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
@@ -94,50 +102,71 @@ const updateBook = asyncWrapper(async (req, res, next) => {
     .json({ status: httpStatusText.SUCCESS, data: { bookLog: updatedBook } });
 });
 
-const deleteBook = asyncWrapper(async (req, res,next) => {
+const deleteBook = asyncWrapper(async (req, res, next) => {
   const book = await Book.findOne({ id: req.params.bookId });
 
   if (!book) {
-      const error = appError.create('Book NOT FOUND!', 404, httpStatusText.FAIL);
-      return next(error);
+    const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
+    return next(error);
   }
 
   const deletedcount = await Book.deleteOne({
     id: req.params.bookId,
   });
-  res.json({ status: httpStatusText.SUCCESS, data: null });
+  res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
 });
+
+
 
 const addRating = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-      const error = appError.create(errors.array(), 400, httpStatusText.FAIL);
-      return next(error);
+    return next(appError.create(errors.array(), 400, httpStatusText.FAIL));
   }
 
-  const { userId, ratingValue } = req.body;
+  const { userId, ratingValue, review } = req.body;
   const { bookId } = req.params;
 
-  const book = await Book.findById(bookId);
+  console.log("Fetching book...");
+  const book = await Book.findOne({ id: bookId });
   if (!book) {
-      const error = appError.create('Book NOT FOUND!', 404, httpStatusText.FAIL);
-      return next(error);
+    return next(appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL));
   }
 
-  // Check if user already rated
-  const existingRating = book.ratings.find(r => r.userId.toString() === userId);
-  if (existingRating) {
-      existingRating.rating = ratingValue; // Update rating
-  } else {
-      book.ratings.push({ userId, rating: ratingValue });
-  }
+  console.log("Checking existing rating...");
+  const existingRating = book.rates.find((r) => r.userId.toString() === userId);
 
-  // Recalculate average rating
-  book.calculateAverageRating();
-  await book.save();
+  console.log("Updating rating...");
+  await Book.updateOne(
+    { id: bookId },
+    existingRating
+      ? { $set: { "rates.$.rating": ratingValue, "rates.$.review": review || "" } } 
+      : { $push: { rates: { userId, rating: ratingValue, review: review || "" } } }
+  );
+  
+  console.log("Fetching updated book...");
+  const updatedBook = await Book.findOne({ id: bookId });
 
-  res.status(200).json({ status: httpStatusText.SUCCESS, data: { book } });
+  console.log("Calculating new average rating...");
+  const newAvgRating = updatedBook.rates.length > 0
+    ? updatedBook.rates.reduce((sum, r) => sum + r.rating, 0) / updatedBook.rates.length
+    : 0;
+
+  console.log("New average rating:", newAvgRating);
+
+  await Book.updateOne(
+    { id: bookId },
+    { $set: { averageRating: newAvgRating } }
+  );
+
+  console.log("Sending response now...");
+  res.status(200).json({
+    status: httpStatusText.SUCCESS,
+    data: { book: updatedBook },
+  });
+  console.log("Response sent!");
 });
+
 
 module.exports = {
   getAllBooks,

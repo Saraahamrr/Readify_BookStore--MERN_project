@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult,param } = require("express-validator");
 const bookController = require("../controllers/books.controller.js");
 const User = require("../models/user");
 const { authToken } = require("../middleWare/userAuth.js");
@@ -94,18 +94,28 @@ res.status(500).json({msg: "Internal server error"});
 }});
 router.get("/:bookId", bookController.getBook);
 
-router.post(
-  "/:bookId/rate",
-  [
-    body("userId").notEmpty().withMessage("User ID is required"),
-    body("ratingValue")
-      .notEmpty()
-      .withMessage("Rating is required")
-      .isInt({ min: 1, max: 5 })
-      .withMessage("Rating must be between 1 and 5"),
-  ],
-  bookController.addRating
-);
+router.route("/:bookId/rate")
+  .post(
+    [
+      param("bookId")
+        .isInt({ min: 1 })
+        .withMessage("Invalid Book ID"),
+      body("userId")
+        .notEmpty()
+        .withMessage("User ID is required"),
+      body("ratingValue")
+        .notEmpty()
+        .withMessage("Rating is required")
+        .isInt({ min: 1, max: 5 })
+        .withMessage("Rating must be between 1 and 5"),
+      body("review")
+        .optional()
+        .isString()
+        .withMessage("Submit a clause that describes your reading experience"),
+    ],
+    bookController.addRating
+  );
+
 
   
 module.exports = router;
