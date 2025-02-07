@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation ,Link } from "react-router-dom";
 import axios from "axios";
 
 export default function SearchPage() {
+  
   const [books, setBooks] = useState([]);
   const location = useLocation();
 
@@ -11,19 +12,19 @@ export default function SearchPage() {
     const query = searchParams.get("query");
 
     if (query) {
-        axios.get(`http://localhost:3000/api/search?query=${query}`)
-            .then(response => {
-                console.log("API Response:", response.data);
-                setBooks(response.data.results || []);
-            })
-            .catch(error => console.error("Error fetching books:", error));
+      axios.get(`http://localhost:3000/api/search?query=${query}`)
+        .then(response => {
+          console.log("API Response:", response.data);
+          setBooks(response.data.results || []);
+        })
+        .catch(error => console.error("Error fetching books:", error));
     }
-}, [location.search]);
+  }, [location.search]);
 
 
   return (
     <div className="container mt-4">
-      <h2>Search Results</h2>
+      <h2>Search Results for ..</h2>
       {books.length > 0 ? (
         <div className="row">
           {books.map((book) => (
@@ -32,9 +33,12 @@ export default function SearchPage() {
                 <img src={book.coverImage} className="card-img-top" alt={book.title} />
                 <div className="card-body">
                   <h5 className="card-title">{book.title}</h5>
-                  <p className="card-text">{book.description}</p>
+                  {/* <p className="card-text">{book.description}</p> */}
                   <p><strong>Publisher:</strong> {book.publisher}</p>
-                  <p><strong>Categories:</strong> {book.categories.join(", ")}</p>
+                  <p><strong>Categories:</strong> {book.categories?.join(", ") || "No categories available"}</p>
+                  <Link className="details-btn" to={`/BookDetails/${book.id}`} >
+                    More Details
+                  </Link>
                 </div>
               </div>
             </div>

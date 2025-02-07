@@ -6,6 +6,7 @@ const authorSchema = new mongoose.Schema(
     gender: { type: String, enum: ["male", "female", "Female","Male"] },
     bio: { type: String },
     dateOfBirth: { type: Date },
+    image: {type: String}
   },
   {
     timestamps: true,
