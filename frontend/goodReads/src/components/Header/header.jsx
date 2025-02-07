@@ -50,8 +50,8 @@ export default function Header() {
               />
               <button type="submit" style={{
                 position: "absolute",
-                right: "-30px",  // Slightly closer to the edge
-                top: "13%",
+                right: "-0.1px", 
+                top: "50%",
                 transform: "translateY(-50%)",
                 backgroundColor: "#fbb02d",
                 border: "none",

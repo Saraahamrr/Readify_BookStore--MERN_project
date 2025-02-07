@@ -13,6 +13,7 @@ export default function AuthorDetails() {
     useEffect(() => {
         axios.get(`http://localhost:3000/api/authors/${id}`)
             .then((res) => {
+                console.log("API Response:", res.data);
                 setAuthor(res.data.author);
                 setBooks(res.data.books);
                 setLoading(false);
@@ -40,14 +41,20 @@ export default function AuthorDetails() {
                 {books.length > 0 ? (
                     <ul>
                         {books.map((book) => (
-                            <li key={book._id}>{book.title}
-                                <Link className="details-btn" to={`/BookDetails/${book.id}`} state={{ book }} style={{marginLeft:"350px"}}>
+                            <li key={book._id}>
+                                {book.title}
+                                <Link className="details-btn" to={`/BookDetails/${book._id}`}>
                                     More Details
                                 </Link>
+
+
+
+
 
                             </li>
                         ))}
                     </ul>
+
                 ) : (
                     <p>No books found for this author.</p>
                 )}

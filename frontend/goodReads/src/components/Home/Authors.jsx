@@ -9,7 +9,7 @@ export default function Authors() {
 
     return (
         <div>
-            <h4 className='title' style={{ marginTop: "20px", fontSize: "40px" }}> Authors </h4>
+            <h4 className='title' style={{ marginTop: "20px", fontSize: "40px" , marginLeft:"20px"}}> Authors </h4>
 
             <div className="row">
                 {authors.length > 0 ? authors.map((author) => (
