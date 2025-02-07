@@ -3,10 +3,10 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {authToken} = require("./userAuth.js");
+const {authToken} = require("../middleWare/userAuth.js");
 const { SendverifyEmail } = require("../controllers/SendverifyEmail.js");
-const { VerifyEmail } = require("../controllers/VerifyEmail.js");
-const { send } = require("process");
+const { VerifyOtp } = require("../controllers/VerifyOTP.js");
+const { forgetPassword, resetPassword } = require("../controllers/forgetPassword.js");
 
 
 //sign-up route
@@ -55,7 +55,8 @@ router.post("/sign-up" , async(req,res)=>{
         //save the user
         await newUser.save();
         //create a token 
-        const token = jwt.sign({ id: newUser._id.toString() }, process.env.JWT_SECRET, { expiresIn: "30d" });
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+        console.log(token);
         //save Token in cookie
         res.cookie('token', token, 
             { 
@@ -105,7 +106,7 @@ router.post("/sign-in" , async(req,res)=>{
                 email: existingUser.email,
                 role : existingUser.role
             };
-               const token = jwt.sign({id : authUserdata._id},process.env.JWT_SECRET,{expiresIn: "7d"});
+               const token = jwt.sign({id : existingUser._id},process.env.JWT_SECRET,{expiresIn: "7d"});
               res.cookie('token', token, 
                 { 
                     httpOnly: true,
@@ -168,7 +169,7 @@ router.get("/user-info", authToken , async(req,res)=>{
 // localhost:3000/api/v1/updateUserInfo
 router.put("/update-user-info", authToken , async(req,res)=>{
     try{
-    const {id} = req.headers;
+    const {id} = req.body;
     const data = await User.findByIdAndUpdate(id, req.body, {new: true});
     return res.status(200).json({msg: "User updated successfully"});
     }catch(err){
@@ -180,5 +181,27 @@ router.put("/update-user-info", authToken , async(req,res)=>{
 // send-verify-email route
 // localhost:3000/api/v1/send-verify-email
 router.post("/send-verify-email", authToken,SendverifyEmail);
-router.post("/verify-email", authToken,VerifyEmail);
+// verify-otp route 
+router.post("/verify-otp", authToken,VerifyOtp);
+// is-authourized route
+router.post("/is-authourized", authToken, async(req,res)=>{
+    const { id } = req.body;
+    const user = await User.findById(id);
+    if(!user){
+        return res.status(400).json({msg: "User not found"});
+    }
+    try{
+        if(user.status === "authorized"){
+            return res.status(200).json({msg: "User is authorized"});
+        }
+        return res.status(400).json({msg: "User is not authorized"});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({msg: "Internal server error"});
+    }
+});
+// forget-password route
+router.post("/forget-password",authToken,forgetPassword);
+// reset-password route
+router.post("/reset-password",authToken,resetPassword);
 module.exports = router;

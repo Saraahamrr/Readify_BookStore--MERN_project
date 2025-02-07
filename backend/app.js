@@ -7,10 +7,11 @@ const searchRouter = require("./routes/search")
 const bookRouter = require('./routes/books.route');
 const userRouter = require('./routes/userControl');
 const favouriteRouter = require('./routes/favourites');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 connectDB();
-
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use('/api/books',bookRouter);
@@ -19,6 +20,7 @@ app.use ("/api", favouriteRouter);
 
 const authorRouter = require("./routes/authors.route");
 const categoryRouter = require("./routes/categories.route");
+const { cookie } = require("express-validator");
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
 });

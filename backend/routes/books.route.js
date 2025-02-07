@@ -2,7 +2,7 @@ const express = require("express");
 const { body, validationResult } = require("express-validator");
 const bookController = require("../controllers/books.controller.js");
 const User = require("../models/user");
-const { authToken } = require("./userAuth.js");
+const { authToken } = require("../middleWare/userAuth.js");
 
 const router = express.Router();
 //console.log("+++++++++++++++++++++++++", bookController);

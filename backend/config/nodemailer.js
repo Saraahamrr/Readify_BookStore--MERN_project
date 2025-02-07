@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer");
+const express = require('express');
 require('dotenv').config({ path: "../.env" }); 
-
+const nodemailer = require('nodemailer');
 // console.log(process.env.MAIL_HOST);
 // console.log(process.env.MAIL_PORT);
 // console.log(process.env.MAIL_USER);

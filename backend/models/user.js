@@ -41,6 +41,14 @@ const user = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    resetOTP: {
+        type: String,
+        default: ''
+    },
+    resetOTPExpires: {
+        type: Date,
+        default: Date.now()
+    },
     favourites: [
         {
             type: mongoose.Types.ObjectId,
