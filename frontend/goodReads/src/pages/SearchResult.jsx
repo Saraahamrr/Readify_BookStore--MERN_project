@@ -3,6 +3,7 @@ import { useLocation ,Link } from "react-router-dom";
 import axios from "axios";
 
 export default function SearchPage() {
+  
   const [books, setBooks] = useState([]);
   const location = useLocation();
 
@@ -35,9 +36,9 @@ export default function SearchPage() {
                   {/* <p className="card-text">{book.description}</p> */}
                   <p><strong>Publisher:</strong> {book.publisher}</p>
                   <p><strong>Categories:</strong> {book.categories?.join(", ") || "No categories available"}</p>
-                  <Link className="details-btn" to="/BookDetails" state={{ book }}>
+                  {/* <Link className="details-btn" to="/BookDetails" state={{ book }}>
                     More Details
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>

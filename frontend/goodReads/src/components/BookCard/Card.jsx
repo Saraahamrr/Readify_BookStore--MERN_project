@@ -8,17 +8,18 @@ import { Link } from "react-router-dom";
 import StarRating from "../StarRate";
 
 export default function Card({ book }) {
+    if (!book) {
+        return <div>Loading...</div>; // Or any placeholder message
+    }
 
-    const posterURL = book.coverImage || "placeholder.jpg";  // التأكد من وجود الصورة
+    const posterURL = book.coverImage || "placeholder.jpg";  // Make sure to handle undefined image
     const bookTitle = book.title || "Unknown Title";
     const authors = book.authors?.map(author => author.name).join(", ") || "Unknown";
-    const rating = book.averageRating || "Not rated yet";
+    // const rating = book.averageRating || "Not rated yet";
 
 
     return (
-
         <>
-
             <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
                 <img
                     src={posterURL}
@@ -36,7 +37,8 @@ export default function Card({ book }) {
                     <p className="card-text">
                         <strong>Rating:</strong> <StarRating rating={book.averageRating} />
                     </p>
-                    <Link className="details-btn" to="/BookDetails" state={{ book }}>
+
+                    <Link className="details-btn" to={`/BookDetails/${book.id}`} state={{ book }}>
                         More Details
                     </Link>
 
@@ -50,8 +52,6 @@ export default function Card({ book }) {
                     </div>
                 </div>
             </div>
-
         </>
-
     );
 }

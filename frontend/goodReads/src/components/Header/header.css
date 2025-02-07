@@ -1,9 +1,12 @@
-/* تحسين مظهر النافبار */
+
 .navbar-nav {
   display: flex;
-  justify-content: flex-start; /* لضبط الروابط بجانب بعضهم */
+  justify-content: center;
   align-items: center;
+  width: 100%;
+  gap: 15px;
 }
+
 .navbar {
   position: sticky;
   top: 0;
@@ -15,7 +18,7 @@
   font-size: 18px;
   font-weight: bold;
   color: #333;
-  margin-left: 15px; /* تحديد المسافة بين الروابط */
+  margin-left: 15px; 
   transition: color 0.3s ease-in-out;
 }
 
@@ -34,7 +37,7 @@
   height: auto;
 }
 
-/* تنسيق الأزرار */
+
 .custom-btn, .sign-btn {
   padding: 10px 20px;
   font-size: 16px;
@@ -48,10 +51,17 @@
   transform: scale(1.1);
 }
 
-/* تحسين التنسيق في الشاشات الصغيرة */
+.sign-btn {
+  display: block;
+  margin: auto;
+  background-color:#fbb02d ;
+  border-radius: 10px;
+}
+
+
 @media (max-width: 992px) {
   .navbar-nav {
-    text-align: center; /* توسيط العناصر في القائمة */
+    text-align: center; 
   }
 
   .nav-item {
@@ -67,20 +77,20 @@
 
 @media (max-width: 768px) {
   .navbar-brand img {
-    width: 150px; /* تصغير اللوجو */
+    width: 150px;
   }
 
   .navbar-toggler {
-    border: none; /* إزالة الحدود */
+    border: none; 
   }
 
   .navbar-toggler:focus {
-    outline: none; /* إزالة الحدود عند التركيز */
+    outline: none; 
     box-shadow: none;
   }
 
   .navbar-nav {
-    background-color: #f8f9fa; /* خلفية للقائمة */
+    background-color: #f8f9fa; 
     padding: 15px;
     border-radius: 10px;
   }
@@ -88,7 +98,7 @@
 
 @media (max-width: 576px) {
   .navbar-brand img {
-    width: 120px; /* تصغير اللوجو أكثر */
+    width: 120px;
   }
 
   .navbar-nav .nav-link {
