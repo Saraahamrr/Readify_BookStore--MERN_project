@@ -22,11 +22,6 @@ app.use("/api/authors", authorRouter);
 app.use("/api/categories", categoryRouter);
 app.use('/api/search',searchRouter);
 
-// app.get("/test", (req, res) => {
-//     res.json({msg:"test worked"});
-// });
-
-
 // global middle ware for not found router
 app.all('*',(req,res,next)=>{
     res.status(404).json({ status: httpStatusText.ERROR, message: 'This resource is not available', code: 404 });

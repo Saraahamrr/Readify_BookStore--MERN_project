@@ -30,7 +30,7 @@ const addCategory = asyncWrapper(async (req, res, next) => {
 
   res.status(201).json({
     status: httpStatusText.SUCCESS,
-    data: { category: newCategory },
+     category: newCategory ,
   });
 });
 

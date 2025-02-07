@@ -15,18 +15,21 @@ router
         .isLength({ min: 2 })
         .withMessage("Author name must be at least 2 characters"),
       body("gender")
-        .isIn(["male", "female", "Female","Male"])
+      .optional({nullable: true})
+        .isIn(["male", "female", "Female", "Male"])
         .withMessage("Gender must be 'male', 'female'"),
       body("bio")
+      .optional({nullable: true})
         .isString()
         .withMessage("Bio must be a string describing the author"),
       body("dateOfBirth")
-        .isISO8601()
-        .withMessage("Date of Birth must be a valid ISO 8601 date"),
+      .optional({nullable: true})
+      .isString()
+      .withMessage("Date of Birth must be a valid ISO 8601 date"),
       body("image")
         .optional()
         .isString()
-        .withMessage("Please provide image URL")
+        .withMessage("Please provide image URL"),
     ],
     authorController.addAuthor
   );
@@ -42,18 +45,21 @@ router
         .isLength({ min: 2 })
         .withMessage("Author name must be at least 2 characters"),
       body("gender")
-        .isIn(["male", "female", "other"])
+        .optional()
+        .isIn(["male", "female", "Male", "Female"])
         .withMessage("Gender must be 'male', 'female'"),
-        body("bio")
+      body("bio")
+        .optional({nullable: true})
         .isString()
         .withMessage("Bio must be a string describing the author"),
       body("dateOfBirth")
-        .isISO8601()
+        .optional({nullable: true})
+        .isString()
         .withMessage("Date of Birth must be a valid ISO 8601 date"),
       body("image")
-        .optional()
+        .optional({nullable: true})
         .isString()
-        .withMessage("Please provide image URL")
+        .withMessage("Please provide image URL"),
     ],
     authorController.updateAuthor
   )

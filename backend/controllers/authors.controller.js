@@ -44,7 +44,7 @@ const addAuthor = asyncWrapper(async (req, res, next) => {
 
   res.status(201).json({
     status: httpStatusText.SUCCESS,
-    data: { author: newAuthor },
+    author: newAuthor ,
   });
 });
 

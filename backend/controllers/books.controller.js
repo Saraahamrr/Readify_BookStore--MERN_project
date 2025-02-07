@@ -43,38 +43,10 @@ const addBook = asyncWrapper(async (req, res, next) => {
     return next(error);
   }
 
-  let authorIds = [];
-  let categoryIds = [];
 
-  // Handle authors
-  for (const authorName of req.body.authors) {
-    console.log("Searching for author:", authorName);
-    let author = await Author.findOne({ name: authorName }).exec();
-    if (!author) {
-      console.log("Author not found, creating new author:", authorName);
-      author = new Author({ name: authorName });
-      await author.save(); // Assuming asyncWrapper handles errors here
-    }
-    authorIds.push(author._id);
-  }
-
-  // Handle categories
-  for (const categoryName of req.body.categories) {
-    console.log("Searching for category:", categoryName);
-    let category = await Category.findOne({ name: categoryName }).exec();
-    if (!category) {
-      console.log("Category not found, creating new category:", categoryName);
-      category = new Category({ name: categoryName });
-      await category.save(); // Assuming asyncWrapper handles errors here
-    }
-    categoryIds.push(category._id);
-  }
-
-  const newBook = new Book({
-    ...req.body,
-    authors: authorIds,
-    categories: categoryIds,
-  });
+  const newBook = new Book(
+    req.body
+  );
 
   console.log("Saving new book:", newBook);
   await newBook.save(); // Assuming asyncWrapper handles errors here
