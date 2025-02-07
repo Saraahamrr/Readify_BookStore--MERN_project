@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./Signup.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,18 +11,20 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 export default function Signup() {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
+  const [signupValues, setSignupValues] = useState({
     username: "",
+    email: "",
     password: "",
     address: "",
   });
-  const navigate = useNavigate();
+  const [signinValues, setSigninValues] = useState({
+    username: "",
+    password: "",
+  });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const validateForm = (values) => {
+  const validateSignUp = (values) => {
     const errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex =
@@ -45,33 +48,81 @@ export default function Signup() {
 
     return errors;
   };
+  const validateSignIn = (values) => {
+    const errors = {};
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    if (!values.username) errors.username = "Username is required";
+    else if (/\s/.test(values.username))
+      errors.username = "Username must not contain spaces";
 
-  const handleSubmit = (e) => {
+    if (!values.password) errors.password = "Password is required";
+    else if (!passwordRegex.test(values.password))
+      errors.password =
+        "Password must include uppercase, lowercase, special symbol, numbers";
+    return errors;
+  };
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    const errors = validateForm(formValues);
+    const errors = validateSignUp(signupValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
-
-      alert("Data submitted successfully");
-      setFormValues({
-        name: "",
-        email: "",
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/sign-up",
+          signupValues
+        );
+        alert(response.data.msg);
+      } catch (error) {
+        alert(error.response.data.msg);
+      }
+      setSignupValues({
         username: "",
+        email: "",
         password: "",
         address: "",
       });
-      console.log(formValues);
-      console.log(response);
-      navigate("/sign-in");
     } else {
       setIsSubmitted(false);
     }
   };
 
-  const handleChange = (e) => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    const errors = validateSignIn(signinValues);
+    setFormErrors(errors);
+    if (Object.keys(errors).length === 0) {
+      setIsSubmitted(true);
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/api/sign-in",
+          signinValues
+        );
+        localStorage.setItem("userId", response.data.id);
+        localStorage.setItem("role", response.data.role);
+        localStorage.setItem("token", response.data.token);
+        alert(response.data.msg);
+      } catch (error) {
+        alert(error.response.data.msg);
+      }
+      setSigninValues({
+        username: "",
+        password: "",
+      });
+    } else {
+      setIsSubmitted(false);
+    }
+  };
+
+  const handleChangeSignUp = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setSignupValues({ ...signupValues, [name]: value });
+  };
+  const handleChangeSignIn = (e) => {
+    const { name, value } = e.target;
+    setSigninValues({ ...signinValues, [name]: value });
   };
 
   useEffect(() => {
@@ -106,7 +157,7 @@ export default function Signup() {
           <div className="containerr" id="main">
             <div className="form-container">
               <div className="sign-up">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSignUp}>
                   <h1>Create Account</h1>
                   <div className="social-container">
                     <a href="#" className="social">
@@ -123,8 +174,8 @@ export default function Signup() {
                     type="text"
                     name="username"
                     placeholder="Username"
-                    value={formValues.username}
-                    onChange={handleChange}
+                    value={signupValues.username}
+                    onChange={handleChangeSignUp}
                     required
                   />
                   {formErrors.username && (
@@ -134,8 +185,8 @@ export default function Signup() {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    value={formValues.email}
-                    onChange={handleChange}
+                    value={signupValues.email}
+                    onChange={handleChangeSignUp}
                     required
                   />
                   {formErrors.email && (
@@ -145,8 +196,8 @@ export default function Signup() {
                     type="password"
                     name="password"
                     placeholder="Password"
-                    value={formValues.password}
-                    onChange={handleChange}
+                    value={signupValues.password}
+                    onChange={handleChangeSignUp}
                     required
                   />
                   {formErrors.password && (
@@ -157,8 +208,8 @@ export default function Signup() {
                     type="text"
                     name="address"
                     placeholder="address"
-                    value={formValues.address}
-                    onChange={handleChange}
+                    value={signupValues.address}
+                    onChange={handleChangeSignUp}
                     required
                   />
                   {formErrors.address && (
@@ -171,7 +222,7 @@ export default function Signup() {
               </div>
 
               <div className="sign-in">
-                <form action="#">
+                <form onSubmit={handleSignIn}>
                   <h1>Sign in</h1>
                   <div className="social-container">
                     <a href="#" className="social">
@@ -184,19 +235,28 @@ export default function Signup() {
                       <FontAwesomeIcon icon={faLinkedinIn} />
                     </a>
                   </div>
-                  <p>or use your email for login</p>
                   <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={signinValues.username}
+                    onChange={handleChangeSignIn}
                     required
                   />
+                  {formErrors.username && (
+                    <p className="error">{formErrors.username}</p>
+                  )}
                   <input
                     type="password"
                     name="password"
                     placeholder="Password"
+                    value={signinValues.password}
+                    onChange={handleChangeSignIn}
                     required
                   />
+                  {formErrors.password && (
+                    <p className="error">{formErrors.password}</p>
+                  )}
                   <a href="#">Forget Password?</a>
                   <button className="signIn" type="submit">
                     Sign In

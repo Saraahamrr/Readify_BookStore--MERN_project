@@ -28,6 +28,19 @@ const user = new mongoose.Schema({
         default: 'user',
         enum: ['user', 'admin']
     },
+    status : {
+        type: String,
+        default: 'unauthorized',
+        enum: ['authorized', 'unauthorized']
+    },
+    verifyOtp: {
+        type: String,
+        default: ''
+    },
+    verifyOtpExpires: {
+        type: Date,
+        default: Date.now()
+    },
     favourites: [
         {
             type: mongoose.Types.ObjectId,

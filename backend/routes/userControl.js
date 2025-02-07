@@ -4,6 +4,9 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const {authToken} = require("./userAuth.js");
+const { SendverifyEmail } = require("../controllers/SendverifyEmail.js");
+const { VerifyEmail } = require("../controllers/VerifyEmail.js");
+const { send } = require("process");
 
 
 //sign-up route
@@ -15,7 +18,7 @@ router.post("/sign-up" , async(req,res)=>{
         if(username.length < 4){
             return res
             .status(400)
-            .json({msg: "Name should be more than 4 characters"});
+            .json({msg: "UserName should be more than 4 characters"});
         }
         //check if name already exists
         // mesh fhamaha lesa 
@@ -23,7 +26,7 @@ router.post("/sign-up" , async(req,res)=>{
         if(userExists){
             return res
             .status(400)
-            .json({msg: "Name already exists"});
+            .json({msg: "UserName already exists"});
         }
         //check if email already exists
         const emailExists = await User.findOne({email: email});
@@ -48,12 +51,20 @@ router.post("/sign-up" , async(req,res)=>{
             address : address,
             password: hashedPassword
         });
+
         //save the user
         await newUser.save();
-        return res.status(200).json({msg: "User signed-up successfully"});
-
-
-
+        //create a token 
+        const token = jwt.sign({ id: newUser._id.toString() }, process.env.JWT_SECRET, { expiresIn: "30d" });
+        //save Token in cookie
+        res.cookie('token', token, 
+            { 
+                httpOnly: true,
+                secure: false,   
+                sameSite: 'none' , // to make it work on another domains
+                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+            });
+        SendverifyEmail(req,res);
     }catch(err){
         console.log(err);
         res.status(500).json({msg: "Internal server error"});
@@ -70,15 +81,14 @@ router.post("/sign-in" , async(req,res)=>{
         if(username.length < 4){
             return res
             .status(400)
-            .json({msg: "Name should be more than 4 characters"});
+            .json({msg: "UserName should be more than 4 characters"});
         }
         //check if name already exists
-        // mesh fhamaha lesa 
         const existingUser = await User.findOne({username});
         if(!existingUser){
             return res
             .status(400)
-            .json({msg: "Name does not exist"});
+            .json({msg: "UserName does not exist"});
         }
         //check if password is more than 6 characters
         if(password.length < 6){
@@ -90,15 +100,29 @@ router.post("/sign-in" , async(req,res)=>{
         // compare gives a boolean value(0 or 1 or true or false)(search for it)
         await bcrypt.compare(password, existingUser.password,(err, result)=>{
             if(result){
-                const authClaims = {
+                const authUserdata = {
                 name : existingUser.username,
                 email: existingUser.email,
                 role : existingUser.role
             };
-                const token = jwt.sign({authClaims},"bookstore123",{expiresIn: "30d"});   
+               const token = jwt.sign({id : authUserdata._id},process.env.JWT_SECRET,{expiresIn: "7d"});
+              res.cookie('token', token, 
+                { 
+                    httpOnly: true,
+                    secure: false,   
+                    sameSite: 'none' , // to make it work on another domains
+                    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                });
+                return res
+                .status(200)
+                .json(
+                    {
+                        id: existingUser._id, 
+                        role : existingUser.role ,
+                        token: token,
+                        msg : "User signed-in successfully"
+                    })
 
-                return res.status(200).json(
-                    {id: existingUser._id, role : existingUser.role ,token: token});
             }
             else{
                 return res.status(400).json({msg: "Password is incorrect"});
@@ -112,6 +136,18 @@ router.post("/sign-in" , async(req,res)=>{
     }
 });
 
+//sign-out route
+// localhost:3000/api/v1/sign-out
+router.post("/sign-out", (req,res)=>{
+    try{
+        res.clearCookie('token');
+        return res.status(200).json({msg: "User signed-out successfully"});
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({msg: "Internal server error"});
+    }
+});
 
 // user-info route
 // localhost:3000/api/v1/userInfo
@@ -120,6 +156,7 @@ router.get("/user-info", authToken , async(req,res)=>{
     try{
     const {id} = req.headers;
     const data = await User.findById(id);
+    console.log(data);
     return res.status(200).json(data);
     }catch(err){
         console.log(err);
@@ -140,4 +177,8 @@ router.put("/update-user-info", authToken , async(req,res)=>{
     }
 }); 
 
+// send-verify-email route
+// localhost:3000/api/v1/send-verify-email
+router.post("/send-verify-email", authToken,SendverifyEmail);
+router.post("/verify-email", authToken,VerifyEmail);
 module.exports = router;
