@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "./Signup.css";
+import "./OTP.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,
   faGooglePlusG,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+import Cookies from "js-cookie";
 
 export default function Signup() {
   const [OTPValues, setOTPValues] = useState({
@@ -21,13 +22,13 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const ValidateOtp = (values) => {
+  const ValidateOTP = (values) => {
     const errors = {};
 
-    if (!values.otp) {
-      errors.otp = "OTP is required";
-    } else if (!/^\d{6}$/.test(values.otp)) {
-      errors.otp = "OTP must be a 6-digit number";
+    if (!values.OTP) {
+      errors.OTP = "OTP is required";
+    } else if (!/^\d{6}$/.test(values.OTP)) {
+      errors.OTP = "OTP must be a 6-digit number";
     }
 
     return errors;
@@ -48,16 +49,21 @@ export default function Signup() {
     return errors;
   };
 
-  const handleSignUp = async (e) => {
+  const handleOTP = async (e) => {
     e.preventDefault();
-    const errors = ValidateOtp(OTPValues);
+    const errors = ValidateOTP(OTPValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
           "http://localhost:3000/api/verify-otp",
-          signupValues
+          {
+            otp: OTPValues.OTP,
+          },
+          {
+            withCredentials: true,
+          }
         );
         alert(response.data.msg);
       } catch (error) {
@@ -100,8 +106,9 @@ export default function Signup() {
 
   const handleChangeSignUp = (e) => {
     const { name, value } = e.target;
-    setSignupValues({ ...signupValues, [name]: value });
+    setOTPValues({ ...OTPValues, [name]: value });
   };
+
   const handleChangeSignIn = (e) => {
     const { name, value } = e.target;
     setSigninValues({ ...signinValues, [name]: value });
@@ -139,8 +146,8 @@ export default function Signup() {
           <div className="containerr" id="main">
             <div className="form-container">
               <div className="sign-up">
-                <form onSubmit={handleSignUp}>
-                  <h1>Create Account</h1>
+                <form onSubmit={handleOTP}>
+                  <h1>Verify Account</h1>
                   <div className="social-container">
                     <a href="#" className="social">
                       <FontAwesomeIcon icon={faFacebookF} />
@@ -154,15 +161,15 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    name="otp"
+                    name="OTP"
                     placeholder="Enter OTP"
-                    value={OTPValues.otp}
+                    value={OTPValues.OTP}
                     onChange={handleChangeSignUp}
                     required
                   />
                   {formErrors.OTP && <p className="error">{formErrors.OTP}</p>}
                   <button className="signUp" type="submit">
-                    Sign Up
+                    Confirm
                   </button>
                 </form>
               </div>
@@ -213,20 +220,18 @@ export default function Signup() {
 
             <div className="overlay-container">
               <div className="overlay">
-                <div className="overlay-left">
-                  <h1>Welcome Back!</h1>
-                  <p>
-                    To keep connected with us please login with your personal
-                    info
-                  </p>
-                  <button className="signIn">Sign In</button>
-                </div>
                 <div className="overlay-right">
                   <h1>Hello, Reader</h1>
+                  <p>Enter your OTP and start your journey with us</p>
+                  <button className="signUp">Confirm OTP</button>
+                </div>
+                <div className="overlay-left">
+                  <h1>Welcome !</h1>
                   <p>
-                    Enter your personal details and start the journey with us
+                    To keep connected with us please login with your personal
+                    info after Confirming OTP
                   </p>
-                  <button className="signUp">Sign Up</button>
+                  <button className="signIn">Sign In</button>
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ const {authToken} = require("../middleWare/userAuth.js");
 const { SendverifyEmail } = require("../controllers/SendverifyEmail.js");
 const { VerifyOtp } = require("../controllers/VerifyOTP.js");
 const { forgetPassword, resetPassword } = require("../controllers/forgetPassword.js");
+const localStorage = require('node-localstorage');
 
 
 //sign-up route
@@ -58,13 +59,7 @@ router.post("/sign-up" , async(req,res)=>{
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
         console.log(token);
         //save Token in cookie
-        res.cookie('token', token, 
-            { 
-                httpOnly: true,
-                secure: false,   
-                sameSite: 'none' , // to make it work on another domains
-                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-            });
+        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" , maxAge: 1000*60*60*24*7}); 
         SendverifyEmail(req,res);
     }catch(err){
         console.log(err);
@@ -107,13 +102,8 @@ router.post("/sign-in" , async(req,res)=>{
                 role : existingUser.role
             };
                const token = jwt.sign({id : existingUser._id},process.env.JWT_SECRET,{expiresIn: "7d"});
-              res.cookie('token', token, 
-                { 
-                    httpOnly: true,
-                    secure: false,   
-                    sameSite: 'none' , // to make it work on another domains
-                    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-                });
+             
+                res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" , maxAge: 1000*60*60*24*7}); 
                 return res
                 .status(200)
                 .json(

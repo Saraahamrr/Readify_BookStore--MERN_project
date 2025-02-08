@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [signupValues, setSignupValues] = useState({
     username: "",
     email: "",
@@ -72,11 +73,18 @@ export default function Signup() {
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
       try {
+        axios.defaults.withCredentials = true;
         const response = await axios.post(
           "http://localhost:3000/api/sign-up",
           signupValues
         );
         alert(response.data.msg);
+        if (
+          response.data.msg ===
+          "User signed-up successfully,please Verify Your email"
+        ) {
+          navigate("/otp");
+        }
       } catch (error) {
         alert(error.response.data.msg);
       }
@@ -100,7 +108,8 @@ export default function Signup() {
       try {
         const response = await axios.post(
           "http://localhost:3000/api/sign-in",
-          signinValues
+          signinValues,
+          { withCredentials: true }
         );
         localStorage.setItem("userId", response.data.id);
         localStorage.setItem("role", response.data.role);

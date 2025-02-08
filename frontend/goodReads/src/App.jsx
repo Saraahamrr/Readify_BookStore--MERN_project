@@ -27,24 +27,24 @@ function App() {
     <BooksProvider>
       <AuthorsProvider>
         <Header />
-          <Suspense fallback={<div className="loading">Loading...</div>}>
-            <Routes>
-              <Route exact path="/" element={<Home />} />
-              <Route path="/allbooks" element={<AllBooks />} />
-              <Route path="/BookDetails/:id" element={<BookDetails />} />
-              <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/add-book" element={<AddBook />} />
-              <Route path="/book-management" element={<BookManagement />} />
-              <Route path="/update-book/:id" element={<UpdateBook />} />
-              <Route path="/search" element={<SearchResult />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
+        <Suspense fallback={<div className="loading">Loading...</div>}>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/allbooks" element={<AllBooks />} />
+            <Route path="/BookDetails/:id" element={<BookDetails />} />
+            <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/add-book" element={<AddBook />} />
+            <Route path="/book-management" element={<BookManagement />} />
+            <Route path="/update-book/:id" element={<UpdateBook />} />
+            <Route path="/search" element={<SearchResult />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
 
-          <Footer />
+        <Footer />
       </AuthorsProvider>
     </BooksProvider>
   );
