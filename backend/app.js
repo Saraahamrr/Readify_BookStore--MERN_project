@@ -11,6 +11,8 @@ const userRouter = require('./routes/userControl');
 const favouriteRouter = require('./routes/favourites');
 const authorRouter = require("./routes/authors.route");
 const categoryRouter = require("./routes/categories.route");
+const cookieParser = require('cookie-parser');
+
 
 // Import cart earlier to avoid circular dependency issues
 const Cart = require('./routes/cart.js');
@@ -18,9 +20,15 @@ const Cart = require('./routes/cart.js');
 //stripe
 const stripe = require('./routes/stripe.js');
 
+connectDB();
+app.use(cookieParser());
+app.use(
+    cors({
+      origin: "http://localhost:5173", // Allow requests from frontend
+      credentials: true, // Allow sending cookies
+    })
+  );
 
-// Middleware
-app.use(cors());
 app.use(express.json());
 
 // Connect to DB
@@ -36,6 +44,7 @@ app.use('/api/cart', Cart); // Ensure Cart is correctly required
 //stripe
 app.use('/api/checkout', stripe);
 
+const { cookie } = require("express-validator");
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});
 });
@@ -43,11 +52,6 @@ app.get("/test", (req, res) => {
 app.use("/api/authors", authorRouter);
 app.use("/api/categories", categoryRouter);
 app.use('/api/search', searchRouter);
-
-// app.get("/test", (req, res) => {
-//     res.json({msg:"test worked"});
-// });
-
 
 // global middle ware for not found router
 app.all('*',(req,res,next)=>{

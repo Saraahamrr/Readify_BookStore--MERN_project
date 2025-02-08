@@ -8,10 +8,10 @@ export default function Authors() {
     if (loading) return <div>Loading authors...</div>;
 
     return (
-        <div>
-            <h4 className='title' style={{ marginTop: "20px", fontSize: "40px" }}> Authors </h4>
+        <div className='d-flex flex-column align-items-center'>
+            <h1 className='title text-start m-5 fw-bold'> Authors </h1>
 
-            <div className="row">
+            <div className="row  align-self-start mx-5">
                 {authors.length > 0 ? authors.map((author) => (
                     <Card key={author._id} author={author} />  
                 )) : <div>No authors found</div>}

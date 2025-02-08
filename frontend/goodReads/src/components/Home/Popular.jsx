@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import "./RecentlyAdded.css";
+import "./Popular.css";
 import axios from "axios";
 import Card from '../BookCard/Card';
 import Loader from '../Loader/Loader';
 
-export default function RecentlyAdded() {
+export default function Popular() {
     const [Data, setData] = useState([]);
 
     useEffect(() => {
@@ -20,10 +20,10 @@ export default function RecentlyAdded() {
     }, []);
 
     return (
-        <div className='recent'>
-            <h4 className='title'>Popular Books</h4>
+        <div className='recent d-flex flex-column align-items-center'>
+            <h1 className='title text-start m-5 fw-bold'>Popular Books</h1>
 
-            <div className="row">
+            <div className="row align-self-start mx-5">
                 {Data.length > 0 ? Data.filter(book => book.averageRating >= 3).map((book) => (
                     <Card key={book._id} book={book} /> 
                 )) : <Loader />}

@@ -25,7 +25,7 @@ export default function Hero() {
                 setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
                 setFade(true);
             }, 1000);
-        }, 4000);
+        }, 2000);
         return () => clearInterval(interval);
     }, []);
 

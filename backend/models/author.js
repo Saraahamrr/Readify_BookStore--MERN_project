@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const authorSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    gender: { type: String, enum: ["male", "female", "Female","Male"] },
-    bio: { type: String },
-    dateOfBirth: { type: Date },
-    image: {type: String}
+    gender: { type: String, enum: ["male", "female", "Female","Male"],required:false },
+    bio: { type: String, default:"No bio", required:false},
+    dateOfBirth: { type: Date,required:false },
+    image: {type: String, required:false}
   },
   {
     timestamps: true,
