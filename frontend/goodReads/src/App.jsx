@@ -6,6 +6,7 @@ import "./App.css";
 import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
+import OTP from "./pages/VerifyOtp/OTP";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -40,6 +41,7 @@ function App() {
             <Route path="/add-book" element={<AddBook />} />
             <Route path="/update-book/:id" element={<UpdateBook />} />
             <Route path="/search" element={<SearchResult />} />
+            <Route path="/OTP" element={<OTP />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
