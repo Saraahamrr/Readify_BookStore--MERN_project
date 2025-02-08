@@ -22,7 +22,7 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
 
 const getBook = asyncWrapper(async (req, res, next) => {
   const book = await Book.findOne(
-    { _id: req.params.bookId }, 
+    { id: Number(req.params.bookId) },  
     { __v: false }
   )
   .populate("authors")
@@ -37,6 +37,7 @@ const getBook = asyncWrapper(async (req, res, next) => {
 });
 
 
+
 const addBook = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -44,24 +45,27 @@ const addBook = asyncWrapper(async (req, res, next) => {
     return next(error);
   }
 
-
+  const { id, ...bookData } = req.body;
   const newBook = new Book(
-    req.body
+    bookData
   );
 
   console.log("Saving new book:", newBook);
-  await newBook.save(); // Assuming asyncWrapper handles errors here
+  await newBook.save(); 
 
   res.status(201).json({
     status: httpStatusText.SUCCESS,
     data: { book: newBook },
+    msg : "Book added successfully"
   });
 });
 
 const updateBook = asyncWrapper(async (req, res, next) => {
+  const { id, ...bookData } = req.body;
+
   const updatedBook = await Book.findOneAndUpdate(
-    { id: req.params.bookId },
-    req.body,
+    { id: Number(req.params.bookId) },
+    bookData,
     { new: true, runValidators: true }
   );
 
@@ -85,7 +89,7 @@ const deleteBook = asyncWrapper(async (req, res, next) => {
   const deletedcount = await Book.deleteOne({
     id: req.params.bookId,
   });
-  res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
+  res.status(200).json({ status: httpStatusText.SUCCESS, data: null,msg:"Book deleted successfully" });
 });
 
 
