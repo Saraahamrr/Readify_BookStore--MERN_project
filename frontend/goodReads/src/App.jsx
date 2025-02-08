@@ -8,6 +8,7 @@ import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
 
+
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
 const BookDetails = lazy(() => import("./pages/BookDetails"));
@@ -27,6 +28,7 @@ function App() {
   return (
     <BooksProvider>
       <AuthorsProvider>
+      
         <Header />
         <Suspense fallback={<div className="loading">Loading...</div>}>
           <Routes>
@@ -47,6 +49,7 @@ function App() {
         </Suspense>
 
         <Footer />
+     
       </AuthorsProvider>
     </BooksProvider>
   );

@@ -3,79 +3,58 @@ import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleFavourite, fetchFavorites } from "../store/favSlice"; 
 import "./BookDetails.css";
 
 export default function BookDetails() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
-
-
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
 
+  const dispatch = useDispatch();
+  const favs = useSelector((state) => state.favs.items); 
+
   useEffect(() => {
-    console.log("Fetching book with ID:", id);
-    if (!id) return;
+    dispatch(fetchFavorites()); 
 
-    axios.get(`http://localhost:3000/api/books/${id}`)
-      .then((response) => {
-        console.log("Fetched book:", response.data);
-        setBook(response.data.book[0] || response.data.book);  // ✅ دعم الاستجابة لو جاية كـ object مش array
-        setLoading(false);
-      })
-      .catch((error) => {
+    const fetchBookDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/books/${id}`);
+        setBook(response.data.book);
+      } catch (error) {
         console.error("Error fetching book details:", error);
+      } finally {
         setLoading(false);
-      });
-  }, [id]);
+      }
+    };
 
-
+    fetchBookDetails();
+  }, [id, dispatch]);
 
   const handleAddReview = async () => {
     try {
       const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
-        userId: "user123",  // user logged in 
+        userId: "user123",
         ratingValue: newRating,
         review: newReview,
       });
 
       console.log("Review added:", response.data);
 
-
       setBook((prevBook) => ({
         ...prevBook,
         rates: [...prevBook.rates, { userId: "user123", rating: newRating, review: newReview }],
       }));
 
-
       setNewRating(0);
       setNewReview("");
-
     } catch (error) {
       console.error("Error adding review:", error);
     }
   };
-
-
-  const headers = {
-    id: localStorage.getItem("id")
-    , authorization: `Bearer ${localStorage.getItem("token")}`
-    , bookid: id
-  }
-
-  const handleFavourites = async () => {
-    const response = await axios.put("http://localhost:3000/api/add-favourite", {}, { headers })
-
-    alert(response.data.message)
-  }
-
-  const handleCart = async () => {
-    const response = await axios.put("http://localhost:3000/api/cart/add-to-cart", {}, { headers })
-    alert(response.data.message)
-  }
-
-
 
   if (loading) return <div>Loading...</div>;
   if (!book) return <div>Book not found</div>;
@@ -94,14 +73,15 @@ export default function BookDetails() {
         <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
-
-        <button className="like-button" onClick={handleFavourites}>
-          <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "30px" }} />
+       
+        <button className="like-button" onClick={() => dispatch(toggleFavourite(id))}>
+          <FontAwesomeIcon
+            icon={faHeart}
+            style={{ color: favs.includes(id) ? "red" : "gray", fontSize: "30px" }}
+          />
         </button>
 
-
-
-        <button className="cart-button" onClick={handleCart}>
+        <button className="cart-button">
           <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
         </button>
       </div>
