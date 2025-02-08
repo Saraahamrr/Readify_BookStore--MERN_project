@@ -1,7 +1,11 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const authToken = (req, res, next) => {
-    const {token} = req.cookies; 
+    // const {authHeaders} = req.headers('auth-token'); 
+    // const token = authHeaders.split(' ')[1];
+    const token = req.cookies.token;
+    console.log(token);
     if (!token) {
         return res.status(401).json({ msg: 'Access Denied, Token Required' });
     }
@@ -12,9 +16,9 @@ const authToken = (req, res, next) => {
         if (!decoded.id) {
             return res.status(403).json({ msg: 'Unauthorized, please log in again' });
         }
-        req.body.id = decoded.id; // Attach user ID to request body
+        req.body.id = decoded.id; 
 
-        next(); // Proceed to next middleware
+        next(); 
     } catch (err) {
         return res.status(403).json({ msg: 'Invalid Token' });
     }
