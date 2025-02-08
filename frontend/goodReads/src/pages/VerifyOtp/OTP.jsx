@@ -86,7 +86,8 @@ export default function Signup() {
       try {
         const response = await axios.post(
           "http://localhost:3000/api/sign-in",
-          signinValues
+          signinValues,
+          { withCredentials: true }
         );
         localStorage.setItem("userId", response.data.id);
         localStorage.setItem("role", response.data.role);
