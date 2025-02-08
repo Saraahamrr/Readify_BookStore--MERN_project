@@ -28,6 +28,10 @@ export default function Header() {
       title: "Profile",
       link: "/profile",
     },
+    {
+      title:"Authors"
+      ,link:"/authors"
+    }
   ];
   const handleSearch = (e) => {
     e.preventDefault();

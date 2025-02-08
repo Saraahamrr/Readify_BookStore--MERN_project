@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import "./RecentlyAdded.css";
+import "./Popular.css";
 import axios from "axios";
 import Card from '../BookCard/Card';
 import Loader from '../Loader/Loader';
 
-export default function RecentlyAdded() {
+export default function Popular() {
     const [Data, setData] = useState([]);
 
     useEffect(() => {

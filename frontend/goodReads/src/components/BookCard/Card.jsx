@@ -5,6 +5,7 @@ import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./Card.css";
 import { Link } from "react-router-dom";
 import StarRating from "../StarRate";
+import authorimage from '../../assets/author.jpeg'
 
 export default function Card({ book, author }) {
     if (!book && !author) {
@@ -19,6 +20,7 @@ export default function Card({ book, author }) {
 
     const authorName = author?.name || "Unknown Author";
     const authorBio = author?.bio || "No biography available";
+    const authorImage = author?.image 
 
     return (
         <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
@@ -48,6 +50,8 @@ export default function Card({ book, author }) {
 
                         <div className="btn-group">
                             <button className="like-button"><FontAwesomeIcon icon={faHeart} /></button>
+
+
                             <button className="cart-button">
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                             </button>
@@ -59,6 +63,12 @@ export default function Card({ book, author }) {
 
             {author && (
                 <div className="card-body">
+                    <img
+                        src={authorImage ||authorimage }
+                        className="card-img-top"
+                        alt={authorName}
+                        style={{ height: "300px", objectFit: "cover" }}
+                    />
                     <h5 className="card-title">{authorName}</h5>
                     <p className="card-text">{authorBio}</p>
                     <Link className="details-btn" to={`/AuthorDetails/${author._id}`} state={{ book }} style={{ textDecoration: "none" }}>
