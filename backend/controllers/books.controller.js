@@ -45,9 +45,9 @@ const addBook = asyncWrapper(async (req, res, next) => {
     return next(error);
   }
 
-
+  const { id, ...bookData } = req.body;
   const newBook = new Book(
-    req.body
+    bookData
   );
 
   console.log("Saving new book:", newBook);
@@ -56,6 +56,7 @@ const addBook = asyncWrapper(async (req, res, next) => {
   res.status(201).json({
     status: httpStatusText.SUCCESS,
     data: { book: newBook },
+    msg : "Book added successfully"
   });
 });
 
