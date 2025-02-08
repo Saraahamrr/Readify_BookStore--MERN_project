@@ -22,7 +22,7 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
 
 const getBook = asyncWrapper(async (req, res, next) => {
   const book = await Book.findOne(
-    { _id: req.params.bookId }, 
+    { id: Number(req.params.bookId) },  // Use 'id' field
     { __v: false }
   )
   .populate("authors")
@@ -35,6 +35,7 @@ const getBook = asyncWrapper(async (req, res, next) => {
   
   res.json({ status: httpStatusText.SUCCESS, book });
 });
+
 
 
 const addBook = asyncWrapper(async (req, res, next) => {
@@ -60,7 +61,7 @@ const addBook = asyncWrapper(async (req, res, next) => {
 
 const updateBook = asyncWrapper(async (req, res, next) => {
   const updatedBook = await Book.findOneAndUpdate(
-    { id: req.params.bookId },
+    { id: Number(req.params.bookId) },
     req.body,
     { new: true, runValidators: true }
   );

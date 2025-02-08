@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan,faPen } from "@fortawesome/free-solid-svg-icons";
 import BooksContext from "../../context/books";
@@ -30,7 +31,11 @@ export const deleteBook = async (bookId, setBooks) => {
 
 export default function BookManagement() {
   const { books, setBooks, loading } = useContext(BooksContext);
+  const navigate = useNavigate();
   if (loading) return <Loader />;
+  const updateBook = (bookId)=>{
+    navigate(`/update-book/${bookId}`)
+  }
   return (
     <div className="p-5 d-flex flex-column align-items-center">
       <div>
@@ -68,7 +73,7 @@ export default function BookManagement() {
                 <td>
                 <button
                     className="editButton"
-                    onClick={() => updateBook(book.id, setBooks)}
+                    onClick={() => updateBook(book.id)}
                   >
                     <FontAwesomeIcon icon={faPen} />
                   </button>

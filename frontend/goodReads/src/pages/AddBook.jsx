@@ -3,6 +3,19 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
+export const fetchData = async (setCategories, setAuthors) => {
+  try {
+    const [responseCat, responseAuthors] = await Promise.all([
+      axios.get("http://localhost:3000/api/categories"),
+      axios.get("http://localhost:3000/api/authors"),
+    ]);
+    setCategories(responseCat.data.categories);
+    setAuthors(responseAuthors.data.authors);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
 const AddBook = () => {
   const [categories, setCategories] = useState([]);
   const [authors, setAuthors] = useState([]);
@@ -14,19 +27,7 @@ const AddBook = () => {
   const [categoryError, setCategoryError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [responseCat, responseAuthors] = await Promise.all([
-          axios.get("http://localhost:3000/api/categories"),
-          axios.get("http://localhost:3000/api/authors"),
-        ]);
-        setCategories(responseCat.data.categories);
-        setAuthors(responseAuthors.data.authors);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
+    fetchData(setCategories, setAuthors);
   }, []);
 
   const formik = useFormik({
@@ -282,10 +283,10 @@ const AddBook = () => {
                   }
                 />
                 <div className="my-3 w-100 d-flex gap-4 align-items-start justify-content-between align-items-center">
-                  <div className="w-100 mb-2 d-flex gap-4 align-items-center " style={{minWidth:"8rem"}}>
+                  <div className="w-75 mb-2 d-flex  align-items-center " style={{minWidth:"8rem"}}>
                     <label
                       htmlFor="dateOfBirth"
-                      className="f fs-5 fw-bolder "
+                      className="f fs-5 fw-bolder mx-2"
                       style={{ color: "gray" }}
                     >
                       dateOfBirth
@@ -310,7 +311,7 @@ const AddBook = () => {
                         e.target.value &&
                         setNewAuthor({ ...newAuthor, gender: e.target.value })
                       }
-                      style={{ backgroundColor: "gray", color: "white" }}
+                      style={{ backgroundColor: "gray", color: "white", width: "8em" }}
                     >
                       <option value="">Select gender</option>
                       <option value="Male">Male</option>
@@ -608,6 +609,7 @@ const AddBook = () => {
             width: "7em",
             height: "2em",
             borderRadius: "0.7em",
+            border: "0"
           }}
         >
           Add
