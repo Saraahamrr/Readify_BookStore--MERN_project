@@ -37,6 +37,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/add-book" element={<AddBook />} />
+              <Route path="/book-management" element={<BookManagement />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
               <Route path="/search" element={<SearchResult />} />
               <Route path="*" element={<NotFound />} />

@@ -7,32 +7,37 @@ import axios from "axios";
 import "./BookManagement.css";
 
 
-export const deleteBook = async (bookId,setBooks) => {
-    const confirmation = confirm("Are you sure you want to delete this book?");
-    if(!confirmation) return;
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/books/${bookId}`,
-        {headers: { "auth-token": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJtZW5uYSIsImVtYWlsIjoiZW1haWxtYWVubmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTczODc4NjA2MiwiZXhwIjoxNzQxMzc4MDYyfQ.GIZD47utk9sEgH4eHEOBWzW1LX2131yW3UYgQz4jIdE`, id:"67a0ff2e2bd5b05cb1cc4f07" }}
+export const deleteBook = async (bookId, setBooks) => {
+  const confirmation = confirm("Are you sure you want to delete this book?");
+  if (!confirmation) return;
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/api/books/${bookId}`,
+      { headers: { "auth-token": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJtZW5uYSIsImVtYWlsIjoiZW1haWxtYWVubmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTczODc4NjA2MiwiZXhwIjoxNzQxMzc4MDYyfQ.GIZD47utk9sEgH4eHEOBWzW1LX2131yW3UYgQz4jIdE`, id: "67a0ff2e2bd5b05cb1cc4f07" } }
 
-      );
-      console.log(response); // Debugging
-      if (response.status === 200) {
-        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
-        alert("Book deleted successfully!");
-      }
-    } catch (error) {
-        console.error("Error deleting book:", error);
-        alert("Failed to delete the book. Please try again.");    }
-  };
+    );
+    console.log(response); // Debugging
+    if (response.status === 200) {
+      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+      alert("Book deleted successfully!");
+    }
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    alert("Failed to delete the book. Please try again.");
+  }
+};
 
 
 export default function BookManagement() {
-  const { books, setBooks,loading } = useContext(BooksContext);
+  const { books, setBooks, loading } = useContext(BooksContext);
   if (loading) return <Loader />;
   return (
-    <div className="p-2">
-      <table className="table table-striped table-hover table-dark ">
+    <div className="p-5 d-flex flex-column align-items-center">
+      <div>
+        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white" }} className="custom-btn sign-btn"
+        >+ New book</button>
+      </div>
+      <table className="m-5 table table-striped table-hover table-dark ">
         <thead className="thead-dark" style={{ position: "sticky", top: 0 }}>
           <tr>
             <th scope="col">id</th>
@@ -63,7 +68,7 @@ export default function BookManagement() {
                 <td>
                   <button
                     className="trashButton"
-                    onClick={() => deleteBook(book.id,setBooks)}
+                    onClick={() => deleteBook(book.id, setBooks)}
                   >
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>
@@ -78,4 +83,4 @@ export default function BookManagement() {
     </div>
   );
 }
- 
+

@@ -34,7 +34,7 @@ export default function Card({ book, author }) {
                     <div className="card-body">
                         <h5 className="card-title">{bookTitle}</h5>
                         <p className="card-text"><strong>Authors:</strong> {bookAuthors}</p>
-                        <p className="card-text"><strong>Rating:</strong> <StarRating rating={book.averageRating} /></p>
+                        <div className="card-text mb-3"><strong>Rating:</strong> <StarRating rating={book.averageRating} /></div>
 
                         <Link className="details-btn" to={`/BookDetails/${book.id}`} state={{ book }}>
                             More Details

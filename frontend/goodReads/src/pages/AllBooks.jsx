@@ -9,10 +9,10 @@ export default function AllBooks() {
   if (loading) return <Loader />;
 
   return (
-    <div>
+    <div className='d-flex flex-column align-items-center'>
       <h4 className='title' style={{marginTop:"20px" , fontSize:"40px"}}>All Books</h4>
 
-      <div className="row">
+      <div className="row d-flex align-items-center justify-content-center">
         {books.length > 0 ? books.map((book) => (
           <Card key={book._id} book={book} />
         )) : <Loader />

@@ -20,10 +20,10 @@ export default function RecentlyAdded() {
     }, []);
 
     return (
-        <div className='recent'>
-            <h4 className='title'>Popular Books</h4>
+        <div className='recent d-flex flex-column align-items-center'>
+            <h1 className='title text-start m-5 fw-bold'>Popular Books</h1>
 
-            <div className="row">
+            <div className="row align-self-start mx-5">
                 {Data.length > 0 ? Data.filter(book => book.averageRating >= 3).map((book) => (
                     <Card key={book._id} book={book} /> 
                 )) : <Loader />}

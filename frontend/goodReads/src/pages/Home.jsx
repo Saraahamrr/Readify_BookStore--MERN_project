@@ -7,7 +7,7 @@ import AboutUs from '../components/AboutUs/AboutUs'
 
 export default function Home() {
   return (
-    <div className="bg-red-500 text-black px-10 py-12">
+    <div className="bg-red-500 text-black px-10 py-12 d-flex flex-column justify-content-center">
        <Hero/>
        <RecentlyAdded/>
        <Authors />
