@@ -2,29 +2,51 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan,faPen } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
 import BooksContext from "../../context/books";
 import Loader from "../../components/Loader/Loader";
 import axios from "axios";
 import "./BookManagement.css";
 
 
-export const deleteBook = async (bookId, setBooks) => {
+ const deleteBook = async (bookId, setBooks) => {
   const confirmation = confirm("Are you sure you want to delete this book?");
   if (!confirmation) return;
   try {
+    axios.defaults.withCredentials = true;
     const response = await axios.delete(
-      `http://localhost:3000/api/books/${bookId}`,
-      { headers: { "auth-token": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJtZW5uYSIsImVtYWlsIjoiZW1haWxtYWVubmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTczODc4NjA2MiwiZXhwIjoxNzQxMzc4MDYyfQ.GIZD47utk9sEgH4eHEOBWzW1LX2131yW3UYgQz4jIdE`, id: "67a0ff2e2bd5b05cb1cc4f07" } }
-
+      `http://localhost:3000/api/books/${bookId}`
     );
     console.log(response); // Debugging
     if (response.status === 200) {
       setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
-      alert("Book deleted successfully!");
+      toast.success(response.data.msg, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+              });
     }
   } catch (error) {
     console.error("Error deleting book:", error);
-    alert("Failed to delete the book. Please try again.");
+    toast.error(error.response.data.msg, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+              });
   }
 };
 
