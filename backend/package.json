@@ -21,6 +21,7 @@
     "modules": "^0.4.0",
     "mongoose": "^8.9.6",
     "mongoose-sequence": "^6.0.1",
-    "node": "^23.7.0"
+    "node": "^23.7.0",
+    "stripe": "^17.6.0"
   }
 }

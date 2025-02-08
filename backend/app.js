@@ -15,6 +15,10 @@ const categoryRouter = require("./routes/categories.route");
 // Import cart earlier to avoid circular dependency issues
 const Cart = require('./routes/cart.js');
 
+//stripe
+const stripe = require('./routes/stripe.js');
+
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -29,8 +33,8 @@ app.use ("/api", favouriteRouter);
 
 app.use('/api/cart', Cart); // Ensure Cart is correctly required
 
-const authorRouter = require("./routes/authors.route");
-const categoryRouter = require("./routes/categories.route");
+//stripe
+app.use('/api/checkout', stripe);
 
 app.get("/test", (req, res) => {
     res.json({msg:"test worked"});

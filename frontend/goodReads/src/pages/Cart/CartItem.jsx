@@ -1,15 +1,12 @@
-import { useState } from "react";
-
-const CartItem = ({ product, onRemove, onUpdateQuantity }) => {
-    const { id, title, author, image, price, quantity } = product;
+const CartItem = ({ product, quantity, onRemove, onUpdateQuantity }) => {
+    const { id, title, author, coverImage, price } = product;
 
     return (
         <div className="cart-item">
             <div className="product-info">
-                <img src={image} alt={title} />
+                <img className='bookImage' src={coverImage} alt={title} />
                 <div className="details">
                     <p className="title">{title}</p>
-                    <p className="author">{author}</p>
                     <button className="remove-btn" onClick={() => onRemove(id)}>Remove</button>
                 </div>
             </div>

@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
             const response = await fetch('/api/cart/add-to-cart', {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("auth-token")}`,
+                    'auth-token': `bearer ${localStorage.getItem("auth-token")}`,
                     'id': 'USER_ID', // Replace with actual logged-in user ID
                     'bookid': bookId,
                 },

@@ -6,9 +6,10 @@ import "./App.css";
 import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
-import Cart from './pages/Cart/Cart';
 import { CartProvider } from './context/CartContext'; 
 import Checkout from './pages/checkout/Checkout';
+import Success from "./pages/checkout/Success";
+import Cancel from "./pages/checkout/Cancel";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -16,7 +17,7 @@ const BookDetails = lazy(() => import("./pages/BookDetails"));
 const AuthorDetails = lazy(() => import("./pages/AuthorDetails"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/SignUp/Signup"));
-const Cart = lazy(() => import("./pages/Cart"));
+const Cart = lazy(() => import("./pages/Cart/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -44,6 +45,8 @@ function App() {
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
               <Route path="/search" element={<SearchResult />} />
+              <Route path="/success" element={<Success/>} />
+              <Route path="/cancel" element={<Cancel/>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
