@@ -3,7 +3,7 @@ const { body, validationResult,param } = require("express-validator");
 const bookController = require("../controllers/books.controller.js");
 const User = require("../models/user");
 const { authToken } = require("../middleWare/userAuth.js");
-
+const Book = require("../models/book");
 const router = express.Router();
 //console.log("+++++++++++++++++++++++++", bookController);
 
@@ -36,6 +36,16 @@ const validation = [[
     body("language").notEmpty().withMessage("Language is required"),
     body("price").notEmpty().withMessage("Price is required").isFloat({ gt: 0 }).withMessage("Price must be a positive number"),
   ]];
+
+  router.get("/recent-books", async (req, res) => {
+    try {
+      const books = await Book.find().sort({ createdAt: -1 }).limit(5); //  fetch last 5 books
+      res.status(200).json({ success: true, books });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  });
 
 
 router
@@ -115,6 +125,7 @@ router.route("/:bookId/rate")
     ],
     bookController.addRating
   );
+
 
 
   

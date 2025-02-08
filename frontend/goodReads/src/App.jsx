@@ -6,6 +6,7 @@ import "./App.css";
 import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
+import Authors from "./components/Home/Authors";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -31,6 +32,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/allbooks" element={<AllBooks />} />
+            <Route path="/authors" element={<Authors />} />
             <Route path="/BookDetails/:id" element={<BookDetails />} />
             <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
             <Route path="/signup" element={<Signup />} />
