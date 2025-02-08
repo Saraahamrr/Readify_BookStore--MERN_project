@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
@@ -6,12 +6,25 @@ import "./Card.css";
 import { Link } from "react-router-dom";
 import StarRating from "../StarRate";
 import authorimage from '../../assets/author.jpeg';
-import { useDispatch, useSelector } from "react-redux";
-import { toggleFavourite } from "../../store/favSlice";
+import axios from "axios";
 
 export default function Card({ book, author }) {
-    const dispatch = useDispatch();
-    const favs = useSelector((state) => state.favs?.items || []);
+    const [favorites, setFavorites] = useState([]);
+
+    useEffect(() => {
+        // جلب المفضلات عند تحميل الصفحة
+        const fetchFavorites = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/api/get-favorites");
+                setFavorites(response.data.favorites || []);
+            } catch (error) {
+                console.error("Error fetching favorites:", error);
+                setFavorites([]);
+            }
+        };
+
+        fetchFavorites();
+    }, []);
 
     if (!book && !author) {
         return <div>Loading...</div>;
@@ -25,12 +38,17 @@ export default function Card({ book, author }) {
     const authorBio = author?.bio || "No biography available";
     const authorImage = author?.image || authorimage;
 
-    const itemId = book?._id || author?._id; // استخدم معرف الكتاب أو المؤلف
+    const itemId = book?._id || author?._id; 
 
-    const isFav = favs.includes(itemId); // تحقق مما إذا كان العنصر في المفضلة
+    const isFav = useMemo(() => favorites.includes(itemId), [favorites, itemId]);
 
-    const handleFavClick = () => {
-        dispatch(toggleFavourite(itemId)); // تبديل حالة المفضلة
+    const handleFavClick = async () => {
+        try {
+            const response = await axios.post("http://localhost:3000/api/toggle-favorite", { bookId: itemId });
+            setFavorites(response.data.favorites || []); // تحديث القائمة بعد الحفظ في السيرفر
+        } catch (error) {
+            console.error("Error toggling favorite:", error);
+        }
     };
 
     return (
@@ -110,10 +128,6 @@ export default function Card({ book, author }) {
                     >
                         More Details
                     </Link>
-
-                    <button className="like-button" onClick={handleFavClick}>
-                        <FontAwesomeIcon icon={faHeart} style={{ color: isFav ? "red" : "gray" }} />
-                    </button>
                 </div>
             )}
         </div>

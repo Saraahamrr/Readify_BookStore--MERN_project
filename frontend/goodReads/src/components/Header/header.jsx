@@ -32,8 +32,6 @@ export default function Header() {
   
 
  
-
-
   const links = [
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },

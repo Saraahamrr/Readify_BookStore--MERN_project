@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleFavourite, fetchFavorites } from "../store/favSlice"; 
 import "./BookDetails.css";
 
 export default function BookDetails() {
@@ -13,15 +11,24 @@ export default function BookDetails() {
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
+  const [favorites, setFavorites] = useState([]);
 
-  const dispatch = useDispatch();
-  const favs = useSelector((state) => state.favs.items); 
 
   useEffect(() => {
-    dispatch(fetchFavorites()); 
+    const fetchUserFavorites = async () => {
+      axios.defaults.withCredentials = true;
+      try {
+          const response = await axios.get("http://localhost:3000/api/get-favourite");
+          setFavorites(response.data.data || []);
+      } catch (error) {
+          console.error("Error fetching favorites:", error);
+      }
+  };
+  
 
     const fetchBookDetails = async () => {
       try {
+        axios.defaults.withCredentials = true;
         const response = await axios.get(`http://localhost:3000/api/books/${id}`);
         setBook(response.data.book);
       } catch (error) {
@@ -31,9 +38,41 @@ export default function BookDetails() {
       }
     };
 
+    fetchUserFavorites();
     fetchBookDetails();
-  }, [id, dispatch]);
+  }, [id]);
 
+
+  const handleFavourites = async () => {
+    axios.defaults.withCredentials = true;
+    try {
+      if (favorites.includes(id)) {
+        await axios.delete("http://localhost:3000/api/remove-favourite", {
+          headers: {
+            bookid: id
+          }
+        });
+
+        
+        setFavorites((prevFavorites) => prevFavorites.filter(bookId => bookId !== id));
+  
+      } else {
+        await axios.put("http://localhost:3000/api/add-favourite", null, {
+          headers: {
+            bookid: id
+          }
+        });
+  
+    
+        setFavorites((prevFavorites) => [...prevFavorites, id]);
+      }
+    } catch (err) {
+      alert(err.response?.data?.msg || "Something went wrong!");
+    }
+  };
+  
+
+ 
   const handleAddReview = async () => {
     try {
       const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
@@ -42,11 +81,9 @@ export default function BookDetails() {
         review: newReview,
       });
 
-      console.log("Review added:", response.data);
-
       setBook((prevBook) => ({
         ...prevBook,
-        rates: [...prevBook.rates, { userId: "user123", rating: newRating, review: newReview }],
+        rates: [...(prevBook?.rates || []), { userId: "user123", rating: newRating, review: newReview }],
       }));
 
       setNewRating(0);
@@ -67,17 +104,17 @@ export default function BookDetails() {
 
       <div className="book-info">
         <h3>{book.title || "Unknown Title"}</h3>
-        <p><strong>Author(s):</strong> {book.authors?.map(author => author.name).join(", ") || "Unknown"}</p>
+        <p><strong>Author(s):</strong> {book.authors?.map((author) => author.name).join(", ") || "Unknown"}</p>
         <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
         <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
-        <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
+        <p><strong>Categories:</strong> {book.categories?.map((category) => category.name).join(", ") || "Unknown"}</p>
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
-       
-        <button className="like-button" onClick={() => dispatch(toggleFavourite(id))}>
+        {/* ✅ زر المفضلة يعمل بشكل صحيح الآن */}
+        <button className="like-button" onClick={handleFavourites}>
           <FontAwesomeIcon
             icon={faHeart}
-            style={{ color: favs.includes(id) ? "red" : "gray", fontSize: "30px" }}
+            style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
           />
         </button>
 
@@ -86,7 +123,7 @@ export default function BookDetails() {
         </button>
       </div>
 
-      {/* show reviews */}
+      {/* ✅ عرض المراجعات */}
       <div className="reviews-section">
         <h2>Reviews</h2>
         {book.rates?.length > 0 ? (
@@ -108,7 +145,7 @@ export default function BookDetails() {
           <p>No reviews yet. Be the first to review!</p>
         )}
 
-        {/* add review*/}
+        {/* ✅ إضافة مراجعة جديدة */}
         <div className="add-review">
           <h4>Add Your Review</h4>
           <div className="rating-input">
