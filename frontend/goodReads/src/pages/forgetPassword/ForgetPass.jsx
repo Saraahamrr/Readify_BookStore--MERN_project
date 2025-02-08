@@ -2,26 +2,23 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "./Signup.css";
+import "./ForgetPass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Bounce } from "react-toastify";
-
 import {
   faFacebookF,
   faGooglePlusG,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [signupValues, setSignupValues] = useState({
-    username: "",
+  const [emailValues, setEmailValues] = useState({
     email: "",
-    password: "",
-    address: "",
   });
   const [signinValues, setSigninValues] = useState({
     username: "",
@@ -30,30 +27,19 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const validateSignUp = (values) => {
+  const validateEmail = (values) => {
     const errors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!values.username) errors.username = "Username is required";
-    else if (/\s/.test(values.username))
-      errors.username = "Username must not contain spaces";
-
-    if (!values.email) errors.email = "Email is required";
-    else if (!emailRegex.test(values.email))
-      errors.email = "Wrong email format";
-
-    if (!values.password) errors.password = "Password is required";
-    else if (!passwordRegex.test(values.password))
-      errors.password =
-        "Password must include uppercase, lowercase, special symbol, numbers";
-    if (!values.address) errors.address = "Address is required";
-    else if (values.address.length < 10)
-      errors.address = "Address must be at least 10 characters";
+    if (!values.email) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(values.email)) {
+      errors.email = "Invalid email format";
+    }
 
     return errors;
   };
+
   const validateSignIn = (values) => {
     const errors = {};
     const passwordRegex =
@@ -69,17 +55,17 @@ export default function Signup() {
     return errors;
   };
 
-  const handleSignUp = async (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    const errors = validateSignUp(signupValues);
+    const errors = validateEmail(emailValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
       try {
-        axios.defaults.withCredentials = true;
         const response = await axios.post(
-          "http://localhost:3000/api/sign-up",
-          signupValues
+          "http://localhost:3000/api/forget-password",
+          { email: emailValues.email },
+          { withCredentials: true }
         );
         toast.success(response.data.msg, {
           position: "top-right",
@@ -92,11 +78,9 @@ export default function Signup() {
           theme: "colored",
           transition: Bounce,
         });
-        if (
-          response.data.msg ===
-          "User signed-up successfully,please Verify Your email"
-        ) {
-          navigate("/otp");
+        setEmailValues({ email: "" });
+        if (response.data.status === "success") {
+          navigate("/reset-pass", { state: { email: emailValues.email } });
         }
       } catch (error) {
         toast.error(error.response.data.msg, {
@@ -111,12 +95,6 @@ export default function Signup() {
           transition: Bounce,
         });
       }
-      setSignupValues({
-        username: "",
-        email: "",
-        password: "",
-        address: "",
-      });
     } else {
       setIsSubmitted(false);
     }
@@ -170,10 +148,11 @@ export default function Signup() {
     }
   };
 
-  const handleChangeSignUp = (e) => {
+  const handleChangeEmail = (e) => {
     const { name, value } = e.target;
-    setSignupValues({ ...signupValues, [name]: value });
+    setEmailValues({ ...emailValues, [name]: value });
   };
+
   const handleChangeSignIn = (e) => {
     const { name, value } = e.target;
     setSigninValues({ ...signinValues, [name]: value });
@@ -208,11 +187,15 @@ export default function Signup() {
     <>
       <div className="container-fluid">
         <div className="custom-form-container">
-          <div className="containerr" id="main">
+          <div className="containerr right-panel-active" id="main">
             <div className="form-container">
               <div className="sign-up">
-                <form onSubmit={handleSignUp}>
-                  <h1>Create Account</h1>
+                <form onSubmit={handleEmailSubmit}>
+                  <h1>Forget Password</h1>
+                  <p>
+                    Please enter your Email to send OTP and start ressetting
+                    password
+                  </p>
                   <div className="social-container">
                     <a href="#" className="social">
                       <FontAwesomeIcon icon={faFacebookF} />
@@ -226,51 +209,17 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={signupValues.username}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.username && (
-                    <p className="error">{formErrors.username}</p>
-                  )}
-                  <input
-                    type="email"
                     name="email"
-                    placeholder="Email"
-                    value={signupValues.email}
-                    onChange={handleChangeSignUp}
+                    placeholder="Enter email"
+                    value={emailValues.email}
+                    onChange={handleChangeEmail}
                     required
                   />
                   {formErrors.email && (
                     <p className="error">{formErrors.email}</p>
                   )}
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={signupValues.password}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.password && (
-                    <p className="error">{formErrors.password}</p>
-                  )}
-
-                  <input
-                    type="text"
-                    name="address"
-                    placeholder="address"
-                    value={signupValues.address}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.address && (
-                    <p className="error">{formErrors.address}</p>
-                  )}
                   <button className="signUp" type="submit">
-                    Sign Up
+                    Confirm
                   </button>
                 </form>
               </div>
@@ -311,7 +260,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <a href="#">Forget Password?</a>
+                  <Link to="/forget-pass">Forget Password?</Link>
                   <button className="signIn" type="submit">
                     Sign In
                   </button>
@@ -321,20 +270,18 @@ export default function Signup() {
 
             <div className="overlay-container">
               <div className="overlay">
-                <div className="overlay-left">
-                  <h1>Welcome Back!</h1>
-                  <p>
-                    To keep connected with us please login with your personal
-                    info
-                  </p>
-                  <button className="signIn">Sign In</button>
-                </div>
                 <div className="overlay-right">
                   <h1>Hello, Reader</h1>
+                  <p>Enter your email to Reset Password</p>
+                  <button className="signUp">Reset Password</button>
+                </div>
+                <div className="overlay-left">
+                  <h1>Welcome !</h1>
                   <p>
-                    Enter your personal details and start the journey with us
+                    To keep connected with us please login with your personal
+                    info after Confirming email
                   </p>
-                  <button className="signUp">Sign Up</button>
+                  <button className="signIn">Sign In</button>
                 </div>
               </div>
             </div>

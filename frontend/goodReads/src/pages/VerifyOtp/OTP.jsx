@@ -10,6 +10,9 @@ import {
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
 
 export default function Signup() {
   const [OTPValues, setOTPValues] = useState({
@@ -65,9 +68,29 @@ export default function Signup() {
             withCredentials: true,
           }
         );
-        alert(response.data.msg);
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       } catch (error) {
-        alert(error.response.data.msg);
+        toast.error(error.response.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       }
       setOTPValues({
         OTP: "",
@@ -92,9 +115,29 @@ export default function Signup() {
         localStorage.setItem("userId", response.data.id);
         localStorage.setItem("role", response.data.role);
         localStorage.setItem("token", response.data.token);
-        alert(response.data.msg);
+        toast.success(response.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       } catch (error) {
-        alert(error.response.data.msg);
+        toast.error(error.response.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       }
       setSigninValues({
         username: "",
@@ -144,7 +187,7 @@ export default function Signup() {
     <>
       <div className="container-fluid">
         <div className="custom-form-container">
-          <div className="containerr" id="main">
+          <div className="containerr right-panel-active" id="main">
             <div className="form-container">
               <div className="sign-up">
                 <form onSubmit={handleOTP}>

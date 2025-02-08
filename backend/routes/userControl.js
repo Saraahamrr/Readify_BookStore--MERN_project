@@ -191,7 +191,7 @@ router.post("/is-authourized", authToken, async(req,res)=>{
     }
 });
 // forget-password route
-router.post("/forget-password",authToken,forgetPassword);
+router.post("/forget-password",forgetPassword);
 // reset-password route
-router.post("/reset-password",authToken,resetPassword);
+router.post("/reset-password",resetPassword);
 module.exports = router;
