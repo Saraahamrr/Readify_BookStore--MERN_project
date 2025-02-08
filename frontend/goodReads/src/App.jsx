@@ -39,7 +39,6 @@ function App() {
 <CartProvider>
     <BooksProvider>
       <AuthorsProvider>
-        <BrowserRouter>
           <Header />
       <ToastContainer
         position="top-right"
@@ -80,7 +79,6 @@ function App() {
           </Suspense>
 
           <Footer />
-        </BrowserRouter>
       </AuthorsProvider>
     </BooksProvider>
 </CartProvider>

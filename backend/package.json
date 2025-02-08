@@ -25,11 +25,8 @@
     "mongoose": "^8.9.6",
     "mongoose-sequence": "^6.0.1",
     "node": "^23.7.0",
-<<<<<<< HEAD
-    "stripe": "^17.6.0"
-=======
     "node-localstorage": "^3.0.5",
-    "nodemailer": "^6.10.0"
->>>>>>> main
+    "nodemailer": "^6.10.0",
+    "stripe": "^17.6.0"
   }
 }
