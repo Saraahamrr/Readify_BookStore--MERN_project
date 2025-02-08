@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import "./AuthorDetails.css"
-
+import authorimage from '../assets/author.jpeg'
 export default function AuthorDetails() {
     const { id } = useParams();
     const [author, setAuthor] = useState(null);
@@ -31,6 +31,19 @@ export default function AuthorDetails() {
     return (
         <div className="author-details">
             <div className="author-info">
+                <img
+                    src={author.image || authorimage}
+                    className="card-img-top"
+                    alt={author.name}
+                    style={{
+                        width: "100%",   
+                        maxWidth: "400px", 
+                        height: "500px", 
+                        objectFit: "cover",
+                        borderRadius: "10px" 
+                    }}
+                />
+
                 <h3>{author.name || "Unknown Author"}</h3>
                 <p><strong>Bio:</strong> {author.bio || "No biography available"}</p>
                 <p><strong>Date of Birth:</strong> {author.dateOfBirth || "Unknown"}</p>
@@ -43,14 +56,9 @@ export default function AuthorDetails() {
                         {books.map((book) => (
                             <li key={book._id}>
                                 {book.title}
-                                <Link className="details-btn" to={`/BookDetails/${book._id}`}>
+                                <Link className="details-btn" to={`/BookDetails/${book._id}`} style={{ marginLeft: "50px", textDecoration: "none" }}>
                                     More Details
                                 </Link>
-
-
-
-
-
                             </li>
                         ))}
                     </ul>

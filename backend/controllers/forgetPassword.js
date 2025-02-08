@@ -36,20 +36,20 @@ const forgetPassword = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
-    const { id, otp, password } = req.body;
+    const { email, otp, password } = req.body;
 
     if (!otp ) {
         return res.status(400).json({ status: "error", msg: "otp is required" });
     }
-    if (!id) {
-        return res.status(400).json({ status: "error", msg: "id is required" });
+    if (!email) {
+        return res.status(400).json({ status: "error", msg: "email is required" });
     }
     if (!password) {
         return res.status(400).json({ status: "error", msg: "password is required" });
     }
     try {
 
-    const user = await User.findById(id);
+    const user = await User.findOne({ email });
     if (!user) {
         return res.status(400).json({ status: "error", msg: "user not found" });
     }                   

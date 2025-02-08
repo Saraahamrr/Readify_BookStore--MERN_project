@@ -2,26 +2,27 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import "./Signup.css";
+import "./ForgetPass.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Bounce } from "react-toastify";
-
 import {
   faFacebookF,
   faGooglePlusG,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Signup() {
-  const navigate = useNavigate();
-  const [signupValues, setSignupValues] = useState({
-    username: "",
-    email: "",
+  const location = useLocation();
+  const { email } = location.state || { email: "" };
+  const [OTPValues, setOTPValues] = useState({
+    OTP: "",
     password: "",
-    address: "",
+    email: email,
   });
   const [signinValues, setSigninValues] = useState({
     username: "",
@@ -30,30 +31,24 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const validateSignUp = (values) => {
+  const ValidateOTP = (values) => {
     const errors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
-    if (!values.username) errors.username = "Username is required";
-    else if (/\s/.test(values.username))
-      errors.username = "Username must not contain spaces";
-
-    if (!values.email) errors.email = "Email is required";
-    else if (!emailRegex.test(values.email))
-      errors.email = "Wrong email format";
-
-    if (!values.password) errors.password = "Password is required";
+    if (!values.OTP) {
+      errors.OTP = "OTP is required";
+    } else if (!/^\d{6}$/.test(values.OTP)) {
+      errors.OTP = "OTP must be a 6-digit number";
+    }
+    if (!values.password) errors.password = "password is required";
     else if (!passwordRegex.test(values.password))
       errors.password =
-        "Password must include uppercase, lowercase, special symbol, numbers";
-    if (!values.address) errors.address = "Address is required";
-    else if (values.address.length < 10)
-      errors.address = "Address must be at least 10 characters";
+        "password must include uppercase, lowercase, special symbol, numbers";
 
     return errors;
   };
+
   const validateSignIn = (values) => {
     const errors = {};
     const passwordRegex =
@@ -62,24 +57,31 @@ export default function Signup() {
     else if (/\s/.test(values.username))
       errors.username = "Username must not contain spaces";
 
-    if (!values.password) errors.password = "Password is required";
+    if (!values.password) errors.password = "password is required";
     else if (!passwordRegex.test(values.password))
       errors.password =
-        "Password must include uppercase, lowercase, special symbol, numbers";
+        "password must include uppercase, lowercase, special symbol, numbers";
     return errors;
   };
 
-  const handleSignUp = async (e) => {
+  const handleOTP = async (e) => {
     e.preventDefault();
-    const errors = validateSignUp(signupValues);
+    const errors = ValidateOTP(OTPValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
       try {
-        axios.defaults.withCredentials = true;
+        console.log(OTPValues.email);
         const response = await axios.post(
-          "http://localhost:3000/api/sign-up",
-          signupValues
+          "http://localhost:3000/api/reset-password",
+          {
+            email: OTPValues.email,
+            otp: OTPValues.OTP,
+            password: OTPValues.password,
+          },
+          {
+            withCredentials: true,
+          }
         );
         toast.success(response.data.msg, {
           position: "top-right",
@@ -92,13 +94,8 @@ export default function Signup() {
           theme: "colored",
           transition: Bounce,
         });
-        if (
-          response.data.msg ===
-          "User signed-up successfully,please Verify Your email"
-        ) {
-          navigate("/otp");
-        }
       } catch (error) {
+        console.log(error);
         toast.error(error.response.data.msg, {
           position: "top-right",
           autoClose: 5000,
@@ -111,11 +108,10 @@ export default function Signup() {
           transition: Bounce,
         });
       }
-      setSignupValues({
-        username: "",
-        email: "",
+      setOTPValues({
+        OTP: "",
         password: "",
-        address: "",
+        email: "",
       });
     } else {
       setIsSubmitted(false);
@@ -172,8 +168,9 @@ export default function Signup() {
 
   const handleChangeSignUp = (e) => {
     const { name, value } = e.target;
-    setSignupValues({ ...signupValues, [name]: value });
+    setOTPValues({ ...OTPValues, [name]: value });
   };
+
   const handleChangeSignIn = (e) => {
     const { name, value } = e.target;
     setSigninValues({ ...signinValues, [name]: value });
@@ -208,11 +205,11 @@ export default function Signup() {
     <>
       <div className="container-fluid">
         <div className="custom-form-container">
-          <div className="containerr" id="main">
+          <div className="containerr right-panel-active" id="main">
             <div className="form-container">
               <div className="sign-up">
-                <form onSubmit={handleSignUp}>
-                  <h1>Create Account</h1>
+                <form onSubmit={handleOTP}>
+                  <h1>Verify Account</h1>
                   <div className="social-container">
                     <a href="#" className="social">
                       <FontAwesomeIcon icon={faFacebookF} />
@@ -226,51 +223,26 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={signupValues.username}
+                    name="OTP"
+                    placeholder="Enter OTP"
+                    value={OTPValues.OTP}
                     onChange={handleChangeSignUp}
                     required
                   />
-                  {formErrors.username && (
-                    <p className="error">{formErrors.username}</p>
-                  )}
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={signupValues.email}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.email && (
-                    <p className="error">{formErrors.email}</p>
-                  )}
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={signupValues.password}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.password && (
-                    <p className="error">{formErrors.password}</p>
-                  )}
-
+                  {formErrors.OTP && <p className="error">{formErrors.OTP}</p>}
                   <input
                     type="text"
-                    name="address"
-                    placeholder="address"
-                    value={signupValues.address}
+                    name="password"
+                    placeholder="New password"
+                    value={OTPValues.password}
                     onChange={handleChangeSignUp}
                     required
                   />
-                  {formErrors.address && (
-                    <p className="error">{formErrors.address}</p>
+                  {formErrors.OTP && (
+                    <p className="error">{formErrors.password}</p>
                   )}
                   <button className="signUp" type="submit">
-                    Sign Up
+                    Confirm
                   </button>
                 </form>
               </div>
@@ -303,7 +275,7 @@ export default function Signup() {
                   <input
                     type="password"
                     name="password"
-                    placeholder="Password"
+                    placeholder="password"
                     value={signinValues.password}
                     onChange={handleChangeSignIn}
                     required
@@ -311,7 +283,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <a href="#">Forget Password?</a>
+                  <Link to="/forget-pass">Forget password?</Link>
                   <button className="signIn" type="submit">
                     Sign In
                   </button>
@@ -321,20 +293,18 @@ export default function Signup() {
 
             <div className="overlay-container">
               <div className="overlay">
-                <div className="overlay-left">
-                  <h1>Welcome Back!</h1>
-                  <p>
-                    To keep connected with us please login with your personal
-                    info
-                  </p>
-                  <button className="signIn">Sign In</button>
-                </div>
                 <div className="overlay-right">
                   <h1>Hello, Reader</h1>
+                  <p>Enter your OTP and start your journey with us</p>
+                  <button className="signUp">Confirm OTP</button>
+                </div>
+                <div className="overlay-left">
+                  <h1>Welcome !</h1>
                   <p>
-                    Enter your personal details and start the journey with us
+                    To keep connected with us please login with your personal
+                    info after Confirming OTP
                   </p>
-                  <button className="signUp">Sign Up</button>
+                  <button className="signIn">Sign In</button>
                 </div>
               </div>
             </div>

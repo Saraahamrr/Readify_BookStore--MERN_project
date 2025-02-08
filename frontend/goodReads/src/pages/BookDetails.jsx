@@ -2,25 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios"; 
+import axios from "axios";
 import "./BookDetails.css";
 
 export default function BookDetails() {
-  const { id } = useParams(); 
-  const [book, setBook] = useState(null); 
-  const [loading, setLoading] = useState(true); 
+  const { id } = useParams();
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
 
   useEffect(() => {
-    console.log("Fetching book with ID:", id); 
-    if (!id) return; 
+    console.log("Fetching book with ID:", id);
+    if (!id) return;
 
     axios.get(`http://localhost:3000/api/books/${id}`)
       .then((response) => {
-        console.log("Fetched book:", response.data); 
+        console.log("Fetched book:", response.data);
         setBook(response.data.book[0] || response.data.book);  // ✅ دعم الاستجابة لو جاية كـ object مش array
         setLoading(false);
       })
@@ -28,7 +28,7 @@ export default function BookDetails() {
         console.error("Error fetching book details:", error);
         setLoading(false);
       });
-  }, [id]); 
+  }, [id]);
 
 
 
@@ -42,13 +42,13 @@ export default function BookDetails() {
 
       console.log("Review added:", response.data);
 
-     
+
       setBook((prevBook) => ({
         ...prevBook,
         rates: [...prevBook.rates, { userId: "user123", rating: newRating, review: newReview }],
       }));
 
-      
+
       setNewRating(0);
       setNewReview("");
 
@@ -57,8 +57,28 @@ export default function BookDetails() {
     }
   };
 
-  if (loading) return <div>Loading...</div>; 
-  if (!book) return <div>Book not found</div>; 
+
+  const headers = {
+    id: localStorage.getItem("id")
+    , authorization: `Bearer ${localStorage.getItem("token")}`
+    , bookid: id
+  }
+
+  const handleFavourites = async () => {
+    const response = await axios.put("http://localhost:3000/api/add-favourite", {}, { headers })
+
+    alert(response.data.message)
+  }
+
+  const handleCart = async () => {
+    const response = await axios.put("http://localhost:3000/api/cart/add-to-cart", {}, { headers })
+    alert(response.data.message)
+  }
+
+
+
+  if (loading) return <div>Loading...</div>;
+  if (!book) return <div>Book not found</div>;
 
   return (
     <div className="book-details-container">
@@ -74,10 +94,14 @@ export default function BookDetails() {
         <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
-        <button className="like-button">
+
+        <button className="like-button" onClick={handleFavourites}>
           <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "30px" }} />
         </button>
-        <button className="cart-button">
+
+
+
+        <button className="cart-button" onClick={handleCart}>
           <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
         </button>
       </div>

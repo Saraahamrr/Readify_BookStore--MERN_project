@@ -8,16 +8,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
-  const links = [
-    { title: "Home", link: "/" },
-    { title: "Books", link: "/allbooks" },
-    { title: "Cart", link: "/cart" },
-    { title: "Profile", link: "/profile" }
-  ];
-
+  
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
+  const links = [
+    {
+      title: "Home",
+      link: "/",
+    },
+    {
+      title: "Books",
+      link: "/allbooks",
+    },
+    {
+      title: "Cart",
+      link: "/cart",
+    },
+    {
+      title: "Profile",
+      link: "/profile",
+    },
+    {
+      title:"Authors"
+      ,link:"/authors"
+    }
+  ];
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
