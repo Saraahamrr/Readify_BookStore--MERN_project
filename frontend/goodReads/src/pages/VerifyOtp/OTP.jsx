@@ -4,8 +4,6 @@ import axios from "axios";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./Signup.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
-
 import {
   faFacebookF,
   faGooglePlusG,
@@ -13,11 +11,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 export default function Signup() {
-  const [signupValues, setSignupValues] = useState({
-    username: "",
-    email: "",
-    password: "",
-    address: "",
+  const [OTPValues, setOTPValues] = useState({
+    OTP: "",
   });
   const [signinValues, setSigninValues] = useState({
     username: "",
@@ -26,30 +21,18 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const validateSignUp = (values) => {
+  const ValidateOtp = (values) => {
     const errors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
-    if (!values.username) errors.username = "Username is required";
-    else if (/\s/.test(values.username))
-      errors.username = "Username must not contain spaces";
-
-    if (!values.email) errors.email = "Email is required";
-    else if (!emailRegex.test(values.email))
-      errors.email = "Wrong email format";
-
-    if (!values.password) errors.password = "Password is required";
-    else if (!passwordRegex.test(values.password))
-      errors.password =
-        "Password must include uppercase, lowercase, special symbol, numbers";
-    if (!values.address) errors.address = "Address is required";
-    else if (values.address.length < 10)
-      errors.address = "Address must be at least 10 characters";
+    if (!values.otp) {
+      errors.otp = "OTP is required";
+    } else if (!/^\d{6}$/.test(values.otp)) {
+      errors.otp = "OTP must be a 6-digit number";
+    }
 
     return errors;
   };
+
   const validateSignIn = (values) => {
     const errors = {};
     const passwordRegex =
@@ -67,24 +50,21 @@ export default function Signup() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const errors = validateSignUp(signupValues);
+    const errors = ValidateOtp(OTPValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/sign-up",
+          "http://localhost:3000/api/verify-otp",
           signupValues
         );
         alert(response.data.msg);
       } catch (error) {
         alert(error.response.data.msg);
       }
-      setSignupValues({
-        username: "",
-        email: "",
-        password: "",
-        address: "",
+      setOTPValues({
+        OTP: "",
       });
     } else {
       setIsSubmitted(false);
@@ -174,49 +154,13 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    name="username"
-                    placeholder="Username"
-                    value={signupValues.username}
+                    name="otp"
+                    placeholder="Enter OTP"
+                    value={OTPValues.otp}
                     onChange={handleChangeSignUp}
                     required
                   />
-                  {formErrors.username && (
-                    <p className="error">{formErrors.username}</p>
-                  )}
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={signupValues.email}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.email && (
-                    <p className="error">{formErrors.email}</p>
-                  )}
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={signupValues.password}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.password && (
-                    <p className="error">{formErrors.password}</p>
-                  )}
-
-                  <input
-                    type="text"
-                    name="address"
-                    placeholder="address"
-                    value={signupValues.address}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.address && (
-                    <p className="error">{formErrors.address}</p>
-                  )}
+                  {formErrors.OTP && <p className="error">{formErrors.OTP}</p>}
                   <button className="signUp" type="submit">
                     Sign Up
                   </button>

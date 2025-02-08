@@ -24,7 +24,7 @@ export default function SearchPage() {
 
   return (
     <div className="container mt-4">
-      <h2>Search Results</h2>
+      <h2>Search Results for ..</h2>
       {books.length > 0 ? (
         <div className="row">
           {books.map((book) => (

@@ -9,15 +9,21 @@ const userRouter = require('./routes/userControl');
 const favouriteRouter = require('./routes/favourites');
 const authorRouter = require("./routes/authors.route");
 const categoryRouter = require("./routes/categories.route");
+const cookieParser = require('cookie-parser');
 
 const app = express();
 connectDB();
-
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use('/api/books',bookRouter);
 app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
+
+const { cookie } = require("express-validator");
+app.get("/test", (req, res) => {
+    res.json({msg:"test worked"});
+});
 app.use("/api/authors", authorRouter);
 app.use("/api/categories", categoryRouter);
 app.use('/api/search',searchRouter);

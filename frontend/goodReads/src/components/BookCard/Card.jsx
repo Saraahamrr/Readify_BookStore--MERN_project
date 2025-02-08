@@ -6,23 +6,23 @@ import "./Card.css";
 import { Link } from "react-router-dom";
 import StarRating from "../StarRate";
 
-export default function Card({ book, author }) {  
+export default function Card({ book, author }) {
     if (!book && !author) {
         return <div>Loading...</div>;
     }
 
 
-    const posterURL = book?.coverImage || "placeholder.jpg";  
+    const posterURL = book?.coverImage || "placeholder.jpg";
     const bookTitle = book?.title || "Unknown Title";
     const bookAuthors = book?.authors?.map(a => a.name).join(", ") || "Unknown";
-    
-   
+
+
     const authorName = author?.name || "Unknown Author";
     const authorBio = author?.bio || "No biography available";
 
     return (
         <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
-         
+
             {book && (
                 <>
                     <img
@@ -36,9 +36,15 @@ export default function Card({ book, author }) {
                         <p className="card-text"><strong>Authors:</strong> {bookAuthors}</p>
                         <div className="card-text mb-3"><strong>Rating:</strong> <StarRating rating={book.averageRating} /></div>
 
-                        <Link className="details-btn" to={`/BookDetails/${book.id}`} state={{ book }}>
+                        <Link
+                            className="details-btn"
+                            to={`/BookDetails/${book._id}`}
+                            state={{ book }}
+                            style={{ textDecoration: "none" }}
+                        >
                             More Details
                         </Link>
+
 
                         <div className="btn-group">
                             <button className="like-button"><FontAwesomeIcon icon={faHeart} /></button>
@@ -50,14 +56,14 @@ export default function Card({ book, author }) {
                 </>
             )}
 
-          
+
             {author && (
                 <div className="card-body">
                     <h5 className="card-title">{authorName}</h5>
                     <p className="card-text">{authorBio}</p>
-                    <Link className="details-btn" to={`/AuthorDetails/${author._id}`} state={{ book }}>
-                            More Details
-                   </Link>
+                    <Link className="details-btn" to={`/AuthorDetails/${author._id}`} state={{ book }} style={{ textDecoration: "none" }}>
+                        More Details
+                    </Link>
                 </div>
             )}
         </div>

@@ -17,16 +17,16 @@ const Cart = lazy(() => import("./pages/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const BookManagement = lazy(() => import("./pages/BookManagement/BookManagement"));
+const BookManagement = lazy(() =>
+  import("./pages/BookManagement/BookManagement")
+);
 const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
   return (
     <BooksProvider>
       <AuthorsProvider>
-        <BrowserRouter>
-          <Header />
-
+        <Header />
           <Suspense fallback={<div className="loading">Loading...</div>}>
             <Routes>
               <Route exact path="/" element={<Home />} />
@@ -45,7 +45,6 @@ function App() {
           </Suspense>
 
           <Footer />
-        </BrowserRouter>
       </AuthorsProvider>
     </BooksProvider>
   );

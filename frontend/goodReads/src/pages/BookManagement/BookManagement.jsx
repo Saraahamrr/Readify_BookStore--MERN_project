@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan,faPen } from "@fortawesome/free-solid-svg-icons";
 import BooksContext from "../../context/books";
 import Loader from "../../components/Loader/Loader";
 import axios from "axios";
@@ -34,7 +34,7 @@ export default function BookManagement() {
   return (
     <div className="p-5 d-flex flex-column align-items-center">
       <div>
-        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white" }} className="custom-btn sign-btn"
+        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white", fontWeight:"bold"}} className="custom-btn sign-btn"
         >+ New book</button>
       </div>
       <table className="m-5 table table-striped table-hover table-dark ">
@@ -44,11 +44,11 @@ export default function BookManagement() {
             <th scope="col">title</th>
             <th scope="col">authors</th>
             <th scope="col">categories</th>
-            <th scope="col">describtion</th>
+            <th scope="col">description</th>
             <th scope="col">Average rating</th>
             <th scope="col">language</th>
             <th scope="col">price</th>
-            <th scope="col">delete book</th>
+            <th scope="col">edit/delete book</th>
           </tr>
         </thead>
         <tbody>
@@ -61,11 +61,17 @@ export default function BookManagement() {
                 <td>
                   {book.categories?.map((category) => category.name).join(", ")}
                 </td>
-                <td>{book.describtion}</td>
+                <td><div className="content-wrapper">{book.description}</div></td>
                 <td>{book.averageRating}</td>
                 <td>{book.language}</td>
                 <td>{book.price}</td>
                 <td>
+                <button
+                    className="editButton"
+                    onClick={() => updateBook(book.id, setBooks)}
+                  >
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
                   <button
                     className="trashButton"
                     onClick={() => deleteBook(book.id, setBooks)}

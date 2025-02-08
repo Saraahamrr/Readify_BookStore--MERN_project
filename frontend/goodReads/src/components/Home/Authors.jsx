@@ -9,7 +9,7 @@ export default function Authors() {
 
     return (
         <div className='d-flex flex-column align-items-center'>
-            <h1 className='title text-start m-5 fw-bold' style={{ marginTop: "20px", fontSize: "40px" }}> Authors </h1>
+            <h1 className='title text-start m-5 fw-bold'> Authors </h1>
 
             <div className="row  align-self-start mx-5">
                 {authors.length > 0 ? authors.map((author) => (

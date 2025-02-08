@@ -15,17 +15,21 @@ export default function BookDetails() {
   const [newReview, setNewReview] = useState("");
 
   useEffect(() => {
+    console.log("Fetching book with ID:", id); 
+    if (!id) return; 
+
     axios.get(`http://localhost:3000/api/books/${id}`)
       .then((response) => {
         console.log("Fetched book:", response.data); 
-        setBook(response.data.book[0]); 
+        setBook(response.data.book[0] || response.data.book);  // ✅ دعم الاستجابة لو جاية كـ object مش array
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching book details:", error);
         setLoading(false);
       });
-  }, [id]);
+  }, [id]); 
+
 
 
   const handleAddReview = async () => {

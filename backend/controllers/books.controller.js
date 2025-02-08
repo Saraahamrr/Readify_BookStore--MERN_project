@@ -21,20 +21,21 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
 });
 
 const getBook = asyncWrapper(async (req, res, next) => {
-  const book = await Book.find(
-    {
-      id: req.params.bookId,
-    },
+  const book = await Book.findOne(
+    { _id: req.params.bookId }, 
     { __v: false }
-  ).populate("authors") 
+  )
+  .populate("authors")
   .populate("categories");
 
-  if (book.length < 1) {
+  if (!book) { 
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
     return next(error);
   }
+  
   res.json({ status: httpStatusText.SUCCESS, book });
 });
+
 
 const addBook = asyncWrapper(async (req, res, next) => {
   const errors = validationResult(req);
