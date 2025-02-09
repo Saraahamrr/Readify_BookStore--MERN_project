@@ -14,7 +14,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/cart/get-user-cart?userId=${userId}`, {
+                const response = await fetch(`http://localhost:3000/api/cart/get-user-cart?userId=${userId}`, {
                     method: 'GET',
                     headers: { 'auth-token': `bearer ${token}` }
                 });
@@ -36,7 +36,6 @@ const Cart = () => {
         return acc;
     }, {});
 
-    // Remove all instances of a product
     const removeItem = (id) => {
         setCart(cart.filter(item => item.id !== id));
     };
