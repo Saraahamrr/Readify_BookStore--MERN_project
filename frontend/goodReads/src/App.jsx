@@ -16,6 +16,7 @@ import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
 import Favourites from "./components/Profile/Favourites";
 import UserOrderHistory from "./components/Profile/UserOrderHistory";
+import Settings from "./components/Profile/Settings";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -64,6 +65,7 @@ function App() {
               <Route path="/profile" element={<Profile />} >
                 <Route index element={<Favourites/>} />
                 <Route path="/profile/orderHistory" element={<UserOrderHistory/>}/>
+                <Route path="/profile/settings" element={<Settings/>}/>
                 <Route/>
 
               </Route>
