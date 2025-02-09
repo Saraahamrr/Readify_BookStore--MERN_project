@@ -27,7 +27,7 @@ export default function AuthorDetails() {
 
     if (loading) return <div>Loading...</div>;
     if (!author) return <div>Author not found</div>;
-
+    console.log("Book in AuthorDetails:", books);
     return (
         <div className="author-details">
             <div className="author-info">
@@ -50,6 +50,7 @@ export default function AuthorDetails() {
             </div>
 
             <div className="author-books">
+                
                 <h4>Books by {author.name}:</h4>
                 {books.length > 0 ? (
                     <ul>

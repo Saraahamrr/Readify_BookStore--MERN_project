@@ -1,13 +1,17 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
 import BooksContext from "../context/books";
 import Loader from "../components/Loader/Loader";
 import axios from "axios";
 import { fetchData } from "./AddBook";
 
 export default function UpdateBook() {
+    const navigate = useNavigate()
     const { id } = useParams();
     const [Book, setBook] = useState({
         title: "",
@@ -76,42 +80,60 @@ export default function UpdateBook() {
 
 
             try {
+                axios.defaults.withCredentials = true;
                 const response = await axios.patch(
                     `http://localhost:3000/api/books/${id}`,
                     bookData,
-                    {
-                        headers: {
-                            "auth-token": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJtZW5uYSIsImVtYWlsIjoiZW1haWxtYWVubmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTczODc4NjA2MiwiZXhwIjoxNzQxMzc4MDYyfQ.GIZD47utk9sEgH4eHEOBWzW1LX2131yW3UYgQz4jIdE`,
-                            id: "67a0ff2e2bd5b05cb1cc4f07",
-                        },
-                    }
+
                 );
                 console.log(response);
                 if (response.status === 200) {
-                    alert("Book updated successfully!");
-                    formik.resetForm(); // Reset form
+                    toast.success(response.data.msg, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Bounce,
+                    });
+                    navigate("/allbooks")
+                    formik.resetForm();
                 }
             } catch (error) {
                 console.error("Error adding book:", error);
+                toast.error(error.response.data.msg, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
             }
         },
     });
 
     useEffect(() => {
-        let foundBook = books.find((book) => book.id === Number(id));
+        let foundBook = books.find((book) => book._id === id);
         if (foundBook) {
-          foundBook = {
-            ...foundBook,
-            publishedDate: foundBook.publishedDate.split('T')[0],
-            authors: foundBook.authors.map(author => author._id),
-            categories: foundBook.categories.map(cat => cat._id),
-          };
-          console.log("Transformed Book:", foundBook); 
-          setBook(foundBook);
-          fetchData(setCategories, setAuthors);
+            foundBook = {
+                ...foundBook,
+                publishedDate: foundBook.publishedDate.split('T')[0],
+                authors: foundBook.authors.map(author => author._id),
+                categories: foundBook.categories.map(cat => cat._id),
+            };
+            console.log("Transformed Book:", foundBook);
+            setBook(foundBook);
+            fetchData(setCategories, setAuthors);
         }
-      }, [books, id]);
-      
+    }, [books, id]);
+
 
     if (loading) return <Loader />;
 
@@ -164,7 +186,17 @@ export default function UpdateBook() {
                 setCategories([...categories, response.data.category]);
                 console.log(response.data);
                 const categoryId = response.data.category["_id"];
-                alert("Category added successfully!");
+                toast.success(response.data.msg, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
                 formik.setFieldValue("categories", [
                     ...formik.values.categories,
                     categoryId,
@@ -174,7 +206,17 @@ export default function UpdateBook() {
             }
         } catch (error) {
             console.error("Error adding new category:", error);
-            alert("Error Adding new category");
+            toast.error(error.response.data.msg, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
         }
     };
     const handleNewAuthorSubmit = async () => {
@@ -198,7 +240,17 @@ export default function UpdateBook() {
                     ...formik.values.authors,
                     response.data.author._id,
                 ]);
-                alert("Author added successfully!");
+                toast.success(response.data.msg, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
                 setNewAuthor({
                     name: "",
                     image: "",
@@ -210,7 +262,17 @@ export default function UpdateBook() {
             }
         } catch (error) {
             console.error("Error adding new author:", error);
-            alert("Error adding new author");
+            toast.error(error.response.data.msg, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Bounce,
+                      });
         }
     };
 
@@ -404,22 +466,23 @@ export default function UpdateBook() {
                                     categories.map((category) => {
                                         return (
                                             <li key={category._id} className="dropdown-item">
-                                            <div className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    checked={formik.values.categories.includes(
-                                                        category._id
-                                                    )}
-                                                    onChange={() => handleCategoryChange(category._id)}
-                                                />
-                                                <label className="form-check-label">
-                                                    {category.name}
-                                                </label>
-                                            </div>
-                                        </li>
+                                                <div className="form-check">
+                                                    <input
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        checked={formik.values.categories.includes(
+                                                            category._id
+                                                        )}
+                                                        onChange={() => handleCategoryChange(category._id)}
+                                                    />
+                                                    <label className="form-check-label">
+                                                        {category.name}
+                                                    </label>
+                                                </div>
+                                            </li>
 
-                                        )})
+                                        )
+                                    })
                                 ) : (
                                     <li className="dropdown-item">No categories available</li>
                                 )}

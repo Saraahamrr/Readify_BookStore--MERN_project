@@ -7,6 +7,8 @@ import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
+import { FavoritesProvider } from "./context/fav";
+
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
@@ -14,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
+import Favourites from "./components/Profile/Favourites";
+import UserOrderHistory from "./components/Profile/UserOrderHistory";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -33,7 +37,7 @@ const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 function App() {
   return (
     <>
-      <ToastContainer
+    <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -49,6 +53,7 @@ function App() {
 
       <BooksProvider>
         <AuthorsProvider>
+        <FavoritesProvider>
           <Header />
           <Suspense fallback={<div className="loading">Loading...</div>}>
             <Routes>
@@ -59,7 +64,12 @@ function App() {
               <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} >
+                <Route index element={<Favourites/>} />
+                <Route path="/profile/orderHistory" element={<UserOrderHistory/>}/>
+                <Route/>
+
+              </Route>
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/book-management" element={<BookManagement />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
@@ -71,10 +81,12 @@ function App() {
             </Routes>
           </Suspense>
 
-          <Footer />
-        </AuthorsProvider>
-      </BooksProvider>
+        <Footer />
+        </FavoritesProvider>
+      </AuthorsProvider>
+    </BooksProvider>
     </>
+      
   );
 }
 

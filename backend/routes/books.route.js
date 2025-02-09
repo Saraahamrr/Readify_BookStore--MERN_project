@@ -77,10 +77,11 @@ router
 
 router.delete("/:bookId",authToken ,async (req, res) => {
   try {
-  const {id} = req.headers;
+  const {id} = req.body;
   if (!id) {
     return res.status(400).json({msg: "User ID is required"});
   }
+  const user = await User.findById(id);
   if (user.role !== "admin" ){
     return res.status(401).json({msg: "Unauthorized"});
   }
@@ -92,7 +93,7 @@ res.status(500).json({msg: "Internal server error"});
 
 router.patch("/:bookId",validation,authToken ,async (req, res) => {
   try {
-  const {id} = req.headers;
+  const {id} = req.body;
   if (!id) {
     return res.status(400).json({msg: "User ID is required"});
   }
@@ -107,26 +108,36 @@ res.status(500).json({msg: "Internal server error"});
 }});
 router.get("/:bookId", bookController.getBook);
 
+
+
+
 router.route("/:bookId/rate")
-  .post(
-    [
-      body("userId")
-        .notEmpty()
-        .withMessage("User ID is required"),
-      body("ratingValue")
-        .notEmpty()
-        .withMessage("Rating is required")
-        .isInt({ min: 1, max: 5 })
-        .withMessage("Rating must be between 1 and 5"),
-      body("review")
-        .optional()
-        .isString()
-        .withMessage("Submit a clause that describes your reading experience"),
-    ],
-    bookController.addRating
-  );
+  .post(authToken, async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const { id } = req.body;
+      if (!id) {
+        return res.status(400).json({ msg: "User ID is required" });
+      }
+
+   
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ msg: "User not found" });
+      }
+
+    
+      bookController.addRating(req, res);
+      
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ msg: "Internal server error" });
+    }
+  });
 
 
-
-  
 module.exports = router;
