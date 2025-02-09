@@ -7,7 +7,6 @@ import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import { CartProvider } from './context/CartContext'; 
-import Checkout from './pages/checkout/Checkout';
 import Success from "./pages/checkout/Success";
 import Cancel from "./pages/checkout/Cancel";
 import Authors from "./components/Home/Authors";
@@ -18,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
+import PaymentPage from "./pages/checkout/PaymentPage";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -36,24 +36,25 @@ const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
   return (
+
+  <>
+    <ToastContainer
+    position="top-right"
+    autoClose={5000}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick={false}
+    rtl={false}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+    theme="colored"
+    transition={Bounce}
+  />
 <CartProvider>
-    <BooksProvider>
-      <AuthorsProvider>
-          <Header />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        transition={Bounce}
-      />
-          <Header />
+  <BooksProvider>
+    <AuthorsProvider>
+      <Header />
           <Suspense fallback={<div className="loading">Loading...</div>}>
             <Routes>
               <Route exact path="/" element={<Home />} />
@@ -63,7 +64,7 @@ function App() {
               <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/payment" element={<PaymentPage />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/book-management" element={<BookManagement />} />
@@ -82,6 +83,7 @@ function App() {
       </AuthorsProvider>
     </BooksProvider>
 </CartProvider>
+</>
   );
 }
 

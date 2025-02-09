@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const connectDB = require("./config/conn");
 const cors = require('cors');
+const paymentRoutes = require("./routes/payment.js");
+
 require("dotenv").config();
 
 const httpStatusText = require('./utils/httpStatusText');
@@ -17,9 +19,6 @@ const cookieParser = require('cookie-parser');
 // Import cart earlier to avoid circular dependency issues
 const Cart = require('./routes/cart.js');
 
-//stripe
-const stripe = require('./routes/stripe.js');
-
 connectDB();
 app.use(cookieParser());
 app.use(
@@ -31,8 +30,6 @@ app.use(
 
 app.use(express.json());
 
-// Connect to DB
-connectDB();
 
 // Routes
 app.use('/api/books', bookRouter);
@@ -40,9 +37,7 @@ app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
 
 app.use('/api/cart', Cart); // Ensure Cart is correctly required
-
-//stripe
-app.use('/api/checkout', stripe);
+app.use("/api/payment", paymentRoutes);
 
 const { cookie } = require("express-validator");
 app.get("/test", (req, res) => {

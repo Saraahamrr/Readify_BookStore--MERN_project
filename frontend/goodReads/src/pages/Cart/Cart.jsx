@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import CartItem from "./CartItem";
 import { useNavigate } from "react-router-dom";
 import './Cart.css';
-import { loadStripe } from '@stripe/stripe-js';
+
 
 const Cart = () => {
     const [cart, setCart] = useState([]);
@@ -57,25 +57,6 @@ const Cart = () => {
     // Calculate total price
     const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
 
-    // Checkout with Stripe
-    const makePayment = async () => {
-        navigate("/checkout");
-        const stripe = await loadStripe("pk_test_51QpuysRruMS7ZCYMM6M3ZkuWggbceDGTOLzA9n1KOsu5CFt6kkp8Mr4yxd9UmIE4hXUEar5Wxshd2wDXJVMuU0EN003BCuwz0c");
-
-        const response = await fetch('http://localhost:5000/api/checkout/create-checkout-session', {
-            method: 'POST',
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ products: cart })
-        });
-
-        const session = await response.json();
-        const result = stripe.redirectToCheckout({ sessionId: session.id });
-
-        if (result.error) {
-            console.log(result.error);
-        }
-    };
-
     return (
         <div className="cart-container">
             <h2 className="cartTitle">Shopping Cart</h2>
@@ -97,7 +78,7 @@ const Cart = () => {
             )}
             <div className="last-cart">
                 <h3 className="totalo">Total: {totalPrice} EGP</h3>
-                <button className="checkout" onClick={makePayment}>Checkout</button>
+                <button className="checkout" onClick={()=> {navigate('/payment')}}>Checkout</button>
             </div>
         </div>
     );
