@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation ,Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 
 export default function SearchPage() {
-  
+
   const [books, setBooks] = useState([]);
   const location = useLocation();
 
@@ -20,6 +20,7 @@ export default function SearchPage() {
         .catch(error => console.error("Error fetching books:", error));
     }
   }, [location.search]);
+  console.log(books);
 
 
   return (
@@ -35,7 +36,12 @@ export default function SearchPage() {
                   <h5 className="card-title">{book.title}</h5>
                   {/* <p className="card-text">{book.description}</p> */}
                   <p><strong>Publisher:</strong> {book.publisher}</p>
-                  <p><strong>Categories:</strong> {book.categories?.join(", ") || "No categories available"}</p>
+                  <p>
+                    <strong>Categories:</strong>{" "}
+                    {book.categories?.length
+                      ? book.categories.map((category) => category.name).join(", ")
+                      : "No categories available"}
+                  </p>
                   <Link className="details-btn" to={`/BookDetails/${book._id}`} >
                     More Details
                   </Link>

@@ -58,6 +58,7 @@ export default function BookManagement() {
   const updateBook = (bookId)=>{
     navigate(`/update-book/${bookId}`)
   }
+  const addBook = ()=>{navigate('/profile/add-book')}
   return (
     <div className="p-5 d-flex flex-column align-items-center">
    
@@ -111,7 +112,7 @@ export default function BookManagement() {
         </tbody>
       </table>
       <div className="align-self-end">
-        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white", fontWeight:"bold"}} className="custom-btn sign-btn"
+        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white", fontWeight:"bold"}} className="custom-btn sign-btn" onClick={()=>addBook()}
         >+ New book</button>
       </div>
     </div>
