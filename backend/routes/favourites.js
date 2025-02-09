@@ -28,7 +28,7 @@ router.put("/add-favourite", authToken, async (req, res) => {
 
         const booksList = await Book.find().distinct("_id");
         const userFavs = [...user.favourites];
-        const usernewFavs = userFavs.filter(favId => booksList.map(id => id.toString()).includes(favId.toString()));
+         const usernewFavs = userFavs.filter(favId => booksList.map(id => id.toString()).includes(favId.toString()));
         user.favourites = usernewFavs;
         await user.save();
 
@@ -79,7 +79,7 @@ router.get("/get-favourite", authToken, async (req, res) => {
         if (!id) {
             return res.status(400).json({ msg: "UserId is required" });
         };
-        const user = await User.findById(id).populate();
+        const user = await User.findById(id).populate("favourites");
         const favourites = user.favourites;
         if (!favourites) {
             return res.status(400).json({ msg: "No favourite feild exists" });
