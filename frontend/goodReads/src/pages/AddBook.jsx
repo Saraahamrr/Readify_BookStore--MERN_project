@@ -2,6 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Bounce } from "react-toastify";
+
+export const fetchData = async (setCategories, setAuthors) => {
+  try {
+    const [responseCat, responseAuthors] = await Promise.all([
+      axios.get("http://localhost:3000/api/categories"),
+      axios.get("http://localhost:3000/api/authors"),
+    ]);
+    setCategories(responseCat.data.categories);
+    setAuthors(responseAuthors.data.authors);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
 
 const AddBook = () => {
   const [categories, setCategories] = useState([]);
@@ -14,19 +30,7 @@ const AddBook = () => {
   const [categoryError, setCategoryError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [responseCat, responseAuthors] = await Promise.all([
-          axios.get("http://localhost:3000/api/categories"),
-          axios.get("http://localhost:3000/api/authors"),
-        ]);
-        setCategories(responseCat.data.categories);
-        setAuthors(responseAuthors.data.authors);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
+    fetchData(setCategories, setAuthors);
   }, []);
 
   const formik = useFormik({
@@ -70,23 +74,39 @@ const AddBook = () => {
       console.log("Submitting book data:", bookData);
 
       try {
+        axios.defaults.withCredentials = true;
         const response = await axios.post(
           "http://localhost:3000/api/books",
-          bookData,
-          {
-            headers: {
-              "auth-token": `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJtZW5uYSIsImVtYWlsIjoiZW1haWxtYWVubmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTczODc4NjA2MiwiZXhwIjoxNzQxMzc4MDYyfQ.GIZD47utk9sEgH4eHEOBWzW1LX2131yW3UYgQz4jIdE`,
-              id: "67a0ff2e2bd5b05cb1cc4f07",
-            },
-          }
+          bookData
         );
         console.log(response);
         if (response.status === 201) {
-          alert("Book added successfully!");
+          toast.success(response.data.msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
           formik.resetForm(); // Reset form
         }
       } catch (error) {
         console.error("Error adding book:", error);
+        toast.error(error.response.data.msg, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       }
     },
   });
@@ -155,7 +175,7 @@ const AddBook = () => {
 
     try {
       console.log(newAuthor);
-      
+
       const response = await axios.post(
         "http://localhost:3000/api/authors",
         newAuthor
@@ -272,7 +292,9 @@ const AddBook = () => {
                     setNewAuthor({ ...newAuthor, name: e.target.value })
                   }
                 />
-                {authorError && <div className="text-danger">{authorError}</div>}
+                {authorError && (
+                  <div className="text-danger">{authorError}</div>
+                )}
                 <input
                   type="text"
                   className="form-control my-2"
@@ -282,10 +304,13 @@ const AddBook = () => {
                   }
                 />
                 <div className="my-3 w-100 d-flex gap-4 align-items-start justify-content-between align-items-center">
-                  <div className="w-100 mb-2 d-flex gap-4 align-items-center " style={{minWidth:"8rem"}}>
+                  <div
+                    className="w-75 mb-2 d-flex  align-items-center "
+                    style={{ minWidth: "8rem" }}
+                  >
                     <label
                       htmlFor="dateOfBirth"
-                      className="f fs-5 fw-bolder "
+                      className="f fs-5 fw-bolder mx-2"
                       style={{ color: "gray" }}
                     >
                       dateOfBirth
@@ -310,7 +335,11 @@ const AddBook = () => {
                         e.target.value &&
                         setNewAuthor({ ...newAuthor, gender: e.target.value })
                       }
-                      style={{ backgroundColor: "gray", color: "white" }}
+                      style={{
+                        backgroundColor: "gray",
+                        color: "white",
+                        width: "8em",
+                      }}
                     >
                       <option value="">Select gender</option>
                       <option value="Male">Male</option>
@@ -410,7 +439,9 @@ const AddBook = () => {
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
                 />
-                {categoryError && <div className="text-danger">{categoryError}</div>}
+                {categoryError && (
+                  <div className="text-danger">{categoryError}</div>
+                )}
                 <button
                   type="button"
                   className="btn mt-2"
@@ -608,6 +639,7 @@ const AddBook = () => {
             width: "7em",
             height: "2em",
             borderRadius: "0.7em",
+            border: "0",
           }}
         >
           Add

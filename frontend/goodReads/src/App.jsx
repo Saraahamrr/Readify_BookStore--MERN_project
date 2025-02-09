@@ -10,6 +10,8 @@ import { CartProvider } from './context/CartContext';
 import Success from "./pages/checkout/Success";
 import Cancel from "./pages/checkout/Cancel";
 import Authors from "./components/Home/Authors";
+import { FavoritesProvider } from "./context/fav";
+
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
@@ -18,6 +20,8 @@ import { Bounce } from "react-toastify";
 import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
 import PaymentPage from "./pages/checkout/PaymentPage";
+import Favourites from "./components/Profile/Favourites";
+import UserOrderHistory from "./components/Profile/UserOrderHistory";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -36,25 +40,25 @@ const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
   return (
-
-  <>
+    <>
     <ToastContainer
-    position="top-right"
-    autoClose={5000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick={false}
-    rtl={false}
-    pauseOnFocusLoss
-    draggable
-    pauseOnHover
-    theme="colored"
-    transition={Bounce}
-  />
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
 <CartProvider>
-  <BooksProvider>
-    <AuthorsProvider>
-      <Header />
+      <BooksProvider>
+        <AuthorsProvider>
+        <FavoritesProvider>
+          <Header />
           <Suspense fallback={<div className="loading">Loading...</div>}>
             <Routes>
               <Route exact path="/" element={<Home />} />
@@ -65,7 +69,11 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} >
+                <Route index element={<Favourites/>} />
+                <Route path="/profile/orderHistory" element={<UserOrderHistory/>}/>
+                <Route/>
+              </Route>
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/book-management" element={<BookManagement />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
@@ -78,11 +86,11 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
-
-          <Footer />
+        <Footer />
+        </FavoritesProvider>
       </AuthorsProvider>
     </BooksProvider>
-</CartProvider>
+  </CartProvider>
 </>
   );
 }

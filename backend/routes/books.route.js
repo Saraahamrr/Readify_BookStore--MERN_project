@@ -56,12 +56,16 @@ router
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     try {
-    const {id} = req.headers;
-    if (!id) {
-      return res.status(400).json({msg: "User ID is required"});
-    }
+      const {id} = req.body;
+      if (!id) {
+        return res.status(400).json({msg: "User ID is required"});
+      }
     const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
     if (user.role !== "admin" ){
       return res.status(401).json({msg: "Unauthorized"});
     }
@@ -73,7 +77,7 @@ router
 
 router.delete("/:bookId",authToken ,async (req, res) => {
   try {
-  const {id} = req.headers;
+  const {id} = req.body;
   if (!id) {
     return res.status(400).json({msg: "User ID is required"});
   }
@@ -89,7 +93,7 @@ res.status(500).json({msg: "Internal server error"});
 
 router.patch("/:bookId",validation,authToken ,async (req, res) => {
   try {
-  const {id} = req.headers;
+  const {id} = req.body;
   if (!id) {
     return res.status(400).json({msg: "User ID is required"});
   }
