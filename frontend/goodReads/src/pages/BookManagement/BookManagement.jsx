@@ -21,7 +21,7 @@ import "./BookManagement.css";
     );
     console.log(response); // Debugging
     if (response.status === 200) {
-      setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+      setBooks((prevBooks) => prevBooks.filter((book) => book._id !== bookId));
       toast.success(response.data.msg, {
                 position: "top-right",
                 autoClose: 5000,
@@ -81,7 +81,7 @@ export default function BookManagement() {
         <tbody>
           {books.length > 0 ? (
             books.map((book) => (
-              <tr scope="row" key={book.id}>
+              <tr scope="row" key={book._id}>
                 <td>{book.id}</td>
                 <td>{book.title}</td>
                 <td>{book.authors?.map((author) => author.name).join(", ")}</td>
@@ -95,13 +95,13 @@ export default function BookManagement() {
                 <td>
                 <button
                     className="editButton"
-                    onClick={() => updateBook(book.id)}
+                    onClick={() => updateBook(book._id)}
                   >
                     <FontAwesomeIcon icon={faPen} />
                   </button>
                   <button
                     className="trashButton"
-                    onClick={() => deleteBook(book.id, setBooks)}
+                    onClick={() => deleteBook(book._id, setBooks)}
                   >
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>

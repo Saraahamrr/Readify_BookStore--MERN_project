@@ -120,7 +120,7 @@ export default function UpdateBook() {
     });
 
     useEffect(() => {
-        let foundBook = books.find((book) => book.id === Number(id));
+        let foundBook = books.find((book) => book._id === id);
         if (foundBook) {
             foundBook = {
                 ...foundBook,

@@ -22,7 +22,7 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
 
 const getBook = asyncWrapper(async (req, res, next) => {
   const book = await Book.findOne(
-    { id: Number(req.params.bookId) },  
+    { _id: Number(req.params.bookId) },  
     { __v: false }
   )
   .populate("authors")
@@ -64,7 +64,7 @@ const updateBook = asyncWrapper(async (req, res, next) => {
   const { id, ...bookData } = req.body;
 
   const updatedBook = await Book.findOneAndUpdate(
-    { id: Number(req.params.bookId) },
+    { _id: Number(req.params.bookId) },
     bookData,
     { new: true, runValidators: true }
   );
@@ -79,7 +79,7 @@ const updateBook = asyncWrapper(async (req, res, next) => {
 });
 
 const deleteBook = asyncWrapper(async (req, res, next) => {
-  const book = await Book.findOne({ id: req.params.bookId });
+  const book = await Book.findOne({ _id: req.params.bookId });
 
   if (!book) {
     const error = appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL);
@@ -87,7 +87,7 @@ const deleteBook = asyncWrapper(async (req, res, next) => {
   }
 
   const deletedcount = await Book.deleteOne({
-    id: req.params.bookId,
+    _id: req.params.bookId,
   });
   res.status(200).json({ status: httpStatusText.SUCCESS, data: null,msg:"Book deleted successfully" });
 });
@@ -104,7 +104,7 @@ const addRating = asyncWrapper(async (req, res, next) => {
   const { bookId } = req.params;
 
   console.log("Fetching book...");
-  const book = await Book.findOne({ id: bookId });
+  const book = await Book.findOne({ _id: bookId });
   if (!book) {
     return next(appError.create("Book NOT FOUND!", 404, httpStatusText.FAIL));
   }
@@ -114,14 +114,14 @@ const addRating = asyncWrapper(async (req, res, next) => {
 
   console.log("Updating rating...");
   await Book.updateOne(
-    { id: bookId },
+    { _id: bookId },
     existingRating
       ? { $set: { "rates.$.rating": ratingValue, "rates.$.review": review || "" } } 
       : { $push: { rates: { userId, rating: ratingValue, review: review || "" } } }
   );
   
   console.log("Fetching updated book...");
-  const updatedBook = await Book.findOne({ id: bookId });
+  const updatedBook = await Book.findOne({ _id: bookId });
 
   console.log("Calculating new average rating...");
   const newAvgRating = updatedBook.rates.length > 0
@@ -131,7 +131,7 @@ const addRating = asyncWrapper(async (req, res, next) => {
   console.log("New average rating:", newAvgRating);
 
   await Book.updateOne(
-    { id: bookId },
+    { _id: bookId },
     { $set: { averageRating: newAvgRating } }
   );
 

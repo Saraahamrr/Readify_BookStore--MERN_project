@@ -16,6 +16,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
+import Favourites from "./components/Profile/Favourites";
+import UserOrderHistory from "./components/Profile/UserOrderHistory";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -62,7 +64,12 @@ function App() {
               <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/cart" element={<Cart />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} >
+                <Route index element={<Favourites/>} />
+                <Route path="/profile/orderHistory" element={<UserOrderHistory/>}/>
+                <Route/>
+
+              </Route>
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/book-management" element={<BookManagement />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
