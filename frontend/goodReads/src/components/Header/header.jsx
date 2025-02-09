@@ -1,37 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import logo from "../../assets/logo3.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "../Header/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useFavorites } from "../../context/fav"; // استيراد الكونتكست
 
 export default function Header() {
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [user, setUser] = useState(null);
-  const [favCount, setFavCount] = useState(0);
   const navigate = useNavigate();
+  const { favorites } = useFavorites(); // استخدام قائمة المفضلات من الكونتكست
 
-  
-  useEffect(() => {
-    const fetchUserFavorites = async () => {
-      axios.defaults.withCredentials = true;
-      try {
-        const response = await axios.get("http://localhost:3000/api/get-favourite", { withCredentials: true });
-        setFavCount(response.data.data?.length || 0);
-      } catch (error) {
-        alert(error.response.data.msg);
-      }
-    };
-  
-    fetchUserFavorites();
-  }, [favCount]); 
-  
-
- 
   const links = [
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },
@@ -56,7 +37,7 @@ export default function Header() {
           <img src={logo} alt="Logo" style={{ width: "100px", height: "100px", marginLeft: "20px" }} />
         </Link>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <form className="d-flex" role="search" style={{ backgroundColor: "#f8f9fa", justifyContent: "center", position: "relative", width: "100%" }} onSubmit={handleSearch}>
+          <form className="d-flex" role="search" onSubmit={handleSearch} style={{ width: "100%" }}>
             <div style={{ position: "relative", width: "60%", display: "flex" }}>
               <input
                 className="form-control"
@@ -87,15 +68,10 @@ export default function Header() {
               </li>
             ))}
 
-         
-           
-              <li className="nav-item">
-               
-                  <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }}  />
-                  <span>{favCount}</span>
-              
-              </li>
-          
+            <li className="nav-item">
+              <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }} />
+              <span>{favorites.length}</span> {/* تحديث العدد بناءً على طول المصفوفة */}
+            </li>
 
             <li className="nav-item">
               <Link className="btn sign-btn" to="/signup">

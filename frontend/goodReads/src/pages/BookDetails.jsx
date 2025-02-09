@@ -4,26 +4,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./BookDetails.css";
-
+import { useFavorites } from "../context/fav"; 
 export default function BookDetails() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
-  const [favorites, setFavorites] = useState([]);
+  const { favorites, toggleFavorite } = useFavorites();
 
 
   useEffect(() => {
-    const fetchUserFavorites = async () => {
-      axios.defaults.withCredentials = true;
-      try {
-          const response = await axios.get("http://localhost:3000/api/get-favourite");
-          setFavorites(response.data.data || []);
-      } catch (error) {
-          console.error("Error fetching favorites:", error);
-      }
-  };
+  //   const fetchUserFavorites = async () => {
+  //     axios.defaults.withCredentials = true;
+  //     try {
+  //         const response = await axios.get("http://localhost:3000/api/get-favourite");
+  //         setFavorites(response.data.data || []);
+  //     } catch (error) {
+  //         console.error("Error fetching favorites:", error);
+  //     }
+  // };
   
 
     const fetchBookDetails = async () => {
@@ -38,38 +38,38 @@ export default function BookDetails() {
       }
     };
 
-    fetchUserFavorites();
+    // fetchUserFavorites();
     fetchBookDetails();
   }, [id]);
 
 
-  const handleFavourites = async () => {
-    axios.defaults.withCredentials = true;
-    try {
-      if (favorites.includes(id)) {
-        await axios.delete("http://localhost:3000/api/remove-favourite", {
-          headers: {
-            bookid: id
-          }
-        });
+  // const handleFavourites = async () => {
+  //   axios.defaults.withCredentials = true;
+  //   try {
+  //     if (favorites.includes(id)) {
+  //       await axios.delete("http://localhost:3000/api/remove-favourite", {
+  //         headers: {
+  //           bookid: id
+  //         }
+  //       });
 
         
-        setFavorites((prevFavorites) => prevFavorites.filter(bookId => bookId !== id));
+  //       setFavorites((prevFavorites) => prevFavorites.filter(bookId => bookId !== id));
   
-      } else {
-        await axios.put("http://localhost:3000/api/add-favourite", null, {
-          headers: {
-            bookid: id
-          }
-        });
+  //     } else {
+  //       await axios.put("http://localhost:3000/api/add-favourite", null, {
+  //         headers: {
+  //           bookid: id
+  //         }
+  //       });
   
     
-        setFavorites((prevFavorites) => [...prevFavorites, id]);
-      }
-    } catch (err) {
-      alert(err.response?.data?.msg || "Something went wrong!");
-    }
-  };
+  //       setFavorites((prevFavorites) => [...prevFavorites, id]);
+  //     }
+  //   } catch (err) {
+  //     alert(err.response?.data?.msg || "Something went wrong!");
+  //   }
+  // };
   
 
  
@@ -111,12 +111,12 @@ export default function BookDetails() {
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
         {/* ✅ زر المفضلة يعمل بشكل صحيح الآن */}
-        <button className="like-button" onClick={handleFavourites}>
-          <FontAwesomeIcon
-            icon={faHeart}
-            style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
-          />
-        </button>
+        <button className="like-button" onClick={() => toggleFavorite(id)}>
+        <FontAwesomeIcon
+          icon={faHeart}
+          style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
+        />
+      </button>
 
         <button className="cart-button">
           <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />

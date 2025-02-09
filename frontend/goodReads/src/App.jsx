@@ -7,6 +7,7 @@ import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
+import { FavoritesProvider } from "./context/fav";
 
 
 const Home = lazy(() => import("./pages/Home"));
@@ -28,7 +29,7 @@ function App() {
   return (
     <BooksProvider>
       <AuthorsProvider>
-      
+      <FavoritesProvider>
         <Header />
         <Suspense fallback={<div className="loading">Loading...</div>}>
           <Routes>
@@ -49,7 +50,7 @@ function App() {
         </Suspense>
 
         <Footer />
-     
+        </FavoritesProvider>
       </AuthorsProvider>
     </BooksProvider>
   );
