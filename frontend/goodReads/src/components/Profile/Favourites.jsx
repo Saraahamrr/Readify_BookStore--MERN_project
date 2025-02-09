@@ -1,5 +1,12 @@
+import Favs from "./Favs";
+
 export default function Favourites(){
     return(
-        <p>Favourites</p>
+        <>
+              
+                <Favs/>
+        
+        </>
+
     );
 }
