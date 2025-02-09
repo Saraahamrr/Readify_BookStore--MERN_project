@@ -23,11 +23,11 @@ export default function Recent() {
 
     return (
         <div className="recent-books">
-            <h2>Recently Added</h2>
+            <h2 style={{marginLeft:"20px"}}>Recently Added</h2>
             {loading ? (
                 <Loader />
             ) : recentBooks.length > 0 ? (
-                <div className="row">
+                <div className="row" style={{marginLeft:"12px"}} >
                     {recentBooks.map((book) => (
                         <Card key={book._id} book={book} />
                     ))}

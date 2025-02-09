@@ -118,3 +118,23 @@
       width: 100%;
   }
 }
+button.trashButton{
+  padding: 0;
+  margin: 0;
+  font-size: 2em;
+  background-color: transparent;
+  color: #780C28;
+  border: 0;
+}
+button.editButton{
+  padding: 0;
+  margin: 0.5em;
+  font-size: 2em;
+  background-color: transparent;
+  color: #fbb02d;
+  border: 0;
+}
+.container {
+  min-height: 75vh; /* Ensures the container takes at least the full screen height */
+  padding-bottom: 50px; /* Adds space at the bottom */
+}

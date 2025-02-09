@@ -1,30 +1,32 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import "./Card.css";
 import { Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Card.css";
 import StarRating from "../StarRate";
-import authorimage from '../../assets/author.jpeg'
+import authorimage from "../../assets/author.jpeg";
+import { useFavorites } from "../../context/fav"; // تأكد من المسار الصحيح
 
 export default function Card({ book, author }) {
+    const { favorites, toggleFavorite } = useFavorites();
+
     if (!book && !author) {
         return <div>Loading...</div>;
     }
 
-
     const posterURL = book?.coverImage || "placeholder.jpg";
     const bookTitle = book?.title || "Unknown Title";
     const bookAuthors = book?.authors?.map(a => a.name).join(", ") || "Unknown";
-
-
     const authorName = author?.name || "Unknown Author";
     const authorBio = author?.bio || "No biography available";
-    const authorImage = author?.image 
+    const authorImage = author?.image || authorimage;
+
+
+    const isFavorite = favorites.includes(book?._id);
 
     return (
         <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
-
             {book && (
                 <>
                     <img
@@ -40,38 +42,72 @@ export default function Card({ book, author }) {
 
                         <Link
                             className="details-btn"
-                            to={`/BookDetails/${book.id}`}
+                            to={`/BookDetails/${book._id}`}
                             state={{ book }}
-                            style={{ textDecoration: "none" }}
+                            style={{
+                                display: "inline-block",
+                                backgroundColor: "#fbb02d",
+                                color: "#fff",
+                                padding: "10px 15px",
+                                borderRadius: "5px",
+                                textDecoration: "none",
+                                fontSize: "0.9rem",
+                                fontWeight: "bold",
+                                transition: "0.3s ease-in-out",
+                                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
+                            }}
                         >
                             More Details
                         </Link>
 
-
                         <div className="btn-group">
-                            <button className="like-button"><FontAwesomeIcon icon={faHeart} /></button>
-
+                            <button 
+                                className="like-button" 
+                                onClick={() => toggleFavorite(book._id)}
+                                style={{ background: "none", border: "none" }}
+                            >
+                                <FontAwesomeIcon 
+                                    icon={faHeart} 
+                                    style={{ fontSize: "20px", color: isFavorite ? "red" : "gray" }} 
+                                />
+                            </button>
 
                             <button className="cart-button">
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                             </button>
                         </div>
+                     
                     </div>
                 </>
             )}
 
-
             {author && (
                 <div className="card-body">
                     <img
-                        src={authorImage ||authorimage }
+                        src={authorImage}
                         className="card-img-top"
                         alt={authorName}
                         style={{ height: "300px", objectFit: "cover" }}
                     />
                     <h5 className="card-title">{authorName}</h5>
                     <p className="card-text">{authorBio}</p>
-                    <Link className="details-btn" to={`/AuthorDetails/${author._id}`} state={{ book }} style={{ textDecoration: "none" }}>
+                    <Link
+                        className="details-btn"
+                        to={`/AuthorDetails/${author._id}`}
+                        state={{ book }}
+                        style={{
+                            display: "inline-block",
+                            backgroundColor: "#fbb02d",
+                            color: "#fff",
+                            padding: "10px 15px",
+                            borderRadius: "5px",
+                            textDecoration: "none",
+                            fontSize: "0.9rem",
+                            fontWeight: "bold",
+                            transition: "0.3s ease-in-out",
+                            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
+                        }}
+                    >
                         More Details
                     </Link>
                 </div>

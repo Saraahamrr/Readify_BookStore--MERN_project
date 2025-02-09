@@ -21,7 +21,7 @@ const user = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: 'https://media.gettyimages.com/id/2169722764/vector/simple-user-profile-icon-minimalist-black-and-white-avatar.jpg?s=612x612&w=gi&k=20&c=Kn6fxZ970khfBhewfmHUV_nNIM7jGTTOTgyaA91iU20='
+        default: 'https://png.pngtree.com/png-vector/20231202/ourmid/pngtree-avatar-icon-personal-png-image_10852101.png'
     },
     role: {
         type: String,
