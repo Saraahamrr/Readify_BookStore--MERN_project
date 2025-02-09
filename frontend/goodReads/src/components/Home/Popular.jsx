@@ -21,9 +21,9 @@ export default function Popular() {
 
     return (
         <div className='recent d-flex flex-column align-items-center'>
-            <h1 className='title text-start m-5 fw-bold'>Popular Books</h1>
+            <h1 >Popular Books</h1>
 
-            <div className="row align-self-start mx-5">
+            <div className="row align-self-start">
                 {Data.length > 0 ? Data.filter(book => book.averageRating >= 3).map((book) => (
                     <Card key={book._id} book={book} /> 
                 )) : <Loader />}

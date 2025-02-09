@@ -10,6 +10,7 @@ import { CartProvider } from './context/CartContext';
 import Success from "./pages/checkout/Success";
 import Cancel from "./pages/checkout/Cancel";
 import Authors from "./components/Home/Authors";
+import { FavoritesProvider } from "./context/fav";
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
@@ -38,25 +39,25 @@ const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
   return (
-
-  <>
+    <>
     <ToastContainer
-    position="top-right"
-    autoClose={5000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick={false}
-    rtl={false}
-    pauseOnFocusLoss
-    draggable
-    pauseOnHover
-    theme="colored"
-    transition={Bounce}
-  />
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
 <CartProvider>
-  <BooksProvider>
-    <AuthorsProvider>
-      <Header />
+      <BooksProvider>
+        <AuthorsProvider>
+        <FavoritesProvider>
+          <Header />
           <Suspense fallback={<div className="loading">Loading...</div>}>
             <Routes>
               <Route exact path="/" element={<Home />} />
@@ -74,7 +75,6 @@ function App() {
                 <Route path="/profile/book-management" element={<BookManagement />} />
 
                 <Route/>
-
               </Route>
               <Route path="/add-book" element={<AddBook />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
@@ -87,11 +87,11 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
-
-          <Footer />
+        <Footer />
+        </FavoritesProvider>
       </AuthorsProvider>
     </BooksProvider>
-</CartProvider>
+  </CartProvider>
 </>
   );
 }
