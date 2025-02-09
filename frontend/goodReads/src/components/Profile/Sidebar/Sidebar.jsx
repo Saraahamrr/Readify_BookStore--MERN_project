@@ -63,10 +63,17 @@ export default function Sidebar(props) {
         <div className="w-100 mt-1 border border-2"></div>
       </div>
 
-            <div className="w-100 d-flex flex-column align-items-center justify-content-center">
-                <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Favourites</Link>
-                <Link to="/profile/orderHistory" className="w-100 py-1 rounded p-link " style={{ fontSize: "1.3rem", textAlign: "center" }}>Order History</Link>
-                <Link to="/profile/settings" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Settings</Link>
+      <div className="w-100 d-flex flex-column align-items-center justify-content-center">
+                {isLoggedIn && role === "user" && <>
+                    <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Favourites</Link>
+                    <Link to="/profile/orderHistory" className="w-100 py-1 rounded p-link " style={{ fontSize: "1.3rem", textAlign: "center" }}>Order History</Link>
+                    <Link to="/profile/settings" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Settings</Link>
+                </>}
+                {isLoggedIn&& role=== "admin"&& <>
+                    <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Manage Books</Link>
+                    <Link to="/profile/allOrders" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>All orders</Link>
+                    </>}
+
             </div>
             <button className="btn logout-btn" onClick={handleLogout}>
                 Log out <FontAwesomeIcon icon={faRightFromBracket} />

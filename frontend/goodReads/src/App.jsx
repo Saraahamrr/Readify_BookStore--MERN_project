@@ -78,7 +78,7 @@ function App() {
                   ) : (
                     <>
                       <Route path="allOrders" element={<AllOrders />} />
-                      <Route path="book-management" element={<BookManagement />} />
+                      <Route index element={<BookManagement />} />
                     </>
                   )}
                 </Route>}

@@ -14,16 +14,19 @@ export default function Header() {
   const navigate = useNavigate();
   const { favorites } = useFavorites();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
+
 
   const links = [
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },
-    { title: "Cart", link: "/cart" },
     { title: "Authors", link: "/authors" },
   ];
 
   if (isLoggedIn) {
     links.push({ title: "Profile", link: "/profile" });
+    if (role === "user")
+      links.push({ title: "Cart", link: "/cart" });
   }
 
   const handleSearch = (e) => {
@@ -85,10 +88,11 @@ export default function Header() {
           </li>
         ))}
 
-        <li className="nav-item">
+        {isLoggedIn&& role === "user" &&   <li className="nav-item">
           <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }} />
           <span>{favorites.length}</span>
-        </li>
+        </li>}
+      
 
         {!isLoggedIn && (
           <li className="nav-item">
