@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faPen, faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./BookDetails.css";
-
+import { useFavorites } from "../context/fav";
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,23 +15,69 @@ export default function BookDetails() {
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
+  const { favorites, toggleFavorite } = useFavorites();
+
 
   const updateBook = (bookId)=>{
     navigate(`/update-book/${bookId}`)
   }
 
   useEffect(() => {
-    if (!id) return;
-    axios.get(`http://localhost:3000/api/books/${id}`)
-      .then((response) => {
-        setBook(response.data.book[0] || response.data.book);
-        setLoading(false);
-      })
-      .catch((error) => {
+    //   const fetchUserFavorites = async () => {
+    //     axios.defaults.withCredentials = true;
+    //     try {
+    //         const response = await axios.get("http://localhost:3000/api/get-favourite");
+    //         setFavorites(response.data.data || []);
+    //     } catch (error) {
+    //         console.error("Error fetching favorites:", error);
+    //     }
+    // };
+
+
+    const fetchBookDetails = async () => {
+      try {
+        axios.defaults.withCredentials = true;
+        const response = await axios.get(`http://localhost:3000/api/books/${id}`);
+        setBook(response.data.book);
+      } catch (error) {
         console.error("Error fetching book details:", error);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    // fetchUserFavorites();
+    fetchBookDetails();
   }, [id]);
+
+
+  // const handleFavourites = async () => {
+  //   axios.defaults.withCredentials = true;
+  //   try {
+  //     if (favorites.includes(id)) {
+  //       await axios.delete("http://localhost:3000/api/remove-favourite", {
+  //         headers: {
+  //           bookid: id
+  //         }
+  //       });
+
+
+  //       setFavorites((prevFavorites) => prevFavorites.filter(bookId => bookId !== id));
+
+  //     } else {
+  //       await axios.put("http://localhost:3000/api/add-favourite", null, {
+  //         headers: {
+  //           bookid: id
+  //         }
+  //       });
+
+
+  //       setFavorites((prevFavorites) => [...prevFavorites, id]);
+  //     }
+  //   } catch (err) {
+  //     alert(err.response?.data?.msg || "Something went wrong!");
+  //   }
+  // };
 
   const deleteBook = async (bookId) => {
     const confirmation = confirm("Are you sure you want to delete this book?");
@@ -74,7 +120,7 @@ export default function BookDetails() {
   
   const handleAddReview = async () => {
     try {
-      await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
+      const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
         userId: "user123",
         ratingValue: newRating,
         review: newReview,
@@ -82,7 +128,7 @@ export default function BookDetails() {
 
       setBook((prevBook) => ({
         ...prevBook,
-        rates: [...prevBook.rates, { userId: "user123", rating: newRating, review: newReview }],
+        rates: [...(prevBook?.rates || []), { userId: "user123", rating: newRating, review: newReview }],
       }));
 
       setNewRating(0);
@@ -90,22 +136,6 @@ export default function BookDetails() {
     } catch (error) {
       console.error("Error adding review:", error);
     }
-  };
-
-  const headers = {
-    id: localStorage.getItem("id"),
-    authorization: `Bearer ${localStorage.getItem("token")}`,
-    bookid: id
-  };
-
-  const handleFavourites = async () => {
-    const response = await axios.put("http://localhost:3000/api/add-favourite", {}, { headers });
-    alert(response.data.message);
-  };
-
-  const handleCart = async () => {
-    const response = await axios.put("http://localhost:3000/api/cart/add-to-cart", {}, { headers });
-    alert(response.data.message);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -118,36 +148,29 @@ export default function BookDetails() {
           <div className="book-image me-4">
             <img src={book.coverImage || "placeholder.jpg"} alt={book.title || "Unknown Title"} />
           </div>
-
+  
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
-            <p><strong>Author(s):</strong> {book.authors?.map(author => author.name).join(", ") || "Unknown"}</p>
+            <p><strong>Author(s):</strong> {book.authors?.map((author) => author.name).join(", ") || "Unknown"}</p>
             <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
             <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
-            <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
+            <p><strong>Categories:</strong> {book.categories?.map((category) => category.name).join(", ") || "Unknown"}</p>
             <p><strong>Language:</strong> {book.language || "Unknown"}</p>
-
-            <button className="like-button" onClick={handleFavourites}>
-              <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "30px" }} />
+  
+            <button className="like-button" onClick={() => toggleFavorite(id)}>
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
+              />
             </button>
-
-            <button className="cart-button" onClick={handleCart}>
+  
+            <button className="cart-button">
               <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
             </button>
-
-            <div className="d-flex mt-3">
-              <button className="editButton me-2" onClick={() => updateBook(id)}>
-                <FontAwesomeIcon icon={faPen} />
-              </button>
-              <button className="trashButton" onClick={() => deleteBook(id)}>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </button>
-            </div>
           </div>
-        </div>
-
-        {/* Reviews Section (on the right) */}
-        <div className="reviews-section w-50">
+        </div> 
+  
+        <div className="reviews-section">
           <h2>Reviews</h2>
           {book.rates?.length > 0 ? (
             book.rates.map((review, index) => (
@@ -167,8 +190,7 @@ export default function BookDetails() {
           ) : (
             <p>No reviews yet. Be the first to review!</p>
           )}
-
-          {/* Add Review Section */}
+  
           <div className="add-review">
             <h4>Add Your Review</h4>
             <div className="rating-input">
@@ -191,7 +213,9 @@ export default function BookDetails() {
             </button>
           </div>
         </div>
-      </div>
+      </div> 
+  
     </div>
   );
 }
+  

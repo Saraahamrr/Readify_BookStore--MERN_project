@@ -7,6 +7,8 @@ import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
+import { FavoritesProvider } from "./context/fav";
+
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
@@ -33,7 +35,7 @@ const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 function App() {
   return (
     <>
-      <ToastContainer
+    <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -49,6 +51,7 @@ function App() {
 
       <BooksProvider>
         <AuthorsProvider>
+        <FavoritesProvider>
           <Header />
           <Suspense fallback={<div className="loading">Loading...</div>}>
             <Routes>
@@ -71,10 +74,12 @@ function App() {
             </Routes>
           </Suspense>
 
-          <Footer />
-        </AuthorsProvider>
-      </BooksProvider>
+        <Footer />
+        </FavoritesProvider>
+      </AuthorsProvider>
+    </BooksProvider>
     </>
+      
   );
 }
 
