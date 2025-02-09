@@ -1,17 +1,8 @@
 footer {
-    background-color: #f8f9fa; /* خلي لون الفوتر نفس الهيدر */
-    text-align: center;
-    padding: 10px 0;
-    width: 100%;
-    margin-top: auto; 
-    position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-  }
-
-  .container{
-    background-color: #212529 !important;
-  }
-  
+  background-color: #f8f9fa; /* خلي لون الفوتر نفس الهيدر */
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+  margin-top: auto; 
+  width: 100%;
+}
