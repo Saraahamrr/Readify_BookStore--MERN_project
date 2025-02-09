@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./BookDetails.css";
-import { useFavorites } from "../context/fav"; 
+import { useFavorites } from "../context/fav";
 export default function BookDetails() {
   const { id } = useParams();
   const [book, setBook] = useState(null);
@@ -15,16 +15,16 @@ export default function BookDetails() {
 
 
   useEffect(() => {
-  //   const fetchUserFavorites = async () => {
-  //     axios.defaults.withCredentials = true;
-  //     try {
-  //         const response = await axios.get("http://localhost:3000/api/get-favourite");
-  //         setFavorites(response.data.data || []);
-  //     } catch (error) {
-  //         console.error("Error fetching favorites:", error);
-  //     }
-  // };
-  
+    //   const fetchUserFavorites = async () => {
+    //     axios.defaults.withCredentials = true;
+    //     try {
+    //         const response = await axios.get("http://localhost:3000/api/get-favourite");
+    //         setFavorites(response.data.data || []);
+    //     } catch (error) {
+    //         console.error("Error fetching favorites:", error);
+    //     }
+    // };
+
 
     const fetchBookDetails = async () => {
       try {
@@ -53,26 +53,26 @@ export default function BookDetails() {
   //         }
   //       });
 
-        
+
   //       setFavorites((prevFavorites) => prevFavorites.filter(bookId => bookId !== id));
-  
+
   //     } else {
   //       await axios.put("http://localhost:3000/api/add-favourite", null, {
   //         headers: {
   //           bookid: id
   //         }
   //       });
-  
-    
+
+
   //       setFavorites((prevFavorites) => [...prevFavorites, id]);
   //     }
   //   } catch (err) {
   //     alert(err.response?.data?.msg || "Something went wrong!");
   //   }
   // };
-  
 
- 
+
+
   const handleAddReview = async () => {
     try {
       const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
@@ -110,13 +110,13 @@ export default function BookDetails() {
         <p><strong>Categories:</strong> {book.categories?.map((category) => category.name).join(", ") || "Unknown"}</p>
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
-       
+
         <button className="like-button" onClick={() => toggleFavorite(id)}>
-        <FontAwesomeIcon
-          icon={faHeart}
-          style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
-        />
-      </button>
+          <FontAwesomeIcon
+            icon={faHeart}
+            style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
+          />
+        </button>
 
         <button className="cart-button">
           <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
@@ -144,7 +144,7 @@ export default function BookDetails() {
           <p>No reviews yet. Be the first to review!</p>
         )}
 
-       
+
         <div className="add-review">
           <h4>Add Your Review</h4>
           <div className="rating-input">
