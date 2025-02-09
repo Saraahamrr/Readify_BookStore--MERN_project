@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const {authenticateToken} = require('./userAuth');
+const {authToken} = require('./userAuth');
 const Book = require('../models/book.js');
 const Order = require('../models/orders.js');
+const User = require('../models/user.js');
 
 //place order
-router.post('/place-order', authenticateToken, async (req, res) => {
+router.post('/place-order', authToken, async (req, res) => {
     try{
         const {id} = req.headers;
         const {order} = req.body;
@@ -34,5 +35,70 @@ router.post('/place-order', authenticateToken, async (req, res) => {
         return res.status(500).json({message: 'an error occurred'});
     }
 });
+
+//get order history of particular user
+router.get('/get-order-history', authToken, async (req, res) => {
+    try{
+        const id = req.headers;
+        const userData = await User.findById(id).populate({
+            path: 'orders',
+            populate: {path: 'book'}
+        });
+
+        const ordersData = userData.orders.reverse();
+
+        return res.json({
+            status: 'success',
+            data: ordersData
+        });
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({message: 'an err occured'});
+    }
+});
+
+//get all orders -- admin
+router.get('/get-all-orders', authToken, async (req, res) => {
+    try{
+        const userData = await Order.find()
+        .populate({
+            path: 'book'
+        })
+        .populate({
+            path: 'user'
+        })
+        .sort({
+            createdAt: -1
+        });
+
+        return res.json({
+            status: 'success',
+            data: userData
+        });
+
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({message: 'an err occured'});
+    }
+});
+
+//update order -- admin
+router.put('/update-status/:id', authToken, async (req, res) => {
+    try{
+        const {id} = req.params;
+
+        await Order.findByIdAndUpdate(id, {status: req.body.status});
+
+        return res.json({
+            status: 'success',
+            message: 'status updated successfully'
+        });
+        
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({message: 'an err occured'});
+    }
+});
+
 
 module.exports = router;

@@ -18,6 +18,7 @@ const cookieParser = require('cookie-parser');
 
 // Import cart earlier to avoid circular dependency issues
 const Cart = require('./routes/cart.js');
+const Order = require('./routes/order.js');
 
 connectDB();
 app.use(cookieParser());
@@ -36,7 +37,8 @@ app.use('/api/books', bookRouter);
 app.use ("/api", userRouter);
 app.use ("/api", favouriteRouter);
 
-app.use('/api/cart', Cart); // Ensure Cart is correctly required
+app.use('/api/cart', Cart); 
+app.use('/api/order', Order);
 app.use("/api/payment", paymentRoutes);
 
 const { cookie } = require("express-validator");
