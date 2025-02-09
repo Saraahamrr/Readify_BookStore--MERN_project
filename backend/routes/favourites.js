@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/user");
 const {authToken} = require("../middleWare/userAuth");
+const Book = require("../models/book");
 
 // add book to favourites
 router.put("/add-favourite", authToken, async (req, res) => {
@@ -13,6 +14,14 @@ router.put("/add-favourite", authToken, async (req, res) => {
             return res.status(400).json({msg: "UserId is required"});
         };
         const user = await User.findById(id);
+        const booksList = [...Book._id];
+        const userFavs = [...user.favourites.id]; 
+        console.log(booksList);
+        console.log(userFavs);
+        const usernewFavs = userFavs.filter(favId => booksList.includes(favId));
+        console.log(usernewFavs);
+        user.favourites = usernewFavs;
+        await user.save();
         const bookexist = user.favourites.includes(bookid);
         if (bookexist) {
             return res.status(400).json({msg: "Book already in favourites"});
