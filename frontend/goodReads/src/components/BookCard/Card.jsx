@@ -1,14 +1,17 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";  
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Card.css";
 import StarRating from "../StarRate";
 import authorimage from "../../assets/author.jpeg";
-import { useFavorites } from "../../context/fav"; // تأكد من المسار الصحيح
-
+import { useFavorites } from "../../context/fav"; 
 export default function Card({ book, author }) {
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const role = useSelector((state) => state.auth.role);
+
     const { favorites, toggleFavorite } = useFavorites();
 
     if (!book && !author) {
@@ -17,7 +20,7 @@ export default function Card({ book, author }) {
 
     const posterURL = book?.coverImage || "placeholder.jpg";
     const bookTitle = book?.title || "Unknown Title";
-    const bookAuthors = book?.authors?.map(a => a.name).join(", ") || "Unknown";
+    const bookAuthors = book?.authors?.map(author => author.name).join(", ")|| "Unknown";
     const authorName = author?.name || "Unknown Author";
     const authorBio = author?.bio || "No biography available";
     const authorImage = author?.image || authorimage;
@@ -38,7 +41,9 @@ export default function Card({ book, author }) {
                     <div className="card-body">
                         <h5 className="card-title">{bookTitle}</h5>
                         <p className="card-text"><strong>Authors:</strong> {bookAuthors}</p>
-                        <div className="card-text mb-3"><strong>Rating:</strong> <StarRating rating={book.averageRating} /></div>
+                        <div className="card-text mb-3">
+                            <strong>Rating:</strong> <StarRating rating={book.averageRating} />
+                        </div>
 
                         <Link
                             className="details-btn"
@@ -60,7 +65,7 @@ export default function Card({ book, author }) {
                             More Details
                         </Link>
 
-                        <div className="btn-group">
+            {isLoggedIn === true && role === "user" && <div className="btn-group">
                             <button 
                                 className="like-button" 
                                 onClick={() => toggleFavorite(book._id)}
@@ -75,7 +80,7 @@ export default function Card({ book, author }) {
                             <button className="cart-button">
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                             </button>
-                        </div>
+                        </div>}
                      
                     </div>
                 </>

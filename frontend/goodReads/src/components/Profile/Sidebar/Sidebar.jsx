@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -9,6 +10,8 @@ import { Bounce } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export default function Sidebar(props) {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
   const data = props.data;
   console.log(data);
   const navigate = useNavigate();
@@ -61,20 +64,42 @@ export default function Sidebar(props) {
       </div>
 
       <div className="w-100 d-flex flex-column align-items-center justify-content-center">
-        <Link
-          to="/profile"
-          className="w-100 py-1 rounded p-link"
-          style={{ fontSize: "1.3rem", textAlign: "center" }}
-        >
-          Favourites
-        </Link>
-        <Link
-          to="/profile/orderHistory"
-          className="w-100 py-1 rounded p-link "
-          style={{ fontSize: "1.3rem", textAlign: "center" }}
-        >
-          Order History
-        </Link>
+        {isLoggedIn && role === "user" && (
+          <>
+            <Link
+              to="/profile"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Favourites
+            </Link>
+            <Link
+              to="/profile/orderHistory"
+              className="w-100 py-1 rounded p-link "
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Order History
+            </Link>
+          </>
+        )}
+        {isLoggedIn && user === "admin" && (
+          <>
+            <Link
+              to="/profile/book-management"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Manage Books
+            </Link>
+            <Link
+              to="/profile/allOrders"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              All orders
+            </Link>
+          </>
+        )}
         <Link
           to="/profile/settings"
           className="w-100 py-1 rounded p-link"
@@ -83,7 +108,7 @@ export default function Sidebar(props) {
           Settings
         </Link>
       </div>
-      <button className="btn logout-btn" onClick={handleLogout}>
+      <button className="btn logout-btn">
         Log out <FontAwesomeIcon icon={faRightFromBracket} />
       </button>
     </div>

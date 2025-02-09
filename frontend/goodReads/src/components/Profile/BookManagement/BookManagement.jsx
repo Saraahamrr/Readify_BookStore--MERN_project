@@ -5,8 +5,8 @@ import { faTrashCan,faPen } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
-import BooksContext from "../../context/books";
-import Loader from "../../components/Loader/Loader";
+import BooksContext from "../../../context/books";
+import Loader from "../../Loader/Loader";
 import axios from "axios";
 import "./BookManagement.css";
 
@@ -58,13 +58,11 @@ export default function BookManagement() {
   const updateBook = (bookId)=>{
     navigate(`/update-book/${bookId}`)
   }
+  const addBook = ()=>{navigate('/profile/add-book')}
   return (
     <div className="p-5 d-flex flex-column align-items-center">
-      <div>
-        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white", fontWeight:"bold"}} className="custom-btn sign-btn"
-        >+ New book</button>
-      </div>
-      <table className="m-5 table table-striped table-hover table-dark ">
+   
+      <table className="m-3 table table-striped table-hover table-light ">
         <thead className="thead-dark" style={{ position: "sticky", top: 0 }}>
           <tr>
             <th scope="col">id</th>
@@ -113,6 +111,10 @@ export default function BookManagement() {
           )}
         </tbody>
       </table>
+      <div className="align-self-end">
+        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white", fontWeight:"bold"}} className="custom-btn sign-btn" onClick={()=>addBook()}
+        >+ New book</button>
+      </div>
     </div>
   );
 }
