@@ -29,7 +29,7 @@ const BookDetails = lazy(() => import("./pages/BookDetails"));
 const AuthorDetails = lazy(() => import("./pages/AuthorDetails"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/SignUp/Signup"));
-const Cart = lazy(() => import("./pages/Cart"));
+const Cart = lazy(() => import("./pages/Cart/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
