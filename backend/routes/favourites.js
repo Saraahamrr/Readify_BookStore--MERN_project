@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/user");
 const { authToken } = require("../middleWare/userAuth");
-
+const Book = require("../models/book");
 // add book to favourites
 router.put("/add-favourite", authToken, async (req, res) => {
      
@@ -20,10 +20,19 @@ router.put("/add-favourite", authToken, async (req, res) => {
         };
         
         const user = await User.findById(id);
+
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
         }
-        
+
+
+        const booksList = await Book.find().distinct("_id");
+        const userFavs = [...user.favourites];
+         const usernewFavs = userFavs.filter(favId => booksList.map(id => id.toString()).includes(favId.toString()));
+        user.favourites = usernewFavs;
+        await user.save();
+
+
         const bookexist = user.favourites.includes(bookid);
         if (bookexist) {
             return res.status(400).json({ msg: "Book already in favourites" });

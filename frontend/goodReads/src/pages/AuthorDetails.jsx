@@ -57,7 +57,7 @@ export default function AuthorDetails() {
                         {books.map((book) => (
                             <li key={book._id}>
                                 {book.title}
-                                <Link className="details-btn" to={`/BookDetails/${book.id}`} style={{ marginLeft: "50px", textDecoration: "none" }}>
+                                <Link className="details-btn" to={`/BookDetails/${book._id}`} style={{ marginLeft: "50px", textDecoration: "none" }}>
                                     More Details
                                 </Link>
                             </li>

@@ -23,7 +23,7 @@ export default function Card({ book, author }) {
     const authorBio = author?.bio || "No biography available";
     const authorImage = author?.image || authorimage;
 
-    const itemId = book?._id || author?._id; 
+    // const itemId = book?._id || author?._id; 
     console.log("Book in Card:", book);
    
     return (

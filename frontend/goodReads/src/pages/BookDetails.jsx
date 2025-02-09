@@ -80,7 +80,7 @@ export default function BookDetails() {
                 });
     }
   };
-  
+   
   const handleAddReview = async () => {
     try {
       const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
@@ -130,6 +130,14 @@ export default function BookDetails() {
             <button className="cart-button">
               <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
             </button>
+            <div className="d-flex mt-3">
+              <button className="editButton me-2" onClick={() => updateBook(id)}>
+                <FontAwesomeIcon icon={faPen} />
+              </button>
+              <button className="trashButton" onClick={() => deleteBook(id)}>
+                <FontAwesomeIcon icon={faTrashCan} />
+              </button>
+            </div>
           </div>
         </div> 
   

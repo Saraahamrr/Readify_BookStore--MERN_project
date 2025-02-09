@@ -22,7 +22,7 @@ const getAllBooks = asyncWrapper(async (req, res, next) => {
 
 const getBook = asyncWrapper(async (req, res, next) => {
   const book = await Book.findOne(
-    { _id: Number(req.params.bookId) },  
+    { _id: req.params.bookId},  
     { __v: false }
   )
   .populate("authors")
@@ -99,7 +99,7 @@ const addRating = asyncWrapper(async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(appError.create(errors.array(), 400, httpStatusText.FAIL));
   }
-
+  
   const { userId, ratingValue, review } = req.body;
   const { bookId } = req.params;
 
