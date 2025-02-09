@@ -36,7 +36,7 @@ export default function SearchPage() {
                   {/* <p className="card-text">{book.description}</p> */}
                   <p><strong>Publisher:</strong> {book.publisher}</p>
                   <p><strong>Categories:</strong> {book.categories?.join(", ") || "No categories available"}</p>
-                  <Link className="details-btn" to={`/BookDetails/${book.id}`} >
+                  <Link className="details-btn" to={`/BookDetails/${book._id}`} >
                     More Details
                   </Link>
                 </div>
