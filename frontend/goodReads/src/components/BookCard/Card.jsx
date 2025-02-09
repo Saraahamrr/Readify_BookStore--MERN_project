@@ -18,7 +18,7 @@ export default function Card({ book, author }) {
 
     const posterURL = book?.coverImage || "placeholder.jpg";
     const bookTitle = book?.title || "Unknown Title";
-    const bookAuthors = book?.authors?.map(a => a.name).join(", ") || "Unknown";
+    const bookAuthors = book.authors?.map(author => author.name).join(", ")|| "Unknown";
     const authorName = author?.name || "Unknown Author";
     const authorBio = author?.bio || "No biography available";
     const authorImage = author?.image;
