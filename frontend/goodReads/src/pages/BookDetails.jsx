@@ -23,17 +23,7 @@ export default function BookDetails() {
   }
 
   useEffect(() => {
-    //   const fetchUserFavorites = async () => {
-    //     axios.defaults.withCredentials = true;
-    //     try {
-    //         const response = await axios.get("http://localhost:3000/api/get-favourite");
-    //         setFavorites(response.data.data || []);
-    //     } catch (error) {
-    //         console.error("Error fetching favorites:", error);
-    //     }
-    // };
-
-
+    
     const fetchBookDetails = async () => {
       try {
         axios.defaults.withCredentials = true;
@@ -46,38 +36,11 @@ export default function BookDetails() {
       }
     };
 
-    // fetchUserFavorites();
+   
     fetchBookDetails();
   }, [id]);
 
 
-  // const handleFavourites = async () => {
-  //   axios.defaults.withCredentials = true;
-  //   try {
-  //     if (favorites.includes(id)) {
-  //       await axios.delete("http://localhost:3000/api/remove-favourite", {
-  //         headers: {
-  //           bookid: id
-  //         }
-  //       });
-
-
-  //       setFavorites((prevFavorites) => prevFavorites.filter(bookId => bookId !== id));
-
-  //     } else {
-  //       await axios.put("http://localhost:3000/api/add-favourite", null, {
-  //         headers: {
-  //           bookid: id
-  //         }
-  //       });
-
-
-  //       setFavorites((prevFavorites) => [...prevFavorites, id]);
-  //     }
-  //   } catch (err) {
-  //     alert(err.response?.data?.msg || "Something went wrong!");
-  //   }
-  // };
 
   const deleteBook = async (bookId) => {
     const confirmation = confirm("Are you sure you want to delete this book?");

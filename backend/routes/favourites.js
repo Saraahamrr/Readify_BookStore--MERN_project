@@ -4,10 +4,13 @@ const { authToken } = require("../middleWare/userAuth");
 
 // add book to favourites
 router.put("/add-favourite", authToken, async (req, res) => {
+     
     try {
         const { bookid } = req.headers;
+        const { id } = req.body; 
 
-        const { id } = req.body
+        console.log("Received bookid:", bookid);
+        console.log("Received user id:", id);
 
         if (!bookid) {
             return res.status(400).json({ msg: "BookId is required" });
@@ -15,18 +18,25 @@ router.put("/add-favourite", authToken, async (req, res) => {
         if (!id) {
             return res.status(400).json({ msg: "UserId is required" });
         };
+        
         const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+        
         const bookexist = user.favourites.includes(bookid);
         if (bookexist) {
             return res.status(400).json({ msg: "Book already in favourites" });
         };
+
         await User.findByIdAndUpdate(id, { $push: { favourites: bookid } });
         res.status(200).json({ msg: "Book added to favourites" });
     } catch (error) {
-        console.log(error);
+        console.error("Error in add-favourite:", error);
         res.status(500).json({ msg: "Internal server error" });
     }
 });
+
 
 // remove book to favourites
 router.delete("/remove-favourite", authToken, async (req, res) => {

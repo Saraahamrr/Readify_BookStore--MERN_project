@@ -9,22 +9,7 @@ import authorimage from '../../assets/author.jpeg';
 import axios from "axios";
 
 export default function Card({ book, author }) {
-    const [favorites, setFavorites] = useState([]);
-
-    useEffect(() => {
-        // جلب المفضلات عند تحميل الصفحة
-        const fetchFavorites = async () => {
-            try {
-                const response = await axios.get("http://localhost:3000/api/get-favorites");
-                setFavorites(response.data.favorites || []);
-            } catch (error) {
-                console.error("Error fetching favorites:", error);
-                setFavorites([]);
-            }
-        };
-
-        fetchFavorites();
-    }, []);
+    
 
     if (!book && !author) {
         return <div>Loading...</div>;
@@ -39,18 +24,8 @@ export default function Card({ book, author }) {
     const authorImage = author?.image || authorimage;
 
     const itemId = book?._id || author?._id; 
-
-    const isFav = useMemo(() => favorites.includes(itemId), [favorites, itemId]);
-
-    const handleFavClick = async () => {
-        try {
-            const response = await axios.post("http://localhost:3000/api/toggle-favorite", { bookId: itemId });
-            setFavorites(response.data.favorites || []); // تحديث القائمة بعد الحفظ في السيرفر
-        } catch (error) {
-            console.error("Error toggling favorite:", error);
-        }
-    };
-
+    console.log("Book in Card:", book);
+   
     return (
         <div className="card mx-3 my-4 py-4" style={{ width: "18rem" }}>
             {book && (
@@ -65,7 +40,7 @@ export default function Card({ book, author }) {
                         <h5 className="card-title">{bookTitle}</h5>
                         <p className="card-text"><strong>Authors:</strong> {bookAuthors}</p>
                         <div className="card-text mb-3"><strong>Rating:</strong> <StarRating rating={book.averageRating} /></div>
-
+                        
                         <Link
                             className="details-btn"
                             to={`/BookDetails/${book.id}`}
@@ -87,8 +62,8 @@ export default function Card({ book, author }) {
                         </Link>
 
                         <div className="btn-group">
-                            <button className="like-button" onClick={handleFavClick}>
-                                <FontAwesomeIcon icon={faHeart} style={{ color: isFav ? "red" : "gray" }} />
+                            <button className="like-button" >
+                                <FontAwesomeIcon icon={faHeart} style={{fontSize:"20px"}} />
                             </button>
 
                             <button className="cart-button">

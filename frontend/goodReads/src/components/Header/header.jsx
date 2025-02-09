@@ -11,7 +11,7 @@ import { useFavorites } from "../../context/fav"; // استيراد الكونت
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const { favorites } = useFavorites(); // استخدام قائمة المفضلات من الكونتكست
+  const { favorites } = useFavorites(); 
 
   const links = [
     { title: "Home", link: "/" },
@@ -38,7 +38,7 @@ export default function Header() {
         </Link>
         <div className="collapse navbar-collapse" id="navbarNav">
           <form className="d-flex" role="search" onSubmit={handleSearch} style={{ width: "100%" }}>
-            <div style={{ position: "relative", width: "60%", display: "flex" }}>
+            <div style={{ position: "relative", width: "60%", display: "flex", backgroundColor:"#f8f9fa" }}>
               <input
                 className="form-control"
                 type="search"
@@ -70,7 +70,7 @@ export default function Header() {
 
             <li className="nav-item">
               <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }} />
-              <span>{favorites.length}</span> {/* تحديث العدد بناءً على طول المصفوفة */}
+              <span>{favorites.length}</span> 
             </li>
 
             <li className="nav-item">

@@ -27,7 +27,7 @@ export default function AuthorDetails() {
 
     if (loading) return <div>Loading...</div>;
     if (!author) return <div>Author not found</div>;
-
+    console.log("Book in AuthorDetails:", books);
     return (
         <div className="author-details">
             <div className="author-info">
@@ -50,13 +50,14 @@ export default function AuthorDetails() {
             </div>
 
             <div className="author-books">
+                
                 <h4>Books by {author.name}:</h4>
                 {books.length > 0 ? (
                     <ul>
                         {books.map((book) => (
                             <li key={book._id}>
                                 {book.title}
-                                <Link className="details-btn" to={`/BookDetails/${book._id}`} style={{ marginLeft: "50px", textDecoration: "none" }}>
+                                <Link className="details-btn" to={`/BookDetails/${book.id}`} style={{ marginLeft: "50px", textDecoration: "none" }}>
                                     More Details
                                 </Link>
                             </li>
