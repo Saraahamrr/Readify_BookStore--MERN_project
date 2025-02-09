@@ -110,7 +110,7 @@ export default function BookDetails() {
         <p><strong>Categories:</strong> {book.categories?.map((category) => category.name).join(", ") || "Unknown"}</p>
         <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
-        {/* ✅ زر المفضلة يعمل بشكل صحيح الآن */}
+       
         <button className="like-button" onClick={() => toggleFavorite(id)}>
         <FontAwesomeIcon
           icon={faHeart}
@@ -123,7 +123,6 @@ export default function BookDetails() {
         </button>
       </div>
 
-      {/* ✅ عرض المراجعات */}
       <div className="reviews-section">
         <h2>Reviews</h2>
         {book.rates?.length > 0 ? (
@@ -145,7 +144,7 @@ export default function BookDetails() {
           <p>No reviews yet. Be the first to review!</p>
         )}
 
-        {/* ✅ إضافة مراجعة جديدة */}
+       
         <div className="add-review">
           <h4>Add Your Review</h4>
           <div className="rating-input">
