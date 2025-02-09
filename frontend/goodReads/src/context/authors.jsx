@@ -12,7 +12,7 @@ export function AuthorsProvider({ children }) {
     useEffect(() => {
         const fetchAuthors = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/authors");
+                const response = await axios.get("http://localhost:5000/api/authors");
                 setAuthors(response.data.authors);
             } catch (error) {
                 console.error("Error fetching authors:", error);
