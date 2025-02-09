@@ -79,7 +79,7 @@ router.get("/get-favourite", authToken, async (req, res) => {
         if (!id) {
             return res.status(400).json({ msg: "UserId is required" });
         };
-        const user = await User.findById(id).populate();
+        const user = await User.findById(id).populate("favourites");
         const favourites = user.favourites;
         if (!favourites) {
             return res.status(400).json({ msg: "No favourite feild exists" });

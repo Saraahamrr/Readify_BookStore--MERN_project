@@ -127,7 +127,8 @@ export default function BookDetails() {
             <button className="like-button" onClick={() => toggleFavorite(id)}>
               <FontAwesomeIcon
                 icon={faHeart}
-                style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
+                style={{ color: favorites.some(fav => fav._id === id) ? "red" : "gray",fontSize:"30px" }}
+
               />
             </button>
   
@@ -150,7 +151,7 @@ export default function BookDetails() {
           {book.rates?.length > 0 ? (
             book.rates.map((review, index) => (
               <div key={index} className="review">
-                <p style={{fontSize:"30px"}}> {review.review || "No review text provided"}</p>
+                <p style={{fontSize:"20px"}}> {review.review || "No review text provided"}</p>
                 <div className="rating-stars">
                   {[...Array(5)].map((_, i) => (
                     <FontAwesomeIcon
