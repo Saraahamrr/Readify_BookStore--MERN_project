@@ -8,6 +8,8 @@ import { faTrashCan, faPen, faHeart, faStar, faShoppingCart } from "@fortawesome
 import axios from "axios";
 import "./BookDetails.css";
 import { useFavorites } from "../context/fav";
+
+
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -82,22 +84,24 @@ export default function BookDetails() {
   };
    
   const handleAddReview = async () => {
+    
     try {
+      axios.defaults.withCredentials = true;
       const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
-        userId: "user123",
+        
         ratingValue: newRating,
         review: newReview,
       });
 
       setBook((prevBook) => ({
         ...prevBook,
-        rates: [...(prevBook?.rates || []), { userId: "user123", rating: newRating, review: newReview }],
+        rates: [...(prevBook?.rates || []), {  rating: newRating, review: newReview }],
       }));
 
       setNewRating(0);
       setNewReview("");
     } catch (error) {
-      console.error("Error adding review:", error);
+      alert("Error adding review:", error);
     }
   };
 
@@ -146,7 +150,7 @@ export default function BookDetails() {
           {book.rates?.length > 0 ? (
             book.rates.map((review, index) => (
               <div key={index} className="review">
-                <p><strong>{review.userId}:</strong> {review.review || "No review text provided"}</p>
+                <p style={{fontSize:"30px"}}> {review.review || "No review text provided"}</p>
                 <div className="rating-stars">
                   {[...Array(5)].map((_, i) => (
                     <FontAwesomeIcon
