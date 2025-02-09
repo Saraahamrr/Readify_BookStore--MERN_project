@@ -40,7 +40,7 @@ export default function Card({ book, author }) {
 
                         <Link
                             className="details-btn"
-                            to={`/BookDetails/${book.id}`}
+                            to={`/BookDetails/${book._id}`}
                             state={{ book }}
                             style={{ textDecoration: "none" }}
                         >

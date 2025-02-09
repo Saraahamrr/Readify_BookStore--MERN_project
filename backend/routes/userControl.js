@@ -145,7 +145,7 @@ router.post("/sign-out", (req,res)=>{
 // bearer ??
 router.get("/user-info", authToken , async(req,res)=>{
     try{
-    const {id} = req.headers;
+    const {id} = req.body;
     const data = await User.findById(id);
     console.log(data);
     return res.status(200).json(data);
