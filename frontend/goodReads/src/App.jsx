@@ -17,6 +17,7 @@ import ResetPass from "./pages/forgetPassword/ResetPass";
 import Favourites from "./components/Profile/Favourites";
 import UserOrderHistory from "./components/Profile/UserOrderHistory";
 import Settings from "./components/Profile/Settings";
+import BookManagement from "./components/Profile/BookManagement/BookManagement";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -28,9 +29,7 @@ const Cart = lazy(() => import("./pages/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const BookManagement = lazy(() =>
-  import("./pages/BookManagement/BookManagement")
-);
+
 const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
@@ -66,11 +65,12 @@ function App() {
                 <Route index element={<Favourites/>} />
                 <Route path="/profile/orderHistory" element={<UserOrderHistory/>}/>
                 <Route path="/profile/settings" element={<Settings/>}/>
+                <Route path="/profile/book-management" element={<BookManagement />} />
+
                 <Route/>
 
               </Route>
               <Route path="/add-book" element={<AddBook />} />
-              <Route path="/book-management" element={<BookManagement />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
               <Route path="/search" element={<SearchResult />} />
               <Route path="/otp" element={<OTP />} />

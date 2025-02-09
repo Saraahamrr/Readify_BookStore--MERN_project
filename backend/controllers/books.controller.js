@@ -100,7 +100,7 @@ const addRating = asyncWrapper(async (req, res, next) => {
     return next(appError.create(errors.array(), 400, httpStatusText.FAIL));
   }
 
-  const { userId, ratingValue, review } = req.body;
+  const { id, ratingValue, review } = req.body;
   const { bookId } = req.params;
 
   console.log("Fetching book...");
@@ -110,14 +110,14 @@ const addRating = asyncWrapper(async (req, res, next) => {
   }
 
   console.log("Checking existing rating...");
-  const existingRating = book.rates.find((r) => r.userId.toString() === userId);
+  const existingRating = book.rates.find((r) => r.userId.toString() === id);
 
   console.log("Updating rating...");
   await Book.updateOne(
     { _id: bookId },
     existingRating
       ? { $set: { "rates.$.rating": ratingValue, "rates.$.review": review || "" } } 
-      : { $push: { rates: { userId, rating: ratingValue, review: review || "" } } }
+      : { $push: { rates: { id, rating: ratingValue, review: review || "" } } }
   );
   
   console.log("Fetching updated book...");

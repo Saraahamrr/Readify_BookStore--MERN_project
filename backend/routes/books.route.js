@@ -111,9 +111,6 @@ router.get("/:bookId", bookController.getBook);
 router.route("/:bookId/rate")
   .post(
     [
-      param("bookId")
-        .isInt({ min: 1 })
-        .withMessage("Invalid Book ID"),
       body("userId")
         .notEmpty()
         .withMessage("User ID is required"),

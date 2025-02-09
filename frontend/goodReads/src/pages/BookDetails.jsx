@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux'
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
@@ -15,8 +16,10 @@ export default function BookDetails() {
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
 
-  const updateBook = (bookId)=>{
+  const updateBook = (bookId) => {
     navigate(`/update-book/${bookId}`)
   }
 
@@ -41,37 +44,37 @@ export default function BookDetails() {
       const response = await axios.delete(
         `http://localhost:3000/api/books/${bookId}`
       );
-      console.log(response); 
+      console.log(response);
       if (response.status === 200) {
         toast.success(response.data.msg, {
-                  position: "top-right",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: false,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                  transition: Bounce,
-                });
-                navigate('/allbooks')
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        navigate('/allbooks')
       }
     } catch (error) {
       console.error("Error deleting book:", error);
       toast.error(error.response.data.msg, {
-                  position: "top-right",
-                  autoClose: 5000,
-                  hideProgressBar: false,
-                  closeOnClick: false,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  theme: "colored",
-                  transition: Bounce,
-                });
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     }
   };
-  
+
   const handleAddReview = async () => {
     try {
       await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
@@ -113,8 +116,8 @@ export default function BookDetails() {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex flex-row justify-content-between gap-5 py-5">
-        <div className="flex-grow-1 d-flex">
+      <div className="d-flex flex-row justify-content-between gap-1 py-5 container-">
+        <div className="flex-grow-1 d-flex flex-wrap w-50">
           <div className="book-image me-4">
             <img src={book.coverImage || "placeholder.jpg"} alt={book.title || "Unknown Title"} />
           </div>
@@ -122,27 +125,30 @@ export default function BookDetails() {
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
             <p><strong>Author(s):</strong> {book.authors?.map(author => author.name).join(", ") || "Unknown"}</p>
+            <p><strong>Description:</strong> {book.description|| "no desription"}</p>
             <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
             <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
             <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
             <p><strong>Language:</strong> {book.language || "Unknown"}</p>
 
-            <button className="like-button" onClick={handleFavourites}>
-              <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "30px" }} />
-            </button>
+            {isLoggedIn === true && role === "user" && <>
+              <button className="like-button" onClick={handleFavourites}>
+                <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "30px" }} />
+              </button>
 
-            <button className="cart-button" onClick={handleCart}>
-              <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
-            </button>
+              <button className="cart-button" onClick={handleCart}>
+                <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
+              </button>
+            </>}
 
-            <div className="d-flex mt-3">
+            {isLoggedIn === true && role === "admin" && <div className="d-flex mt-3">
               <button className="editButton me-2" onClick={() => updateBook(id)}>
                 <FontAwesomeIcon icon={faPen} />
               </button>
               <button className="trashButton" onClick={() => deleteBook(id)}>
                 <FontAwesomeIcon icon={faTrashCan} />
               </button>
-            </div>
+            </div>}
           </div>
         </div>
 

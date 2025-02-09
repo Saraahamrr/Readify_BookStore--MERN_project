@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import './Sidebar.css'
 export default function Sidebar(props) {
+    const role = useSelector((state) => state.auth.role);
     const data = props.data;
     console.log(data);
 
@@ -19,6 +21,7 @@ export default function Sidebar(props) {
                 <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Favourites</Link>
                 <Link to="/profile/orderHistory" className="w-100 py-1 rounded p-link " style={{ fontSize: "1.3rem", textAlign: "center" }}>Order History</Link>
                 <Link to="/profile/settings" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Settings</Link>
+                {role === "admin" && <Link to="/profile/book-management" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Book Management</Link>}
             </div>
             <button className="btn logout-btn">
                 Log out <FontAwesomeIcon icon={faRightFromBracket} />
