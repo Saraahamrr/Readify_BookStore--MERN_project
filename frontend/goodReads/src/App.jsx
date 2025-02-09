@@ -70,7 +70,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 {isLoggedIn && <Route path="/profile" element={<Profile />}>
                   <Route path="settings" element={<Settings />} />
-                  {isLoggedIn&& user=== "user" ? (
+                  {isLoggedIn&& role=== "user" ? (
                     <>
                       <Route index element={<Favourites />} />
                       <Route path="orderHistory" element={<UserOrderHistory />} />

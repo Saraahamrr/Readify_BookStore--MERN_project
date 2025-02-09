@@ -68,7 +68,7 @@ export default function Sidebar(props) {
                 <Link to="/profile/orderHistory" className="w-100 py-1 rounded p-link " style={{ fontSize: "1.3rem", textAlign: "center" }}>Order History</Link>
                 <Link to="/profile/settings" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Settings</Link>
             </div>
-            <button className="btn logout-btn">
+            <button className="btn logout-btn" onClick={handleLogout}>
                 Log out <FontAwesomeIcon icon={faRightFromBracket} />
             </button>
 
