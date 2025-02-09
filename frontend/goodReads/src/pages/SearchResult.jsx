@@ -34,7 +34,7 @@ export default function SearchPage() {
                 <img src={book.coverImage} className="card-img-top" alt={book.title} />
                 <div className="card-body">
                   <h5 className="card-title">{book.title}</h5>
-                  {/* <p className="card-text">{book.description}</p> */}
+                
                   <p><strong>Publisher:</strong> {book.publisher}</p>
                   <p>
                     <strong>Categories:</strong>{" "}
