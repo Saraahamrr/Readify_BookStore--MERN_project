@@ -4,13 +4,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";  // <-- Fix 1: Import useSelector
 import { Link } from "react-router-dom";
+import { useCart } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 import StarRating from "../StarRate";
 import authorimage from '../../assets/author.jpeg';
 import "./Card.css";
 
-export default function Card({ book, author }) {
+export default function Card({ book, author }) {  
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const role = useSelector((state) => state.auth.role);
+
+    const navigate = useNavigate();
+    const { addToCart } = useCart(); // Access addToCart from context
+
+    // const handleRedirectDetails = (id) => {
+    //     navigate(`/BookDetails/${id}`);
+    // };
 
     if (!book && !author) {
         return <div>Loading...</div>;
@@ -54,7 +63,7 @@ export default function Card({ book, author }) {
                         {isLoggedIn === true && role === "user" && (
                             <div className="btn-group">
                                 <button className="like-button"><FontAwesomeIcon icon={faHeart} /></button>
-                                <button className="cart-button">
+                                <button className="cart-button" onClick={() => addToCart(book.id)}>
                                     <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                                 </button>
                             </div>
