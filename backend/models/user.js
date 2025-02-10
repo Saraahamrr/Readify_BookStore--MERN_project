@@ -66,7 +66,12 @@ const user = new mongoose.Schema({
             type: mongoose.Types.ObjectId, 
             ref: 'orders'
         }
-    ]
+    ],
+    isSubscribed :{
+        type: Boolean,
+        default: false,
+    }
+
 }, {
     timestamps: true
 });

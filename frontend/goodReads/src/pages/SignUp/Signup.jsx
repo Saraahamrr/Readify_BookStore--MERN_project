@@ -17,7 +17,6 @@ import {
   faGooglePlusG,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
-
 export default function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -152,6 +151,7 @@ export default function Signup() {
         toast.success(response.data.msg, toastOptions);
         dispatch(authActions.login());
         console.log(authActions.login());
+
         navigate("/");
       } catch (error) {
         toast.error(error.response.data.msg, toastOptions);

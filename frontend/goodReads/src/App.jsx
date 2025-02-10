@@ -33,6 +33,7 @@ const Cart = lazy(() => import("./pages/Cart/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const ReadBook = lazy(() => import("./pages/ReadBook"));
 
 const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
@@ -68,6 +69,7 @@ function App() {
                 <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/read/:id" element={<ReadBook />} />
 
                 {isLoggedIn && (
                   <Route path="/profile" element={<Profile />}>
