@@ -254,7 +254,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <a href="#">Forget Password?</a>
+                  <Link to="/forget-pass">Forget password?</Link>{" "}
                   <button className="signIn" type="submit">
                     Sign In
                   </button>
