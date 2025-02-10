@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/authSlicer";
+import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux";
 
 import {
@@ -149,7 +150,10 @@ export default function Signup() {
         localStorage.setItem("isSubscribed",response.data.isSubscribed)
 
         toast.success(response.data.msg, toastOptions);
+        console.log(response);
+        localStorage.setItem("isSubscribed", response.data.isSubscribed);
         dispatch(authActions.login());
+        dispatch(authActions.changeRole(response.data.role));
         console.log(authActions.login());
 
         navigate("/");
@@ -161,7 +165,8 @@ export default function Signup() {
         password: "",
       });
     } else {
-      localStorage.setItem("isSubscribed","false")
+      setIsSubmitted(false);
+      localStorage.setItem("isSubscribed", "false");
     }
   };
 
@@ -306,7 +311,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <a href="#">Forget Password?</a>
+                  <Link to="/forget-pass">Forget password?</Link>{" "}
                   <button className="signIn" type="submit">
                     Sign In
                   </button>

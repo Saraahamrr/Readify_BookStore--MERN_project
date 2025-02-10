@@ -33,6 +33,7 @@ export default function Sidebar(props) {
         transition: Bounce,
       });
       dispatch(authActions.logout());
+      localStorage.setItem("isSubscribed", "false");
       navigate("/");
     } catch (error) {
       toast.error(error.response.data.msg, {
@@ -69,7 +70,7 @@ export default function Sidebar(props) {
         {isLoggedIn && role === "user" && (
           <>
             <Link
-              to="/profile"
+              to="/profile/favourites"
               className="w-100 py-1 rounded p-link"
               style={{ fontSize: "1.3rem", textAlign: "center" }}
             >
@@ -81,6 +82,13 @@ export default function Sidebar(props) {
               style={{ fontSize: "1.3rem", textAlign: "center" }}
             >
               Order History
+            </Link>
+            <Link
+              to="/profile/settings"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Settings
             </Link>
           </>
         )}
@@ -102,16 +110,9 @@ export default function Sidebar(props) {
             </Link>
           </>
         )}
-        <Link
-          to="/profile/settings"
-          className="w-100 py-1 rounded p-link"
-          style={{ fontSize: "1.3rem", textAlign: "center" }}
-        >
-          Settings
-        </Link>
       </div>
       <button className="btn logout-btn" onClick={handleSignout}>
-        sign out <FontAwesomeIcon icon={faRightFromBracket} />
+        Log out <FontAwesomeIcon icon={faRightFromBracket} />
       </button>
     </div>
   );

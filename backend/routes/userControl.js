@@ -111,12 +111,14 @@ router.post("/sign-in", async (req, res) => {
                 //     maxAge: 1000 * 60 * 60 * 24 * 7  
                 //   });
                 return res
-                    .status(200)
-                    .json(
-                        {
-                            msg: "User signed-in successfully",
-                            isSubscribed: existingUser.isSubscribed
-                        })
+                .status(200)
+                .json(
+                    {
+                        role : existingUser.role ,
+                        isSubscribed : existingUser.isSubscribed,
+                        msg : "User signed-in successfully"
+
+                    })
 
             }
             else {
@@ -148,13 +150,13 @@ router.post("/sign-out", (req, res) => {
 // user-info route
 // localhost:3000/api/v1/userInfo
 // bearer ??
-router.get("/user-info", authToken, async (req, res) => {
-    try {
-        const { id } = req.body;
-        const data = await User.findById(id);
-        console.log(data);
-        return res.status(200).json(data, { msg: "User data fetched successfully" });
-    } catch (err) {
+router.get("/user-info", authToken , async(req,res)=>{
+    try{
+    const {id} = req.body;
+    const data = await User.findById(id);
+    console.log(data);
+    return res.status(200).json(data);
+    }catch(err){
         console.log(err);
         res.status(500).json({ msg: "Internal server error" });
     }

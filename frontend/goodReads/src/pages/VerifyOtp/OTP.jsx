@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
   const [OTPValues, setOTPValues] = useState({
@@ -254,7 +255,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <a href="#">Forget Password?</a>
+                  <Link to="/forget-pass">Forget password?</Link>{" "}
                   <button className="signIn" type="submit">
                     Sign In
                   </button>

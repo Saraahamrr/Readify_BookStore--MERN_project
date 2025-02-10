@@ -26,7 +26,10 @@ export default function BookDetails() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
-  const [isSubscribed,setIsSubscribed] = useState(localStorage.getItem("isSubscribed") === "true");
+
+  const [isSubscribed, setIsSubscribed] = useState(
+    localStorage.getItem("isSubscribed") === "true"
+  );
 
   const { favorites, toggleFavorite } = useFavorites();
 
@@ -161,19 +164,44 @@ export default function BookDetails() {
   
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
-            <p><strong>Author(s):</strong> {book.authors?.map(author => author.name).join(", ") || "Unknown"}</p>
-            <p><strong>Description:</strong> {book.description || "No description"}</p>
-            <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
-            <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
-            <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
-            <p><strong>Language:</strong> {book.language || "Unknown"}</p>
-  
+            <p>
+              <strong>Author(s):</strong>{" "}
+              {book.authors?.map((author) => author.name).join(", ") ||
+                "Unknown"}
+            </p>
+            <p>
+              <strong>Description:</strong>{" "}
+              {book.description || "No description"}
+            </p>
+            <p>
+              <strong>Publisher:</strong> {book.publisher || "Unknown"}
+            </p>
+            <p>
+              <strong>Published Date:</strong>{" "}
+              {book.publishedDate
+                ? new Date(book.publishedDate).toDateString()
+                : "Unknown"}
+            </p>
+            <p>
+              <strong>Categories:</strong>{" "}
+              {book.categories?.map((category) => category.name).join(", ") ||
+                "Unknown"}
+            </p>
+            <p>
+              <strong>Language:</strong> {book.language || "Unknown"}
+            </p>
+
             {isLoggedIn && role === "user" && (
               <>
                 <button className="like-button" onClick={() => toggleFavorite(id)}>
                   <FontAwesomeIcon
                     icon={faHeart}
-                    style={{ color: favorites.some(fav => fav._id === id) ? "red" : "gray", fontSize: "30px" }}
+                    style={{
+                      color: favorites.some((fav) => fav._id === id)
+                        ? "red"
+                        : "gray",
+                      fontSize: "30px",
+                    }}
                   />
                 </button>
   
@@ -182,10 +210,12 @@ export default function BookDetails() {
                 </button>
               </>
             )}
-            {role === "user" &&  <button className="subscribe-button" onClick={handleSubscription}>
-              {isSubscribed ? "Read Now" : "Subscribe to Read"}
-            </button>}
-  
+            {role === "user" && (
+              <button className="subscribe-button" onClick={handleSubscription}>
+                {isSubscribed ? " Now" : "Subscribe to Read"}
+              </button>
+            )}
+
             {isLoggedIn && role === "admin" && (
               <div className="d-flex mt-3">
                 <button className="editButton me-2" onClick={() => updateBook(id)}>
@@ -198,30 +228,60 @@ export default function BookDetails() {
             )}
           </div>
         </div>
-  
-      <div className="reviews-section">
-        <h2>Reviews</h2>
-        {book.rates?.length > 0 ? (
-          book.rates.map((review, index) => (
-            <div key={index} className="review">
-              <p style={{ fontSize: "20px" }}>
-                {review.review || "No review text provided"}
-              </p>
-              <div className="rating-stars">
+
+        <div className="reviews-section">
+          <h2>Reviews</h2>
+          {book.rates?.length > 0 ? (
+            book.rates.map((review, index) => (
+              <div key={index} className="review">
+                <p style={{ fontSize: "20px" }}>
+                  {" "}
+                  {review.review || "No review text provided"}
+                </p>
+                <div className="rating-stars">
+                  {[...Array(5)].map((_, i) => (
+                    <FontAwesomeIcon
+                      key={i}
+                      icon={faStar}
+                      style={{ color: i < review.rating ? "#FFD700" : "#ccc" }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No reviews yet. Be the first to review!</p>
+          )}
+          {role === "user" && (
+            <div className="add-review">
+              <h4>Add Your Review</h4>
+              <div className="rating-input">
                 {[...Array(5)].map((_, i) => (
                   <FontAwesomeIcon
                     key={i}
                     icon={faStar}
-                    style={{ color: i < review.rating ? "#FFD700" : "#ccc" }}
+                    style={{
+                      color: i < newRating ? "#FFD700" : "#ccc",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setNewRating(i + 1)}
                   />
                 ))}
               </div>
+              <textarea
+                placeholder="Write your review..."
+                value={newReview}
+                onChange={(e) => setNewReview(e.target.value)}
+              />
+              <button
+                onClick={handleAddReview}
+                disabled={newRating === 0 || newReview.trim() === ""}
+              >
+                Submit Review
+              </button>
             </div>
-          ))
-        ) : (
-          <p>No reviews yet.</p>
-        )}
-      </div>
+          )}
+        </div>
       </div>
 
     </div>
