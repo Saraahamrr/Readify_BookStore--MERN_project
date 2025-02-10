@@ -14,13 +14,26 @@ export default function SearchPage() {
       axios
         .get(`http://localhost:3000/api/search?query=${query}`)
         .then((response) => {
-          console.log("API Response:", response.data);
+          //console.log("API Response:", response.data);
           setBooks(response.data.results || []);
         })
-        .catch((error) => console.error("Error fetching books:", error));
+        .catch((error) => {
+          toast.error("Error fetching books:", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          });
+        });
+      //console.error("Error fetching books:", error));
     }
   }, [location.search]);
-  console.log(books);
+  //console.log(books);
 
   return (
     <div className="container mt-4">
@@ -37,8 +50,12 @@ export default function SearchPage() {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{book.title}</h5>
-                
-                  <p><strong>Publisher:</strong> {book.publisher}</p>
+
+                  <p>
+                    <strong>Author:</strong>{" "}
+                    {book?.authors?.map((author) => author.name).join(", ") ||
+                      "Unknown"}
+                  </p>
                   <p>
                     <strong>Categories:</strong>{" "}
                     {book.categories?.length
@@ -47,7 +64,7 @@ export default function SearchPage() {
                           .join(", ")
                       : "No categories available"}
                   </p>
-                  <Link className="details-btn" to={`/BookDetails/${book._id}`} >
+                  <Link className="details-btn" to={`/BookDetails/${book._id}`}>
                     More Details
                   </Link>
                 </div>
