@@ -9,7 +9,7 @@ import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
 import { FavoritesProvider } from "./context/fav";
-
+import {CartProvider} from './context/CartContext';
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
@@ -19,6 +19,8 @@ import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
 import Favourites from "./components/Profile/Favourites";
 import UserOrderHistory from "./components/Profile/UserOrderHistory";
+import BookManagement from "./components/Profile/BookManagement/BookManagement";
+import PaymentPage from './pages/checkout/PaymentPage';
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -75,8 +77,6 @@ function App() {
               <Route path="/book-management" element={<BookManagement />} />
               <Route path="/update-book/:id" element={<UpdateBook />} />
               <Route path="/search" element={<SearchResult />} />
-              <Route path="/success" element={<Success/>} />
-              <Route path="/cancel" element={<Cancel/>} />
               <Route path="/otp" element={<OTP />} />
               <Route path="/forget-pass" element={<ForgetPass />} />
               <Route path="/reset-pass" element={<ResetPass />} />
