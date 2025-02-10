@@ -153,7 +153,7 @@ router.get("/user-info", authToken , async(req,res)=>{
     const {id} = req.body;
     const data = await User.findById(id);
     console.log(data);
-    return res.status(200).json(data , {msg: "User data fetched successfully"});
+    return res.status(200).json(data);
     }catch(err){
         console.log(err);
         res.status(500).json({msg: "Internal server error"});

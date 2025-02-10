@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/authSlicer";
+import { Link } from "react-router-dom";
 // import { useSelector } from "react-redux";
 
 import {

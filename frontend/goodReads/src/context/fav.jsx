@@ -14,20 +14,21 @@ export const FavoritesProvider = ({ children }) => {
 
   useEffect(() => {
     if (!isLoggedIn) return;
+    if (isLoggedIn) {
+      const fetchFavorites = async () => {
+        axios.defaults.withCredentials = true;
+        try {
+          const response = await axios.get(
+            "http://localhost:3000/api/get-favourite"
+          );
+          setFavorites(response.data.data || []);
+        } catch (error) {
+          console.error("Error fetching favorites:", error);
+        }
+      };
 
-    const fetchFavorites = async () => {
-      axios.defaults.withCredentials = true;
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/get-favourite"
-        );
-        setFavorites(response.data.data || []);
-      } catch (error) {
-        console.error("Error fetching favorites:", error);
-      }
-    };
-
-    fetchFavorites();
+      fetchFavorites();
+    }
   }, [isLoggedIn]);
 
   const toggleFavorite = async (bookId) => {
