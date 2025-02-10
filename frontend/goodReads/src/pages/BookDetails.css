@@ -117,6 +117,9 @@
   .like-button {
       width: 100%;
   }
+  .container-{
+    flex-wrap: wrap;
+  }
 }
 button.trashButton{
   padding: 0;
