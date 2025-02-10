@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -8,15 +8,24 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { authActions } from "../../../store/authSlicer";
 
 export default function Sidebar(props) {
+<<<<<<< HEAD
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const role = useSelector((state) => state.auth.role);
+=======
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
+>>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
   const data = props.data;
-  console.log(data);
   const navigate = useNavigate();
+<<<<<<< HEAD
+=======
+  const dispatch = useDispatch();
+>>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
 
-  const handleLogout = async (e) => {
+  const handleSignout = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/api/sign-out");
@@ -31,6 +40,7 @@ export default function Sidebar(props) {
         theme: "colored",
         transition: Bounce,
       });
+      dispatch(authActions.logout());
       navigate("/");
     } catch (error) {
       toast.error(error.response.data.msg, {
@@ -64,6 +74,7 @@ export default function Sidebar(props) {
       </div>
 
       <div className="w-100 d-flex flex-column align-items-center justify-content-center">
+<<<<<<< HEAD
                 {isLoggedIn && role === "user" && <>
                     <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Favourites</Link>
                     <Link to="/profile/orderHistory" className="w-100 py-1 rounded p-link " style={{ fontSize: "1.3rem", textAlign: "center" }}>Order History</Link>
@@ -81,4 +92,55 @@ export default function Sidebar(props) {
 
         </div>
     );
+=======
+        {isLoggedIn && role === "user" && (
+          <>
+            <Link
+              to="/profile"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Favourites
+            </Link>
+            <Link
+              to="/profile/orderHistory"
+              className="w-100 py-1 rounded p-link "
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Order History
+            </Link>
+          </>
+        )}
+        {isLoggedIn && role === "admin" && (
+          <>
+            <Link
+              to="/profile/book-management"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              Manage Books
+            </Link>
+            <Link
+              to="/profile/allOrders"
+              className="w-100 py-1 rounded p-link"
+              style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >
+              All orders
+            </Link>
+          </>
+        )}
+        <Link
+          to="/profile/settings"
+          className="w-100 py-1 rounded p-link"
+          style={{ fontSize: "1.3rem", textAlign: "center" }}
+        >
+          Settings
+        </Link>
+      </div>
+      <button className="btn logout-btn" onClick={handleSignout}>
+        sign out <FontAwesomeIcon icon={faRightFromBracket} />
+      </button>
+    </div>
+  );
+>>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
 }

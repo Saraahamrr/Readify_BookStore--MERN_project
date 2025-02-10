@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
+
 
 const authSlice = createSlice({
     name: "auth",
     initialState: {
-        isLoggedIn: true,
+        isLoggedIn: !!Cookies.get("token"),
         role: "user",
     },
     reducers: {

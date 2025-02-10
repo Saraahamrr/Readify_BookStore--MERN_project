@@ -71,7 +71,8 @@ const user = new mongoose.Schema({
     isSubscribed :{
         type: Boolean,
         default: false,
-    },
+    }
+
 }, {
     timestamps: true
 });

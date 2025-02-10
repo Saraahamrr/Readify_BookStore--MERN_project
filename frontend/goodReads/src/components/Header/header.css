@@ -56,6 +56,15 @@
   background-color: #fbb02d;
   border-radius: 10px;
 }
+#fav-btn {
+  background-color: transparent;
+  color: black;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: larger;
+  font-weight: 500;
+}
 
 @media (max-width: 992px) {
   .navbar-nav {

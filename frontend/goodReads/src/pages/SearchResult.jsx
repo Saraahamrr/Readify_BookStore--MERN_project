@@ -3,7 +3,6 @@ import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 
 export default function SearchPage() {
-
   const [books, setBooks] = useState([]);
   const location = useLocation();
 
@@ -12,16 +11,16 @@ export default function SearchPage() {
     const query = searchParams.get("query");
 
     if (query) {
-      axios.get(`http://localhost:3000/api/search?query=${query}`)
-        .then(response => {
+      axios
+        .get(`http://localhost:3000/api/search?query=${query}`)
+        .then((response) => {
           console.log("API Response:", response.data);
           setBooks(response.data.results || []);
         })
-        .catch(error => console.error("Error fetching books:", error));
+        .catch((error) => console.error("Error fetching books:", error));
     }
   }, [location.search]);
   console.log(books);
-
 
   return (
     <div className="container mt-4">
@@ -31,7 +30,11 @@ export default function SearchPage() {
           {books.map((book) => (
             <div key={book._id} className="col-md-4">
               <div className="card mb-4">
-                <img src={book.coverImage} className="card-img-top" alt={book.title} />
+                <img
+                  src={book.coverImage}
+                  className="card-img-top"
+                  alt={book.title}
+                />
                 <div className="card-body">
                   <h5 className="card-title">{book.title}</h5>
                 
@@ -39,10 +42,12 @@ export default function SearchPage() {
                   <p>
                     <strong>Categories:</strong>{" "}
                     {book.categories?.length
-                      ? book.categories.map((category) => category.name).join(", ")
+                      ? book.categories
+                          .map((category) => category.name)
+                          .join(", ")
                       : "No categories available"}
                   </p>
-                  <Link className="details-btn" to={`/BookDetails/${book._id}`} >
+                  <Link className="details-btn" to={`/BookDetails/${book._id}`}>
                     More Details
                   </Link>
                 </div>

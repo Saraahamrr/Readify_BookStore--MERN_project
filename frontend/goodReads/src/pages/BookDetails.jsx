@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faPen, faHeart, faStar, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrashCan,
+  faPen,
+  faHeart,
+  faStar,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import "./BookDetails.css";
 import { useFavorites } from "../context/fav";
@@ -17,21 +24,26 @@ export default function BookDetails() {
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
+  const isSubscribed = useSelector(
+    (state) => state.SubscribeSlicer.isSubscribed
+  );
+
   const { favorites, toggleFavorite } = useFavorites();
 
   const updateBook = (bookId) => {
     navigate(`/update-book/${bookId}`);
   };
 
+
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
         axios.defaults.withCredentials = true;
-        const response = await axios.get(`http://localhost:3000/api/books/${id}`);
+        const response = await axios.get(
+          `http://localhost:3000/api/books/${id}`
+        );
         setBook(response.data.book);
       } catch (error) {
         console.error("Error fetching book details:", error);
@@ -43,8 +55,6 @@ export default function BookDetails() {
     const checkSubscription = async () => {
       if (!isLoggedIn) return;
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/${userId}/isSubscribed`);
-        setIsSubscribed(response.data.isSubscribed);
       } catch (error) {
         console.error("Error checking subscription status:", error);
       }
@@ -56,7 +66,7 @@ export default function BookDetails() {
 
   const handleSubscription = async () => {
     if (!isLoggedIn) {
-      toast.info("Please log in to subscribe.", {
+      toast.error("Please log in to subscribe.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -69,11 +79,8 @@ export default function BookDetails() {
       return;
     }
 
-    try {
-      axios.defaults.withCredentials = true;
-      await axios.post(`http://localhost:3000/api/users/${userId}/subscribe`);
-      setIsSubscribed(true);
-      toast.success("You are now subscribed!", {
+    if (isLoggedIn && !isSubscribed) {
+      toast.success("Temporary alert make navigate in code", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -83,19 +90,10 @@ export default function BookDetails() {
         theme: "colored",
         transition: Bounce,
       });
-      window.open(book.fullContent, "_blank");
-    } catch (error) {
-      console.error("Error subscribing:", error);
-      toast.error("Subscription failed. Please try again later.", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-        transition: Bounce,
-      });
+      //navigate("/payment");
+    }
+    if (isSubscribed) {
+      navigate(`/read/${id}`);
     }
   };
 
@@ -104,7 +102,9 @@ export default function BookDetails() {
     if (!confirmation) return;
     try {
       axios.defaults.withCredentials = true;
-      const response = await axios.delete(`http://localhost:3000/api/books/${bookId}`);
+      const response = await axios.delete(
+        `http://localhost:3000/api/books/${bookId}`
+      );
       if (response.status === 200) {
         toast.success(response.data.msg, {
           position: "top-right",
@@ -144,7 +144,10 @@ export default function BookDetails() {
 
       setBook((prevBook) => ({
         ...prevBook,
-        rates: [...(prevBook?.rates || []), { rating: newRating, review: newReview }],
+        rates: [
+          ...(prevBook?.rates || []),
+          { rating: newRating, review: newReview },
+        ],
       }));
 
       setNewRating(0);
@@ -162,41 +165,76 @@ export default function BookDetails() {
       <div className="d-flex flex-row justify-content-between gap-1 py-5 container-">
         <div className="flex-grow-1 d-flex flex-wrap w-50">
           <div className="book-image me-4">
-            <img src={book.coverImage || "placeholder.jpg"} alt={book.title || "Unknown Title"} />
+            <img
+              src={book.coverImage || "placeholder.jpg"}
+              alt={book.title || "Unknown Title"}
+            />
           </div>
 
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
-            <p><strong>Author(s):</strong> {book.authors?.map((author) => author.name).join(", ") || "Unknown"}</p>
-            <p><strong>Description:</strong> {book.description || "No description"}</p>
-            <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
-            <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
-            <p><strong>Categories:</strong> {book.categories?.map((category) => category.name).join(", ") || "Unknown"}</p>
-            <p><strong>Language:</strong> {book.language || "Unknown"}</p>
-            <p><strong>Price:</strong> {book.price|| "Unknown"}$</p>
-
+            <p>
+              <strong>Author(s):</strong>{" "}
+              {book.authors?.map((author) => author.name).join(", ") ||
+                "Unknown"}
+            </p>
+            <p>
+              <strong>Description:</strong>{" "}
+              {book.description || "No description"}
+            </p>
+            <p>
+              <strong>Publisher:</strong> {book.publisher || "Unknown"}
+            </p>
+            <p>
+              <strong>Published Date:</strong>{" "}
+              {book.publishedDate
+                ? new Date(book.publishedDate).toDateString()
+                : "Unknown"}
+            </p>
+            <p>
+              <strong>Categories:</strong>{" "}
+              {book.categories?.map((category) => category.name).join(", ") ||
+                "Unknown"}
+            </p>
+            <p>
+              <strong>Language:</strong> {book.language || "Unknown"}
+            </p>
+            <p>
+              <strong>Price:</strong> {book.price || "Unknown"}$
+            </p>
 
             {isLoggedIn && role === "user" && (
               <>
-                <button className="like-button" onClick={() => toggleFavorite(id)}>
+                <button
+                  className="like-button"
+                  onClick={() => toggleFavorite(id)}
+                >
                   <FontAwesomeIcon
                     icon={faHeart}
-                    style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
+                    style={{
+                      color: favorites.includes(id) ? "red" : "gray",
+                      fontSize: "30px",
+                    }}
                   />
                 </button>
 
                 <button className="cart-button">
-                  <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    style={{ fontSize: "30px", color: "#000000" }}
+                  />
                 </button>
-              <button className="subscribe-button" onClick={handleSubscription}>
-              {isLoggedIn ? (isSubscribed ? "Read Now" : "Subscribe to Read") : "Subscribe to Read"}
-            </button>
               </>
             )}
-
+            {!role === "admin" &&  <button className="subscribe-button" onClick={handleSubscription}>
+              {isSubscribed ? "Read Now" : "Subscribe to Read"}
+            </button>}
             {isLoggedIn && role === "admin" && (
               <div className="d-flex mt-3">
-                <button className="editButton me-2" onClick={() => updateBook(id)}>
+                <button
+                  className="editButton me-2"
+                  onClick={() => updateBook(id)}
+                >
                   <FontAwesomeIcon icon={faPen} />
                 </button>
                 <button className="trashButton" onClick={() => deleteBook(id)}>
@@ -204,7 +242,6 @@ export default function BookDetails() {
                 </button>
               </div>
             )}
-       
           </div>
         </div>
       </div>
