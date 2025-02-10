@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/user.js');
-const { authToken } = require('../middleWare/userAuth');
+
+const { authToken } = require('../middleWare/userAuth.js');
 
 //put book to cart
 const mongoose = require("mongoose");

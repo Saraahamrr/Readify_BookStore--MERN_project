@@ -52,11 +52,10 @@
 }
 
 .reviews-section {
- 
-  margin-top: 30px;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
+  width: 40%;
 }
 
 .review {
@@ -98,38 +97,37 @@
   cursor: not-allowed;
 }
 
-
 /* تحسين الاستجابة */
 @media (max-width: 768px) {
   .book-details-container {
-      flex-direction: column;
-      padding: 10px;
+    flex-direction: column;
+    padding: 10px;
   }
 
   .book-info {
-      text-align: center;
+    text-align: center;
   }
 
   .book-image img {
-      max-width: 90%;
+    max-width: 90%;
   }
 
   .like-button {
-      width: 100%;
+    width: 100%;
   }
-  .container-{
+  .container- {
     flex-wrap: wrap;
   }
 }
-button.trashButton{
+button.trashButton {
   padding: 0;
   margin: 0;
   font-size: 2em;
   background-color: transparent;
-  color: #780C28;
+  color: #780c28;
   border: 0;
 }
-button.editButton{
+button.editButton {
   padding: 0;
   margin: 0.5em;
   font-size: 2em;

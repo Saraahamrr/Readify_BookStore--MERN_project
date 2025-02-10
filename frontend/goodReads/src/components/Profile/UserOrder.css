@@ -1,0 +1,56 @@
+
+.loading-text {
+    font-size: 20px;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+.order-container {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #555;
+}
+
+.order-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.no-history-text {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.no-history-image {
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+
+.history-container {
+    padding: 20px;
+}
+
+.history-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.order-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 18px;
+}

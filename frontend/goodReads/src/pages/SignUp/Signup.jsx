@@ -8,15 +8,19 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/authSlicer";
+import { Link } from "react-router-dom";
+// import { useSelector } from "react-redux";
 
 import {
   faFacebookF,
   faGooglePlusG,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
-
 export default function Signup() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [signupValues, setSignupValues] = useState({
     username: "",
     email: "",
@@ -68,7 +72,17 @@ export default function Signup() {
         "Password must include uppercase, lowercase, special symbol, numbers";
     return errors;
   };
-
+  const toastOptions = {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+    transition: Bounce,
+  };
   const handleSignUp = async (e) => {
     e.preventDefault();
     const errors = validateSignUp(signupValues);
@@ -134,32 +148,17 @@ export default function Signup() {
           signinValues,
           { withCredentials: true }
         );
-        localStorage.setItem("userId", response.data.id);
-        localStorage.setItem("role", response.data.role);
-        localStorage.setItem("token", response.data.token);
-        toast.success(response.data.msg, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
+
+        toast.success(response.data.msg, toastOptions);
+        console.log(response);
+        localStorage.setItem("isSubscribed", response.data.isSubscribed);
+        dispatch(authActions.login());
+        dispatch(authActions.changeRole(response.data.role));
+        console.log(authActions.login());
+
+        navigate("/");
       } catch (error) {
-        toast.error(error.response.data.msg, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
+        toast.error(error.response.data.msg, toastOptions);
       }
       setSigninValues({
         username: "",
@@ -167,6 +166,7 @@ export default function Signup() {
       });
     } else {
       setIsSubmitted(false);
+      localStorage.setItem("isSubscribed", "false");
     }
   };
 
@@ -311,7 +311,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <a href="#">Forget Password?</a>
+                  <Link to="/forget-pass">Forget password?</Link>{" "}
                   <button className="signIn" type="submit">
                     Sign In
                   </button>
