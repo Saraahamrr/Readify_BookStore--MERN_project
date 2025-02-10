@@ -2,33 +2,29 @@ import { useState, useEffect } from "react";
 import CartItem from "./CartItem";
 import { useNavigate } from "react-router-dom";
 import './Cart.css';
+import axios from "axios";
+import { useCart } from "../../context/CartContext";
 
 
 const Cart = () => {
     const [cart, setCart] = useState([]);
     const navigate = useNavigate();
 
-    const userId = '67a67b09f25cbefeccc347ac'; 
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhaW1zIjp7Im5hbWUiOiJTYXJhYWhhbXJyIiwiZW1haWwiOiJzYXJhYWhhbXJyOThAZ21haWwuY29tIiwicm9sZSI6InVzZXIifSwiaWF0IjoxNzM4OTc0ODI3LCJleHAiOjE3NDE1NjY4Mjd9.vequKkUrwiHOrvnJ6T1KXEd_s6axQEb3BN9qFvGKsl8';
+    const {removeFromCart} = useCart();
 
     useEffect(() => {
         const fetchCart = async () => {
+            axios.defaults.withCredentials = true;
             try {
-                const response = await fetch(`http://localhost:3000/api/cart/get-user-cart?userId=${userId}`, {
-                    method: 'GET',
-                    headers: { 'auth-token': `bearer ${token}` }
-                });
-
-                const data = await response.json();
-                if (data.status === 'success') {
-                    setCart(data.data);
-                }
+              const response = await axios.get("http://localhost:3000/api/cart/get-user-cart");
+              setCart(response.data.data || []);
             } catch (error) {
-                console.error("Error fetching cart:", error);
+              console.error("Error fetching cart:", error);
             }
-        };
-        fetchCart();
-    }, [token, userId]);
+          };
+
+            fetchCart();
+          }, []);          
 
     // Calculate quantity dynamically
     const quantities = cart.reduce((acc, item) => {
@@ -77,7 +73,7 @@ const Cart = () => {
             )}
             <div className="last-cart">
                 <h3 className="totalo">Total: {totalPrice} EGP</h3>
-                <button className="checkout" onClick={()=> {navigate('/payment')}}>Checkout</button>
+                <button className="checkout" onClick={()=> {navigate('/profile/payment')}}>Checkout</button>
             </div>
         </div>
     );

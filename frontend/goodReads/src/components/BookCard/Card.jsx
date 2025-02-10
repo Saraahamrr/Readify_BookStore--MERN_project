@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";  
+import { useCart } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Card.css";
@@ -11,6 +12,8 @@ import { useFavorites } from "../../context/fav";
 export default function Card({ book, author }) {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const role = useSelector((state) => state.auth.role);
+
+    const {addToCart} = useCart();
 
     const { favorites, toggleFavorite } = useFavorites();
 
@@ -77,7 +80,7 @@ export default function Card({ book, author }) {
                                 />
                             </button>
 
-                            <button className="cart-button">
+                            <button className="cart-button" onClick={() => addToCart(book._id)}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                             </button>
                         </div>}

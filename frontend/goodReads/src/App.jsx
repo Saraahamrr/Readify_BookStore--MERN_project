@@ -9,7 +9,7 @@ import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
 import { FavoritesProvider } from "./context/fav";
-
+import PaymentPage from './pages/checkout/PaymentPage'
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
@@ -22,6 +22,7 @@ import UserOrderHistory from "./components/Profile/UserOrderHistory";
 import Settings from "./components/Profile/Settings";
 import BookManagement from "./components/Profile/BookManagement/BookManagement";
 import AllOrders from "./pages/AllOrders";
+import { CartProvider } from "./context/CartContext";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -54,7 +55,7 @@ function App() {
         theme="colored"
         transition={Bounce}
       />
-
+<CartProvider>
       <BooksProvider>
         <AuthorsProvider>
           <FavoritesProvider>
@@ -68,6 +69,7 @@ function App() {
                 <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/profile/payment" element={<PaymentPage/>} />
                 {isLoggedIn && <Route path="/profile" element={<Profile />}>
                   <Route path="settings" element={<Settings />} />
                   {isLoggedIn&& role=== "user" ? (
@@ -100,6 +102,7 @@ function App() {
           </FavoritesProvider>
         </AuthorsProvider>
       </BooksProvider>
+      </CartProvider>
     </>
   );
 }

@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo3.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import { useCart } from "../../context/CartContext";
 import "../Header/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useFavorites } from "../../context/fav";
 
 export default function Header() {
@@ -15,6 +16,9 @@ export default function Header() {
   const { favorites } = useFavorites();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
+
+      const {cart} = useCart();
+  
 
 
   const links = [
@@ -25,8 +29,9 @@ export default function Header() {
 
   if (isLoggedIn) {
     links.push({ title: "Profile", link: "/profile" });
-    if (role === "user")
-      links.push({ title: "Cart", link: "/cart" });
+  //   if (role === "user")
+  //     links.push({ title: "Cart", link: "/cart" });
+  // }
   }
 
   const handleSearch = (e) => {
@@ -88,19 +93,21 @@ export default function Header() {
           </li>
         ))}
 
-        {isLoggedIn&& role === "user" &&   <li className="nav-item">
+        {isLoggedIn&& role === "user" &&   (<li className="nav-item">
           <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }} />
           <span>{favorites.length}</span>
-        </li>}
-      
-
-        {!isLoggedIn && (
+          <Link to={'/cart'}>
+          <FontAwesomeIcon  icon={faShoppingCart} style={{ color: "black", fontSize: "20px", marginRight: "5px" }} />
+          <span>{cart.length}</span>
+          </Link>
+        </li>)}
+        
           <li className="nav-item">
             <Link className="btn sign-btn" to="/signup">
               Sign Up
             </Link>
           </li>
-        )}
+        
       </ul>
     </div>
       </div >

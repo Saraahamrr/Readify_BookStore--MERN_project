@@ -1,5 +1,6 @@
 const express = require("express");
 const Stripe = require("stripe");
+const Order = require('../models/orders.js');
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -9,6 +10,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 router.post("/create-payment", async (req, res) => {
   try {
     const { amount, currency } = req.body;
+    const{user,books,totalPrice,status} = req.body;
 
     // Create a PaymentIntent with the given amount
     const paymentIntent = await stripe.paymentIntents.create({
@@ -16,6 +18,17 @@ router.post("/create-payment", async (req, res) => {
       currency: currency || "usd", // Use USD if EGP is not available
       payment_method_types: ["card"], // Supports card payments
     });
+
+     //create a new order
+            const newOrder = new Order({
+              user : user,
+              books   : books,
+              totalPrice : totalPrice,
+              status: status
+            });
+    
+            //save the user
+            await newOrder.save();
 
     res.send({
       clientSecret: paymentIntent.client_secret,

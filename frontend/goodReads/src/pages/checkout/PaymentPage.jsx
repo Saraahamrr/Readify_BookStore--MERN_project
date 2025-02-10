@@ -80,7 +80,7 @@ const CheckoutForm = () => {
           <h2>Checkout</h2>
           <div className="checkout-content">
             <div className="left-section">
-              <h3>Shipping Address</h3>
+              <h3 className="shipping">Shipping Address</h3>
               <form className="checkout-form" onSubmit={handleSubmit}>
                 <div className="input-group">
                   <input type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
@@ -99,7 +99,7 @@ const CheckoutForm = () => {
                   </select>
                 </div>
 
-                <h3>Payment Details</h3>
+                <h3 className="shipping">Payment Details</h3>
 
 <div className="input-group">
   <label>Card Number</label>
