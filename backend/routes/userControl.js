@@ -114,6 +114,8 @@ router.post("/sign-in" , async(req,res)=>{
                 .status(200)
                 .json(
                     {
+                        role : existingUser.role ,
+                        isSubscribed : existingUser.isSubscribed,
                         msg : "User signed-in successfully"
 
                     })
@@ -162,16 +164,29 @@ router.get("/user-info", authToken , async(req,res)=>{
 
 // update-user-info route
 // localhost:3000/api/v1/updateUserInfo
-router.put("/update-user-info", authToken , async(req,res)=>{
-    try{
-    const {id} = req.body;
-    const data = await User.findByIdAndUpdate(id, req.body, {new: true});
-    return res.status(200).json({msg: "User updated successfully"});
-    }catch(err){
-        console.log(err);
-        res.status(500).json({msg: "Internal server error"});
+router.put("/update-user-info", authToken, async (req, res) => {
+    try {
+        const { id, ...updateData } = req.body;
+
+        console.log("Updating User ID:", id);
+        console.log("Update Data:", updateData);
+
+        if (!id) {
+            return res.status(400).json({ msg: "User ID is required" });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(id, updateData, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        return res.status(200).json({ msg: "User updated successfully", updatedUser });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Internal server error" });
     }
-}); 
+});
 
 // send-verify-email route
 // localhost:3000/api/v1/send-verify-email

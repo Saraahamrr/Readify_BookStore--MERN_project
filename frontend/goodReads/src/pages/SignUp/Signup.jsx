@@ -150,7 +150,10 @@ export default function Signup() {
         );
 
         toast.success(response.data.msg, toastOptions);
+        console.log(response);
+        localStorage.setItem("isSubscribed", response.data.isSubscribed);
         dispatch(authActions.login());
+        dispatch(authActions.changeRole(response.data.role));
         console.log(authActions.login());
 
         navigate("/");
@@ -163,6 +166,7 @@ export default function Signup() {
       });
     } else {
       setIsSubmitted(false);
+      localStorage.setItem("isSubscribed", "false");
     }
   };
 

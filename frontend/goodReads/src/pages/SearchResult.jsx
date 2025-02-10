@@ -37,10 +37,8 @@ export default function SearchPage() {
                 />
                 <div className="card-body">
                   <h5 className="card-title">{book.title}</h5>
-
-                  <p>
-                    <strong>Publisher:</strong> {book.publisher}
-                  </p>
+                
+                  <p><strong>Publisher:</strong> {book.publisher}</p>
                   <p>
                     <strong>Categories:</strong>{" "}
                     {book.categories?.length
@@ -49,7 +47,7 @@ export default function SearchPage() {
                           .join(", ")
                       : "No categories available"}
                   </p>
-                  <Link className="details-btn" to={`/BookDetails/${book._id}`}>
+                  <Link className="details-btn" to={`/BookDetails/${book._id}`} >
                     More Details
                   </Link>
                 </div>

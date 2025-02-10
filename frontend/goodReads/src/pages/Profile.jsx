@@ -27,19 +27,19 @@ const [columnClass, setColumnClass] = useState("col-12 col-5 col-md-5");
       }
     };
 
-    handleResize(); // Set initial class based on current screen size
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
 
-  return <div className="px-2 px-md-5 d-flex flex-column flex-md-row vh-100 py-4  ">
+  return <div className="px-2 px-md-5 d-flex flex-column flex-md-row min-vh-100 py-4  ">
    {profile? <>
       <div className={`${columnClass} h-75 my-4 d-flex justify-content-center`}>
         <Sidebar data={profile} />
       </div>
-      <div className="col-12 col-7 col-md-7 col-lg-9 my-4">
-        <Outlet />
+      <div className="col-12 col-7 col-md-7 col-lg-9 my-4 flex-grow-1">
+      <Outlet />
       </div>
     </>:<div className="w-100 h-100 d-flex align-items-center justify-content-center">
     <Loader/>

@@ -11,7 +11,9 @@ import {
   faHeart,
   faShoppingCart,
   faUser,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
+
 import { useFavorites } from "../../context/fav";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -21,6 +23,7 @@ import { authActions } from "../../store/authSlicer";
 
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
   const { favorites } = useFavorites();
   const dispatch = useDispatch();
@@ -55,6 +58,7 @@ export default function Header() {
         transition: Bounce,
       });
       dispatch(authActions.logout());
+      localStorage.setItem("isSubscribed", "false");
       console.log(authActions.login());
       navigate("/");
     } catch (error) {
@@ -85,6 +89,7 @@ export default function Header() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light w-100">
       <div className="container-fluid">
+        {/* Logo */}
         <Link to="/" className="navbar-brand">
           <img
             src={logo}
@@ -92,12 +97,24 @@ export default function Header() {
             style={{ width: "100px", height: "100px", marginLeft: "20px" }}
           />
         </Link>
-        <div className="collapse navbar-collapse" id="navbarNav">
+
+        {/* Toggler Button for Small Screens */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={() => setIsNavOpen(!isNavOpen)}
+        >
+          <FontAwesomeIcon icon={faBars} />
+        </button>
+
+        <div
+          className={`collapse navbar-collapse ${isNavOpen ? "show" : ""}`}
+          id="navbarNav"
+        >
           <form
-            className="d-flex bg-light"
+            className="d-flex bg-light w-100"
             role="search"
             onSubmit={handleSearch}
-            style={{ width: "100%" }}
           >
             <div
               style={{
@@ -149,7 +166,7 @@ export default function Header() {
           <ul className="navbar-nav ms-auto">
             {links.map((item, i) => (
               <li key={i} className="nav-item">
-                <Link to={item.link} className="nav-link" key={i}>
+                <Link to={item.link} className="nav-link">
                   {item.title}
                 </Link>
               </li>

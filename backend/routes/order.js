@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {authToken} = require('./userAuth');
+const { authToken } = require('../middleWare/userAuth');
 const Book = require('../models/book.js');
 const Order = require('../models/orders.js');
 const User = require('../models/user.js');
@@ -39,11 +39,9 @@ router.post('/place-order', authToken, async (req, res) => {
 //get order history of particular user
 router.get('/get-order-history', authToken, async (req, res) => {
     try{
-        const id = req.headers;
-        const userData = await User.findById(id).populate({
-            path: 'orders',
-            populate: {path: 'book'}
-        });
+        const id = req.body;
+        const userData = await User.findById(id).populate(
+           "Book").populate("orders");
 
         const ordersData = userData.orders.reverse();
 

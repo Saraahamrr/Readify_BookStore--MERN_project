@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan,faPen } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPen } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
@@ -10,8 +10,7 @@ import Loader from "../../Loader/Loader";
 import axios from "axios";
 import "./BookManagement.css";
 
-
- const deleteBook = async (bookId, setBooks) => {
+const deleteBook = async (bookId, setBooks) => {
   const confirmation = confirm("Are you sure you want to delete this book?");
   if (!confirmation) return;
   try {
@@ -23,45 +22,45 @@ import "./BookManagement.css";
     if (response.status === 200) {
       setBooks((prevBooks) => prevBooks.filter((book) => book._id !== bookId));
       toast.success(response.data.msg, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
-              });
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
     }
   } catch (error) {
     console.error("Error deleting book:", error);
     toast.error(error.response.data.msg, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Bounce,
-              });
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
   }
 };
-
 
 export default function BookManagement() {
   const { books, setBooks, loading } = useContext(BooksContext);
   const navigate = useNavigate();
   if (loading) return <Loader />;
-  const updateBook = (bookId)=>{
-    navigate(`/update-book/${bookId}`)
-  }
-  const addBook = ()=>{navigate('/profile/add-book')}
+  const updateBook = (bookId) => {
+    navigate(`/update-book/${bookId}`);
+  };
+  const addBook = () => {
+    navigate("/profile/add-book");
+  };
   return (
     <div className="p-5 d-flex flex-column align-items-center">
-   
       <table className="m-3 table table-striped table-hover table-light ">
         <thead className="thead-dark" style={{ position: "sticky", top: 0 }}>
           <tr>
@@ -86,12 +85,14 @@ export default function BookManagement() {
                 <td>
                   {book.categories?.map((category) => category.name).join(", ")}
                 </td>
-                <td><div className="content-wrapper">{book.description}</div></td>
+                <td>
+                  <div className="content-wrapper">{book.description}</div>
+                </td>
                 <td>{book.averageRating}</td>
                 <td>{book.language}</td>
                 <td>{book.price}</td>
                 <td>
-                <button
+                  <button
                     className="editButton"
                     onClick={() => updateBook(book._id)}
                   >
@@ -112,10 +113,20 @@ export default function BookManagement() {
         </tbody>
       </table>
       <div className="align-self-end">
-        <button type="button" style={{ backgroundColor: "#fbb02d", border:0, color:"white", fontWeight:"bold"}} className="custom-btn sign-btn" onClick={()=>addBook()}
-        >+ New book</button>
+        <button
+          type="button"
+          style={{
+            backgroundColor: "#fbb02d",
+            border: 0,
+            color: "white",
+            fontWeight: "bold",
+          }}
+          className="custom-btn sign-btn"
+          onClick={() => addBook()}
+        >
+          + New book
+        </button>
       </div>
     </div>
   );
 }
-

@@ -26,8 +26,9 @@ export default function BookDetails() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
-  const isSubscribed = useSelector(
-    (state) => state.SubscribeSlicer.isSubscribed
+
+  const [isSubscribed, setIsSubscribed] = useState(
+    localStorage.getItem("isSubscribed") === "true"
   );
 
   const { favorites, toggleFavorite } = useFavorites();
@@ -51,17 +52,8 @@ export default function BookDetails() {
       }
     };
 
-    const checkSubscription = async () => {
-      if (!isLoggedIn) return;
-      try {
-      } catch (error) {
-        console.error("Error checking subscription status:", error);
-      }
-    };
-
     fetchBookDetails();
-    checkSubscription();
-  }, [id, isLoggedIn, userId]);
+  }, [id]);
 
   const handleSubscription = async () => {
     if (!isLoggedIn) {
@@ -161,7 +153,7 @@ export default function BookDetails() {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex flex-row justify-content-between gap-1 py-5 container-">
+      <div className="d-flex flex-row align-items-center justify-content-between gap-5 py-5 container-">
         <div className="flex-grow-1 d-flex flex-wrap w-50">
           <div className="book-image me-4">
             <img
@@ -198,9 +190,6 @@ export default function BookDetails() {
             <p>
               <strong>Language:</strong> {book.language || "Unknown"}
             </p>
-            <p>
-              <strong>Price:</strong> {book.price || "Unknown"}$
-            </p>
 
             {isLoggedIn && role === "user" && (
               <>
@@ -211,7 +200,9 @@ export default function BookDetails() {
                   <FontAwesomeIcon
                     icon={faHeart}
                     style={{
-                      color: favorites.includes(id) ? "red" : "gray",
+                      color: favorites.some((fav) => fav._id === id)
+                        ? "red"
+                        : "gray",
                       fontSize: "30px",
                     }}
                   />
@@ -225,9 +216,12 @@ export default function BookDetails() {
                 </button>
               </>
             )}
-            <button className="subscribe-button" onClick={handleSubscription}>
-              {isSubscribed ? "Read Now" : "Subscribe to Read"}
-            </button>
+            {role === "user" && (
+              <button className="subscribe-button" onClick={handleSubscription}>
+                {isSubscribed ? "Read Now" : "Subscribe to Read"}
+              </button>
+            )}
+
             {isLoggedIn && role === "admin" && (
               <div className="d-flex mt-3">
                 <button
@@ -242,6 +236,60 @@ export default function BookDetails() {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="reviews-section">
+          <h2>Reviews</h2>
+          {book.rates?.length > 0 ? (
+            book.rates.map((review, index) => (
+              <div key={index} className="review">
+                <p style={{ fontSize: "20px" }}>
+                  {" "}
+                  {review.review || "No review text provided"}
+                </p>
+                <div className="rating-stars">
+                  {[...Array(5)].map((_, i) => (
+                    <FontAwesomeIcon
+                      key={i}
+                      icon={faStar}
+                      style={{ color: i < review.rating ? "#FFD700" : "#ccc" }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No reviews yet. Be the first to review!</p>
+          )}
+          {!role === "user" && (
+            <div className="add-review">
+              <h4>Add Your Review</h4>
+              <div className="rating-input">
+                {[...Array(5)].map((_, i) => (
+                  <FontAwesomeIcon
+                    key={i}
+                    icon={faStar}
+                    style={{
+                      color: i < newRating ? "#FFD700" : "#ccc",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setNewRating(i + 1)}
+                  />
+                ))}
+              </div>
+              <textarea
+                placeholder="Write your review..."
+                value={newReview}
+                onChange={(e) => setNewReview(e.target.value)}
+              />
+              <button
+                onClick={handleAddReview}
+                disabled={newRating === 0 || newReview.trim() === ""}
+              >
+                Submit Review
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
