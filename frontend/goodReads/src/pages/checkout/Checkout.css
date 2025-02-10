@@ -1,7 +1,11 @@
 .checkout-container {
     max-width: 900px;
-    margin: auto;
+    margin-left: 450px;
     padding: 20px;
+  }
+
+  .shipping{
+    font-size: 18px;
   }
   
   .checkout-content {
@@ -34,8 +38,6 @@
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
   }
   
   .continue-btn {

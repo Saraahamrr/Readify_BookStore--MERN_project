@@ -14,9 +14,7 @@ import {
   CardCvcElement,
 } from "@stripe/react-stripe-js";
 import "./PaymentPage.css";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Bounce } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // Load Stripe
 const stripePromise = loadStripe(
@@ -39,7 +37,7 @@ const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -72,17 +70,8 @@ const CheckoutForm = () => {
 
       if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
         setPaymentSuccess(true);
-        toast.success("Payment Successful!", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
+        alert("Payment Successful!");
+        navigate("/paymentSuccess");
       } else {
         console.error(result.error.message);
       }
@@ -92,115 +81,108 @@ const CheckoutForm = () => {
   };
 
   return (
-    <div className="checkout-container">
-      {paymentSuccess ? (
-        <div className="success-pay">
-          <div className="right-sign">&#x2713;</div>
-          <h2 className="success-sen">Payment Successful!</h2>
-        </div>
-      ) : (
-        <div>
-          <h2>Checkout</h2>
-          <div className="checkout-content">
-            <div className="left-section">
-              <h3>Shipping Address</h3>
-              <form className="checkout-form" onSubmit={handleSubmit}>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    name="firstName"
-                    placeholder="First Name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    placeholder="Last Name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+    <>
+      <div>
+        <h2>Checkout</h2>
+        <div className="checkout-content">
+          <div className="left-section">
+            <h3 className="shipping">Shipping Address</h3>
+            <form className="checkout-form" onSubmit={handleSubmit}>
+              <div className="input-group">
                 <input
                   type="text"
-                  name="address1"
-                  placeholder="Address 1 - City, Street"
-                  value={formData.address1}
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formData.firstName}
                   onChange={handleChange}
                   required
                 />
                 <input
                   type="text"
-                  name="address2"
-                  placeholder="Address 2 - Building, Apt, Floor"
-                  value={formData.address2}
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formData.lastName}
                   onChange={handleChange}
+                  required
                 />
-                <div className="input-group">
-                  <input
-                    type="text"
-                    name="zip"
-                    placeholder="ZIP Code"
-                    value={formData.zip}
-                    onChange={handleChange}
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                  />
-                  <select
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select...</option>
-                    <option value="CA">Cairo</option>
-                    <option value="NY">Giza</option>
-                  </select>
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <input
+                type="text"
+                name="address1"
+                placeholder="Address 1 - City, Street"
+                value={formData.address1}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="text"
+                name="address2"
+                placeholder="Address 2 - Building, Apt, Floor"
+                value={formData.address2}
+                onChange={handleChange}
+              />
+              <div className="input-group">
+                <input
+                  type="text"
+                  name="zip"
+                  placeholder="ZIP Code"
+                  value={formData.zip}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="City"
+                  value={formData.city}
+                  onChange={handleChange}
+                  required
+                />
+                <select
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select...</option>
+                  <option value="CA">Cairo</option>
+                  <option value="NY">Giza</option>
+                </select>
+              </div>
 
-                <h3>Payment Details</h3>
+              <h3 className="shipping">Payment Details</h3>
 
-                <div className="input-group">
-                  <label>Card Number</label>
-                  <CardNumberElement className="card-input" />
-                </div>
+              <div className="input-group">
+                <label>Card Number</label>
+                <CardNumberElement className="card-input" />
+              </div>
 
-                <div className="input-group">
-                  <label>Expiry Date</label>
-                  <CardExpiryElement className="card-input" />
-                </div>
+              <div className="input-group">
+                <label>Expiry Date</label>
+                <CardExpiryElement className="card-input" />
+              </div>
 
-                <div className="input-group">
-                  <label>CVV</label>
-                  <CardCvcElement className="card-input" />
-                </div>
+              <div className="input-group">
+                <label>CVV</label>
+                <CardCvcElement className="card-input" />
+              </div>
 
-                <button type="submit" className="pay-btn" disabled={!stripe}>
-                  Place Order
-                </button>
-              </form>
-            </div>
+              <button type="submit" className="pay-btn" disabled={!stripe}>
+                Place Order
+              </button>
+            </form>
           </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 

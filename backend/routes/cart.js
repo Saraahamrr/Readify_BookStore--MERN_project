@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/user.js');
-const { authToken } = require('../middleWare/userAuth');
+const { authToken } = require('../middleWare/userAuth.js');
 
 //put book to cart
 const mongoose = require("mongoose");
@@ -8,12 +8,18 @@ const mongoose = require("mongoose");
 router.put('/add-to-cart', authToken, async (req, res) => {
 
     try {
-        const { bookid, id } = req.headers || req.query;
+        const {id} = req.body;
+        const { bookid} = req.body;
 
         // Validate id and bookid
-        if (!id || !bookid) {
-            return res.status(400).json({ message: "Missing id or bookid" });
+        if (!bookid) {
+            return res.status(400).json({ message: "Missing bookid" });
         }
+
+                // Validate id and bookid
+                if (!id ) {
+                    return res.status(400).json({ message: "Missing id" });
+                }
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: "Invalid user id" });
@@ -26,7 +32,7 @@ router.put('/add-to-cart', authToken, async (req, res) => {
 
         const isBookInCart = userData.cart.includes(bookid);
         if (isBookInCart) {
-            return res.json({ status: "Success", message: "Book is already in cart" });
+            return res.json({ status: "success", message: "Book is already in cart" });
         }
 
         await User.findByIdAndUpdate(id, { $push: { cart: bookid } });
@@ -40,10 +46,19 @@ router.put('/add-to-cart', authToken, async (req, res) => {
 });
 
 //remove from cart
-router.put('/remove-from-cart/:bookid', authToken, async (req, res) => {
+router.put('/remove-from-cart', authToken, async (req, res) => {
     try {
-        const {bookid} = req.params;
-        const {id} = req.headers;
+        const {id, bookid} = req.body;
+
+        // Validate id and bookid
+        if (!bookid) {
+            return res.status(400).json({ message: "Missing bookid" });
+        }
+
+                // Validate id and bookid
+                if (!id ) {
+                    return res.status(400).json({ message: "Missing id" });
+                }
 
         await User.findByIdAndUpdate(id, {
             $pull: {cart: bookid}
@@ -63,10 +78,10 @@ router.put('/remove-from-cart/:bookid', authToken, async (req, res) => {
 //get cart of particular user
 router.get('/get-user-cart', authToken, async (req, res) => {
     try {
-        const userId = req.query.userId; // Get user ID from token or query
-        if (!userId) return res.status(400).json({ message: "User ID required" });
+        const id = req.body.id; // Get user ID from token or query
+        if (!id) return res.status(400).json({ message: "User ID required" });
 
-        const userData = await User.findById(userId).populate('cart');
+        const userData = await User.findById(id).populate('cart');
         if (!userData) return res.status(404).json({ message: "User not found" });
 
         return res.json({ status: 'success', data: userData.cart.reverse() });

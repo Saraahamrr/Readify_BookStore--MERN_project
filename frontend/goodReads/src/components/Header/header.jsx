@@ -13,7 +13,7 @@ import {
   faUser,
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
-
+import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/fav";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -27,7 +27,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { favorites } = useFavorites();
   const dispatch = useDispatch();
-
+  const { cart } = useCart();
   const links = [
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },
@@ -186,8 +186,16 @@ export default function Header() {
             )}
             {isLoggedIn && role === "user" && (
               <li className="nav-item">
-                <Link to="/cart" className="nav-link">
-                  <FontAwesomeIcon icon={faShoppingCart} />
+                <Link to={"/cart"}>
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    style={{
+                      color: "black",
+                      fontSize: "20px",
+                      marginRight: "5px",
+                    }}
+                  />
+                  <span>{cart.length}</span>
                 </Link>
               </li>
             )}
