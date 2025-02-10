@@ -11,6 +11,11 @@ const orders = new mongoose.Schema({
             ref: 'book'
         }
     ],
+    totalPrice: { 
+        type: Number, 
+        required: true,
+        default: 0 
+    },
     status: {
         type: String,
         default: 'order placed',
