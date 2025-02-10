@@ -23,13 +23,7 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const { favorites } = useFavorites();
-<<<<<<< HEAD
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const role = useSelector((state) => state.auth.role);
-
-=======
   const dispatch = useDispatch();
->>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
 
   const links = [
     { title: "Home", link: "/" },
@@ -37,19 +31,12 @@ export default function Header() {
     { title: "Authors", link: "/authors" },
   ];
 
-<<<<<<< HEAD
-  if (isLoggedIn) {
-    links.push({ title: "Profile", link: "/profile" });
-    if (role === "user")
-      links.push({ title: "Cart", link: "/cart" });
-=======
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
   console.log(isLoggedIn);
 
   if (!isLoggedIn) {
     links;
->>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
   }
 
   const handleSignout = async (e) => {
@@ -210,36 +197,7 @@ export default function Header() {
             )}
           </ul>
         </div>
-<<<<<<< HEAD
-      </form>
-
-      <ul className="navbar-nav ms-auto">
-        {links.map((item, i) => (
-          <li key={i} className="nav-item">
-            <Link to={item.link} className="nav-link">{item.title}</Link>
-          </li>
-        ))}
-
-        {isLoggedIn&& role === "user" &&   <li className="nav-item">
-          <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }} />
-          <span>{favorites.length}</span>
-        </li>}
-      
-
-        {!isLoggedIn && (
-          <li className="nav-item">
-            <Link className="btn sign-btn" to="/signup">
-              Sign Up
-            </Link>
-          </li>
-        )}
-      </ul>
-    </div>
-      </div >
-    </nav >
-=======
       </div>
     </nav>
->>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
   );
 }
