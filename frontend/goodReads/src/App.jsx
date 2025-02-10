@@ -33,7 +33,7 @@ const Cart = lazy(() => import("./pages/Cart/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-
+const ReadBook = lazy(()=>import("./pages/ReadBook"))
 const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
@@ -91,6 +91,8 @@ function App() {
                 <Route path="/forget-pass" element={<ForgetPass />} />
                 <Route path="/reset-pass" element={<ResetPass />} />
                 <Route path="*" element={<NotFound />} />
+                <Route path="/read/:id" element={<ReadBook />} />
+
               </Routes>
             </Suspense>
 

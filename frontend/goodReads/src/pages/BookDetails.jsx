@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +10,6 @@ import axios from "axios";
 import "./BookDetails.css";
 import { useFavorites } from "../context/fav";
 
-
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -18,17 +17,17 @@ export default function BookDetails() {
   const [loading, setLoading] = useState(true);
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
   const { favorites, toggleFavorite } = useFavorites();
 
-
   const updateBook = (bookId) => {
-    navigate(`/update-book/${bookId}`)
-  }
+    navigate(`/update-book/${bookId}`);
+  };
 
   useEffect(() => {
-    
     const fetchBookDetails = async () => {
       try {
         axios.defaults.withCredentials = true;
@@ -41,21 +40,71 @@ export default function BookDetails() {
       }
     };
 
-   
+    const checkSubscription = async () => {
+      if (!isLoggedIn) return;
+      try {
+        const response = await axios.get(`http://localhost:3000/api/users/${userId}/isSubscribed`);
+        setIsSubscribed(response.data.isSubscribed);
+      } catch (error) {
+        console.error("Error checking subscription status:", error);
+      }
+    };
+
     fetchBookDetails();
-  }, [id]);
+    checkSubscription();
+  }, [id, isLoggedIn, userId]);
 
+  const handleSubscription = async () => {
+    if (!isLoggedIn) {
+      toast.info("Please log in to subscribe.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+      return;
+    }
 
+    try {
+      axios.defaults.withCredentials = true;
+      await axios.post(`http://localhost:3000/api/users/${userId}/subscribe`);
+      setIsSubscribed(true);
+      toast.success("You are now subscribed!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+      window.open(book.fullContent, "_blank");
+    } catch (error) {
+      console.error("Error subscribing:", error);
+      toast.error("Subscription failed. Please try again later.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+    }
+  };
 
   const deleteBook = async (bookId) => {
     const confirmation = confirm("Are you sure you want to delete this book?");
     if (!confirmation) return;
     try {
       axios.defaults.withCredentials = true;
-      const response = await axios.delete(
-        `http://localhost:3000/api/books/${bookId}`
-      );
-      console.log(response);
+      const response = await axios.delete(`http://localhost:3000/api/books/${bookId}`);
       if (response.status === 200) {
         toast.success(response.data.msg, {
           position: "top-right",
@@ -68,10 +117,9 @@ export default function BookDetails() {
           theme: "colored",
           transition: Bounce,
         });
-        navigate('/allbooks')
+        navigate("/allbooks");
       }
     } catch (error) {
-      console.error("Error deleting book:", error);
       toast.error(error.response.data.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -85,20 +133,18 @@ export default function BookDetails() {
       });
     }
   };
- 
+
   const handleAddReview = async () => {
-    
     try {
       axios.defaults.withCredentials = true;
-      const response = await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
-        
+      await axios.post(`http://localhost:3000/api/books/${id}/rate`, {
         ratingValue: newRating,
         review: newReview,
       });
 
       setBook((prevBook) => ({
         ...prevBook,
-        rates: [...(prevBook?.rates || []), {  rating: newRating, review: newReview }],
+        rates: [...(prevBook?.rates || []), { rating: newRating, review: newReview }],
       }));
 
       setNewRating(0);
@@ -118,85 +164,50 @@ export default function BookDetails() {
           <div className="book-image me-4">
             <img src={book.coverImage || "placeholder.jpg"} alt={book.title || "Unknown Title"} />
           </div>
-  
+
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
             <p><strong>Author(s):</strong> {book.authors?.map((author) => author.name).join(", ") || "Unknown"}</p>
-            <p><strong>Description:</strong> {book.description|| "no desription"}</p>
+            <p><strong>Description:</strong> {book.description || "No description"}</p>
             <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
             <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
             <p><strong>Categories:</strong> {book.categories?.map((category) => category.name).join(", ") || "Unknown"}</p>
             <p><strong>Language:</strong> {book.language || "Unknown"}</p>
-  
-            {isLoggedIn === true && role === "user" && <>
-              <button className="like-button" onClick={() => toggleFavorite(id)}>
-                <FontAwesomeIcon
-                icon={faHeart}
-                style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
-              />
-              </button>
-  
-              <button className="cart-button">
-                <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
-              </button>
-            </>}
-            {isLoggedIn === true && role === "admin" && <div className="d-flex mt-3">
-              <button className="editButton me-2" onClick={() => updateBook(id)}>
-                <FontAwesomeIcon icon={faPen} />
-              </button>
-              <button className="trashButton" onClick={() => deleteBook(id)}>
-                <FontAwesomeIcon icon={faTrashCan} />
-              </button>
-            </div>}
-          </div>
-        </div> 
-  
-        <div className="reviews-section">
-          <h2>Reviews</h2>
-          {book.rates?.length > 0 ? (
-            book.rates.map((review, index) => (
-              <div key={index} className="review">
-                <p style={{fontSize:"30px"}}> {review.review || "No review text provided"}</p>
-                <div className="rating-stars">
-                  {[...Array(5)].map((_, i) => (
-                    <FontAwesomeIcon
-                      key={i}
-                      icon={faStar}
-                      style={{ color: i < review.rating ? "#FFD700" : "#ccc" }}
-                    />
-                  ))}
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No reviews yet. Be the first to review!</p>
-          )}
-  
-          <div className="add-review">
-            <h4>Add Your Review</h4>
-            <div className="rating-input">
-              {[...Array(5)].map((_, i) => (
-                <FontAwesomeIcon
-                  key={i}
-                  icon={faStar}
-                  style={{ color: i < newRating ? "#FFD700" : "#ccc", cursor: "pointer" }}
-                  onClick={() => setNewRating(i + 1)}
-                />
-              ))}
-            </div>
-            <textarea
-              placeholder="Write your review..."
-              value={newReview}
-              onChange={(e) => setNewReview(e.target.value)}
-            />
-            <button onClick={handleAddReview} disabled={newRating === 0 || newReview.trim() === ""}>
-              Submit Review
+            <p><strong>Price:</strong> {book.price|| "Unknown"}$</p>
+
+
+            {isLoggedIn && role === "user" && (
+              <>
+                <button className="like-button" onClick={() => toggleFavorite(id)}>
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    style={{ color: favorites.includes(id) ? "red" : "gray", fontSize: "30px" }}
+                  />
+                </button>
+
+                <button className="cart-button">
+                  <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
+                </button>
+              <button className="subscribe-button" onClick={handleSubscription}>
+              {isLoggedIn ? (isSubscribed ? "Read Now" : "Subscribe to Read") : "Subscribe to Read"}
             </button>
+              </>
+            )}
+
+            {isLoggedIn && role === "admin" && (
+              <div className="d-flex mt-3">
+                <button className="editButton me-2" onClick={() => updateBook(id)}>
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+                <button className="trashButton" onClick={() => deleteBook(id)}>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </button>
+              </div>
+            )}
+       
           </div>
         </div>
-      </div> 
-  
+      </div>
     </div>
   );
 }
-  

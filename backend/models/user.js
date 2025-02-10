@@ -1,4 +1,5 @@
 const mongoose = require('mongoose'); // Import mongoose
+const { type } = require('os');
 
 const user = new mongoose.Schema({
     username: {
@@ -66,7 +67,11 @@ const user = new mongoose.Schema({
             type: mongoose.Types.ObjectId, 
             ref: 'orders'
         }
-    ]
+    ],
+    isSubscribed :{
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true
 });
