@@ -5,7 +5,7 @@ const { authToken } = require('../middleWare/userAuth');
 //put book to cart
 const mongoose = require("mongoose");
 
-router.put('/add-to-cart', authToken, async (req, res) => {
+router.post('/add-to-cart', authToken, async (req, res) => {
 
     try {
         const { bookid, id } = req.headers || req.query;

@@ -57,6 +57,23 @@
   border-radius: 10px;
 }
 
+.cart-link {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 50%;
+}
+
 @media (max-width: 992px) {
   .navbar-nav {
     text-align: center;

@@ -6,12 +6,19 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "../Header/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+<<<<<<< HEAD
 import { faSearch, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useFavorites } from "../../context/fav";
+=======
+import { faSearch, faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useFavorites } from "../../context/fav"; // استيراد الكونتكست
+import { useCart } from "../../context/CartContext";
+>>>>>>> d3bcb0c (---)
 
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+<<<<<<< HEAD
   const { favorites } = useFavorites();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
@@ -20,6 +27,15 @@ export default function Header() {
   const links = [
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },
+=======
+  const { favorites } = useFavorites(); 
+  const { cartItemCount } = useCart(); // Get cart count
+  
+  const links = [
+    { title: "Home", link: "/" },
+    { title: "Books", link: "/allbooks" },
+    { title: "Profile", link: "/profile" },
+>>>>>>> d3bcb0c (---)
     { title: "Authors", link: "/authors" },
   ];
 
@@ -78,6 +94,35 @@ export default function Header() {
               }}>
                 <FontAwesomeIcon icon={faSearch} style={{ color: "#111111", fontSize: "15px" }} />
               </button>
+<<<<<<< HEAD
+=======
+            </div>
+          </form>
+
+          <ul className="navbar-nav ms-auto">
+            {links.map((item, i) => (
+              <li key={i} className="nav-item">
+                <Link to={item.link} className="nav-link">{item.title}</Link>
+              </li>
+            ))}
+
+            <li className="nav-item">
+              <FontAwesomeIcon icon={faHeart} style={{cursor: 'pointer', color: "red", fontSize: "20px", marginRight: "5px" }} />
+              {favorites.length>0 && <span>{favorites.length}</span> }
+            </li>
+
+            <li className="nav-item cart-link" onClick={()=>navigate('/cart')}>
+              <FontAwesomeIcon icon={faShoppingCart} style={{cursor: 'pointer', color: "black", fontSize: "20px", marginRight: "5px" }} />
+              {cartItemCount > 0 && <span className="cart-badge">{cartItemCount}</span>}
+            </li>
+
+            <li className="nav-item">
+              <Link className="btn sign-btn" to="/signup">
+                Sign Up
+              </Link>
+            </li>
+          </ul>
+>>>>>>> d3bcb0c (---)
         </div>
       </form>
 

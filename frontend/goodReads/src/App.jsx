@@ -19,9 +19,6 @@ import ForgetPass from "./pages/forgetPassword/ForgetPass";
 import ResetPass from "./pages/forgetPassword/ResetPass";
 import Favourites from "./components/Profile/Favourites";
 import UserOrderHistory from "./components/Profile/UserOrderHistory";
-import Settings from "./components/Profile/Settings";
-import BookManagement from "./components/Profile/BookManagement/BookManagement";
-import AllOrders from "./pages/AllOrders";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -54,51 +51,44 @@ function App() {
         theme="colored"
         transition={Bounce}
       />
-
+<CartProvider>
       <BooksProvider>
         <AuthorsProvider>
-          <FavoritesProvider>
-            <Header />
-            <Suspense fallback={<div className="loading">Loading...</div>}>
-              <Routes>
-                <Route exact path="/" element={<Home />} />
-                <Route path="/allbooks" element={<AllBooks />} />
-                <Route path="/authors" element={<Authors />} />
-                <Route path="/BookDetails/:id" element={<BookDetails />} />
-                <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/cart" element={<Cart />} />
-                {isLoggedIn && <Route path="/profile" element={<Profile />}>
-                  <Route path="settings" element={<Settings />} />
-                  {isLoggedIn&& role=== "user" ? (
-                    <>
-                      <Route index element={<Favourites />} />
-                      <Route path="orderHistory" element={<UserOrderHistory />} />
-                    </>
-                  ) : (
-                    <>
-                      <Route path="allOrders" element={<AllOrders />} />
-                      <Route index element={<BookManagement />} />
-                    </>
-                  )}
-                </Route>}
-                {isLoggedIn && role === "admin" && <>
-                  <Route path="/profile/add-book" element={<AddBook />} /> 
-                  <Route path="/update-book/:id" element={<UpdateBook />} />
-                </>}
-                <Route path="/search" element={<SearchResult />} />
-                <Route path="/otp" element={<OTP />} />
-                <Route path="/forget-pass" element={<ForgetPass />} />
-                <Route path="/reset-pass" element={<ResetPass />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-
-            <Footer />
-          </FavoritesProvider>
-        </AuthorsProvider>
-      </BooksProvider>
-    </>
+        <FavoritesProvider>
+          <Header />
+          <Suspense fallback={<div className="loading">Loading...</div>}>
+            <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route path="/allbooks" element={<AllBooks />} />
+              <Route path="/authors" element={<Authors />} />
+              <Route path="/BookDetails/:id" element={<BookDetails />} />
+              <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/profile" element={<Profile />} >
+                <Route index element={<Favourites/>} />
+                <Route path="/profile/orderHistory" element={<UserOrderHistory/>}/>
+                <Route/>
+              </Route>
+              <Route path="/add-book" element={<AddBook />} />
+              <Route path="/book-management" element={<BookManagement />} />
+              <Route path="/update-book/:id" element={<UpdateBook />} />
+              <Route path="/search" element={<SearchResult />} />
+              <Route path="/success" element={<Success/>} />
+              <Route path="/cancel" element={<Cancel/>} />
+              <Route path="/otp" element={<OTP />} />
+              <Route path="/forget-pass" element={<ForgetPass />} />
+              <Route path="/reset-pass" element={<ResetPass />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        <Footer />
+        </FavoritesProvider>
+      </AuthorsProvider>
+    </BooksProvider>
+  </CartProvider>
+</>
   );
 }
 

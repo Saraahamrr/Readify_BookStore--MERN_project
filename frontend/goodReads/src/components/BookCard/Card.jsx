@@ -76,8 +76,7 @@ export default function Card({ book, author }) {
                                     style={{ fontSize: "20px", color: isFavorite ? "red" : "gray" }} 
                                 />
                             </button>
-
-                            <button className="cart-button">
+                            <button className="cart-button" onClick={() => addToCart(book._id)}>
                                 <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "20px", color: "#000000" }} />
                             </button>
                         </div>}

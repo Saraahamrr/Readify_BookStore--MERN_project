@@ -1,25 +1,51 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
-// Create a context for the cart
 const CartContext = createContext();
 
-// Create a provider to wrap your app and provide cart state
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
 
-    const addToCart = async (bookId) => {
+    const fetchCart = async () => {
         try {
-            const response = await fetch('/api/cart/add-to-cart', {
-                method: 'PUT',
+            const response = await fetch('http://localhost:5000/api/cart/get-user-cart', {
+                method: 'GET',
                 headers: {
-                    'auth-token': `bearer ${localStorage.getItem("auth-token")}`,
-                    'id': 'USER_ID', // Replace with actual logged-in user ID
-                    'bookid': bookId,
-                },
+                    'auth-token': `Bearer ${localStorage.getItem("auth-token")}`,
+                    'Content-Type': 'application/json'
+                }
             });
+
             const data = await response.json();
             if (data.status === 'success') {
-                setCart((prevCart) => [...prevCart, data.data]);
+                setCart(data.data); // Set cart with fetched items
+            }
+        } catch (error) {
+            console.error('Error fetching cart:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCart(); // Fetch cart when app loads
+    }, []);
+
+    const addToCart = async (bookId) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/cart/add-to-cart', {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': `bearer ${localStorage.getItem("auth-token")}`
+                },
+                body: JSON.stringify({
+                    userId: localStorage.getItem("userId"),  // Send user ID properly
+                    bookId: bookId
+                })
+            });
+
+            const data = await response.json();
+            if (data.status === 'success') {
+                console.log("Cart updated:", data.data);
+                setCart((prevCart) => [...prevCart, data.data]);  // Append new item
                 alert('Book added to cart');
             }
         } catch (error) {
@@ -27,8 +53,11 @@ export const CartProvider = ({ children }) => {
         }
     };
 
+     // Get total number of cart items
+     const cartItemCount = cart.length;
+
     return (
-        <CartContext.Provider value={{ cart, addToCart }}>
+        <CartContext.Provider value={{ cart, addToCart, cartItemCount }}>
             {children}
         </CartContext.Provider>
     );
