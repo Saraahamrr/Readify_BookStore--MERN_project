@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header/header";
 import Footer from "./components/Footer/Footer";
@@ -68,24 +68,40 @@ function App() {
                 <Route path="/AuthorDetails/:id" element={<AuthorDetails />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/cart" element={<Cart />} />
-                {isLoggedIn && <Route path="/profile" element={<Profile />}>
-                  <Route path="settings" element={<Settings />} />
-                  {isLoggedIn&& user=== "user" ? (
-                    <>
-                      <Route index element={<Favourites />} />
-                      <Route path="orderHistory" element={<UserOrderHistory />} />
-                    </>
-                  ) : (
-                    <>
-                      <Route path="allOrders" element={<AllOrders />} />
-                      <Route path="book-management" element={<BookManagement />} />
-                    </>
-                  )}
-                </Route>}
-                {isLoggedIn && role === "admin" && <>
-                  <Route path="/profile/add-book" element={<AddBook />} /> 
-                  <Route path="/update-book/:id" element={<UpdateBook />} />
-                </>}
+
+                {isLoggedIn && (
+                  <Route path="/profile" element={<Profile />}>
+                    <Route path="settings" element={<Settings />} />
+                    {isLoggedIn && role === "user" ? (
+                      <>
+                        <Route
+                          index
+                          path="favourites"
+                          element={<Favourites />}
+                        />
+
+                        <Route
+                          path="orderHistory"
+                          element={<UserOrderHistory />}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <Route path="allOrders" element={<AllOrders />} />
+                        <Route
+                          path="book-management"
+                          element={<BookManagement />}
+                        />
+                      </>
+                    )}
+                  </Route>
+                )}
+                {isLoggedIn && role === "admin" && (
+                  <>
+                    <Route path="/profile/add-book" element={<AddBook />} />
+                    <Route path="/update-book/:id" element={<UpdateBook />} />
+                  </>
+                )}
                 <Route path="/search" element={<SearchResult />} />
                 <Route path="/otp" element={<OTP />} />
                 <Route path="/forget-pass" element={<ForgetPass />} />

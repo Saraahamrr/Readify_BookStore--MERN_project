@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -8,15 +8,16 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { authActions } from "../../../store/authSlicer";
 
 export default function Sidebar(props) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
   const data = props.data;
-  console.log(data);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleLogout = async (e) => {
+  const handleSignout = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/api/sign-out");
@@ -31,6 +32,7 @@ export default function Sidebar(props) {
         theme: "colored",
         transition: Bounce,
       });
+      dispatch(authActions.logout());
       navigate("/");
     } catch (error) {
       toast.error(error.response.data.msg, {
@@ -82,7 +84,7 @@ export default function Sidebar(props) {
             </Link>
           </>
         )}
-        {isLoggedIn && user === "admin" && (
+        {isLoggedIn && role === "admin" && (
           <>
             <Link
               to="/profile/book-management"
@@ -108,8 +110,8 @@ export default function Sidebar(props) {
           Settings
         </Link>
       </div>
-      <button className="btn logout-btn">
-        Log out <FontAwesomeIcon icon={faRightFromBracket} />
+      <button className="btn logout-btn" onClick={handleSignout}>
+        sign out <FontAwesomeIcon icon={faRightFromBracket} />
       </button>
     </div>
   );
