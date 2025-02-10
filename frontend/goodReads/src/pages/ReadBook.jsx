@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,9 +12,9 @@ export default function ReadBook() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
+    // Redirect if user is not logged in
     if (!isLoggedIn) {
       toast.info("Please log in to access this book.", {
         position: "top-right",
@@ -25,10 +26,11 @@ export default function ReadBook() {
         theme: "colored",
         transition: Bounce,
       });
-      navigate("/sign-up");
+      navigate("/signup");
       return;
     }
 
+    // Fetch book details
     const fetchBookDetails = async () => {
       try {
         axios.defaults.withCredentials = true;
@@ -38,60 +40,61 @@ export default function ReadBook() {
         setBook(response.data.book);
       } catch (error) {
         console.error("Error fetching book details:", error);
-        toast.error("Failed to load book details.");
+        toast.error("Failed to load book details.", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          transition: Bounce,
+        });
         navigate("/allbooks");
       } finally {
         setLoading(false);
       }
     };
 
-    const checkSubscription = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/isSubscribed`
-        );
-        setIsSubscribed(response.data.isSubscribed);
-      } catch (error) {
-        console.error("Error checking subscription:", error);
-      }
-    };
-
     fetchBookDetails();
-    checkSubscription();
-  }, [id, isLoggedIn, navigate, userId]);
+  }, [id, isLoggedIn, navigate]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!book) return <div>Book not found</div>;
-  if (!isSubscribed) {
-    toast.warning("You must be subscribed to read this book.", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "colored",
-      transition: Bounce,
-    });
-    navigate("/allbooks");
-    return null;
-  }
+  // Loading state
+  if (loading)
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <h3 className="text-muted">Loading...</h3>
+      </div>
+    );
 
-  // Construct the Google Drive embed URL
+  // Book not found state
+  if (!book)
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <h3 className="text-danger">Book not found</h3>
+      </div>
+    );
+
+  // Extract file ID from Google Drive link
   const driveLink = book.fullContent;
-  const fileId = driveLink.match(/\/file\/d\/([^\/]+)\//)?.[1]; // Extract file ID from the Google Drive link
-  const embedUrl = `https://drive.google.com/file/d/${fileId}/preview`;
+  const fileId = driveLink.match(/\/file\/d\/([^\/?]+)/)?.[1]; 
+  const embedUrl = fileId
+    ? `https://drive.google.com/file/d/${fileId}/preview`
+    : null;
 
   return (
-    <div className="pdf-container d-flex flex-column align-items-center">
-      <h2 className="pdf-title">{book.title}</h2>
-      <iframe
-        src={embedUrl}
-        width="75%"
-        className="vh-100"
-        style={{ border: "none" }}
-        title="PDF Viewer"
-      ></iframe>
+    <div className="container d-flex flex-column align-items-center mt-4">
+      <h2 className="m-5">{book.title}</h2>
+      {embedUrl ? (
+        <iframe
+          src={embedUrl}
+          width="75%"
+          className="vh-100 border rounded shadow-lg"
+          title="PDF Viewer"
+        ></iframe>
+      ) : (
+        <p className="text-warning">Invalid book link</p>
+      )}
     </div>
   );
 }

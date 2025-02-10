@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,17 +24,15 @@ export default function BookDetails() {
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
-  const isSubscribed = useSelector(
-    (state) => state.SubscribeSlicer.isSubscribed
-  );
+  const [isSubscribed,setIsSubscribed] = useState(localStorage.getItem("isSubscribed") === "true");
 
   const { favorites, toggleFavorite } = useFavorites();
 
   const updateBook = (bookId) => {
     navigate(`/update-book/${bookId}`);
   };
-
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -52,17 +49,8 @@ export default function BookDetails() {
       }
     };
 
-    const checkSubscription = async () => {
-      if (!isLoggedIn) return;
-      try {
-      } catch (error) {
-        console.error("Error checking subscription status:", error);
-      }
-    };
-
     fetchBookDetails();
-    checkSubscription();
-  }, [id, isLoggedIn, userId]);
+  }, [id]);
 
   const handleSubscription = async () => {
     if (!isLoggedIn) {
@@ -162,7 +150,7 @@ export default function BookDetails() {
 
   return (
     <div className="container mt-4">
-      <div className="d-flex flex-row justify-content-between gap-1 py-5 container-">
+      <div className="d-flex flex-row align-items-center justify-content-between gap-5 py-5 container-">
         <div className="flex-grow-1 d-flex flex-wrap w-50">
           <div className="book-image me-4">
             <img
@@ -170,71 +158,37 @@ export default function BookDetails() {
               alt={book.title || "Unknown Title"}
             />
           </div>
-
+  
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
-            <p>
-              <strong>Author(s):</strong>{" "}
-              {book.authors?.map((author) => author.name).join(", ") ||
-                "Unknown"}
-            </p>
-            <p>
-              <strong>Description:</strong>{" "}
-              {book.description || "No description"}
-            </p>
-            <p>
-              <strong>Publisher:</strong> {book.publisher || "Unknown"}
-            </p>
-            <p>
-              <strong>Published Date:</strong>{" "}
-              {book.publishedDate
-                ? new Date(book.publishedDate).toDateString()
-                : "Unknown"}
-            </p>
-            <p>
-              <strong>Categories:</strong>{" "}
-              {book.categories?.map((category) => category.name).join(", ") ||
-                "Unknown"}
-            </p>
-            <p>
-              <strong>Language:</strong> {book.language || "Unknown"}
-            </p>
-            <p>
-              <strong>Price:</strong> {book.price || "Unknown"}$
-            </p>
-
+            <p><strong>Author(s):</strong> {book.authors?.map(author => author.name).join(", ") || "Unknown"}</p>
+            <p><strong>Description:</strong> {book.description || "No description"}</p>
+            <p><strong>Publisher:</strong> {book.publisher || "Unknown"}</p>
+            <p><strong>Published Date:</strong> {book.publishedDate ? new Date(book.publishedDate).toDateString() : "Unknown"}</p>
+            <p><strong>Categories:</strong> {book.categories?.map(category => category.name).join(", ") || "Unknown"}</p>
+            <p><strong>Language:</strong> {book.language || "Unknown"}</p>
+  
             {isLoggedIn && role === "user" && (
               <>
-                <button
-                  className="like-button"
-                  onClick={() => toggleFavorite(id)}
-                >
+                <button className="like-button" onClick={() => toggleFavorite(id)}>
                   <FontAwesomeIcon
                     icon={faHeart}
-                    style={{
-                      color: favorites.includes(id) ? "red" : "gray",
-                      fontSize: "30px",
-                    }}
+                    style={{ color: favorites.some(fav => fav._id === id) ? "red" : "gray", fontSize: "30px" }}
                   />
                 </button>
-
+  
                 <button className="cart-button">
-                  <FontAwesomeIcon
-                    icon={faShoppingCart}
-                    style={{ fontSize: "30px", color: "#000000" }}
-                  />
+                  <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
                 </button>
               </>
             )}
-            {!role === "admin" &&  <button className="subscribe-button" onClick={handleSubscription}>
+            {role === "user" &&  <button className="subscribe-button" onClick={handleSubscription}>
               {isSubscribed ? "Read Now" : "Subscribe to Read"}
             </button>}
+  
             {isLoggedIn && role === "admin" && (
               <div className="d-flex mt-3">
-                <button
-                  className="editButton me-2"
-                  onClick={() => updateBook(id)}
-                >
+                <button className="editButton me-2" onClick={() => updateBook(id)}>
                   <FontAwesomeIcon icon={faPen} />
                 </button>
                 <button className="trashButton" onClick={() => deleteBook(id)}>
@@ -244,7 +198,33 @@ export default function BookDetails() {
             )}
           </div>
         </div>
+  
+      <div className="reviews-section">
+        <h2>Reviews</h2>
+        {book.rates?.length > 0 ? (
+          book.rates.map((review, index) => (
+            <div key={index} className="review">
+              <p style={{ fontSize: "20px" }}>
+                {review.review || "No review text provided"}
+              </p>
+              <div className="rating-stars">
+                {[...Array(5)].map((_, i) => (
+                  <FontAwesomeIcon
+                    key={i}
+                    icon={faStar}
+                    style={{ color: i < review.rating ? "#FFD700" : "#ccc" }}
+                  />
+                ))}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet.</p>
+        )}
       </div>
+      </div>
+
     </div>
   );
-}
+  
+  }

@@ -53,10 +53,10 @@
 
 .reviews-section {
  
-  margin-top: 30px;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 10px;
+  width: 40%;
 }
 
 .review {

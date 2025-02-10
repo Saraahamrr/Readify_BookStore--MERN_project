@@ -7,8 +7,7 @@ import SubscribeSlicer from "./SubscribeSlicer";
 
 const rootReducer = combineReducers({
   auth: authSlice,
-  SubscribeSlicer: SubscribeSlicer,
-
+  subscribe: SubscribeSlicer
 });
 
 const persistConfig = {

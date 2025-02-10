@@ -11,19 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { authActions } from "../../../store/authSlicer";
 
 export default function Sidebar(props) {
-<<<<<<< HEAD
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-    const role = useSelector((state) => state.auth.role);
-=======
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
->>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
   const data = props.data;
   const navigate = useNavigate();
-<<<<<<< HEAD
-=======
   const dispatch = useDispatch();
->>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
 
   const handleSignout = async (e) => {
     e.preventDefault();
@@ -74,25 +66,6 @@ export default function Sidebar(props) {
       </div>
 
       <div className="w-100 d-flex flex-column align-items-center justify-content-center">
-<<<<<<< HEAD
-                {isLoggedIn && role === "user" && <>
-                    <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Favourites</Link>
-                    <Link to="/profile/orderHistory" className="w-100 py-1 rounded p-link " style={{ fontSize: "1.3rem", textAlign: "center" }}>Order History</Link>
-                    <Link to="/profile/settings" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Settings</Link>
-                </>}
-                {isLoggedIn&& role=== "admin"&& <>
-                    <Link to="/profile" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>Manage Books</Link>
-                    <Link to="/profile/allOrders" className="w-100 py-1 rounded p-link" style={{ fontSize: "1.3rem", textAlign: "center" }}>All orders</Link>
-                    </>}
-
-            </div>
-            <button className="btn logout-btn" onClick={handleLogout}>
-                Log out <FontAwesomeIcon icon={faRightFromBracket} />
-            </button>
-
-        </div>
-    );
-=======
         {isLoggedIn && role === "user" && (
           <>
             <Link
@@ -142,5 +115,4 @@ export default function Sidebar(props) {
       </button>
     </div>
   );
->>>>>>> 39b7ba3f0b20b27ae72576e715ae3880e24ca6b1
 }
