@@ -10,7 +10,7 @@ import Loader from "../../Loader/Loader";
 import axios from "axios";
 import "./BookManagement.css";
 
-const deleteBook = async (bookId, setBooks) => {
+const deleteBook = async (bookId, setBooks,fetchBooks) => {
   const confirmation = confirm("Are you sure you want to delete this book?");
   if (!confirmation) return;
   try {
@@ -32,6 +32,7 @@ const deleteBook = async (bookId, setBooks) => {
         theme: "colored",
         transition: Bounce,
       });
+      fetchBooks();
     }
   } catch (error) {
     console.error("Error deleting book:", error);
@@ -50,7 +51,7 @@ const deleteBook = async (bookId, setBooks) => {
 };
 
 export default function BookManagement() {
-  const { books, setBooks, loading } = useContext(BooksContext);
+  const { books, setBooks, loading,fetchBooks } = useContext(BooksContext);
   const navigate = useNavigate();
   if (loading) return <Loader />;
   const updateBook = (bookId) => {
@@ -99,7 +100,7 @@ export default function BookManagement() {
                   </button>
                   <button
                     className="trashButton"
-                    onClick={() => deleteBook(book._id, setBooks)}
+                    onClick={() => deleteBook(book._id, setBooks,fetchBooks)}
                   >
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>

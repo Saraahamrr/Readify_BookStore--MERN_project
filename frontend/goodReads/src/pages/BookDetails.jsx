@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import BooksContext from "../context/books";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +30,8 @@ export default function BookDetails() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
   const { addToCart } = useCart();  const status = useSelector((state) => state.auth.status);
+  const {fetchBooks } = useContext(BooksContext);
+
 
   const [isSubscribed, setIsSubscribed] = useState(
     localStorage.getItem("isSubscribed") === "true"
@@ -114,6 +118,7 @@ export default function BookDetails() {
           theme: "colored",
           transition: Bounce,
         });
+        fetchBooks();
         navigate("/allbooks");
       }
     } catch (error) {

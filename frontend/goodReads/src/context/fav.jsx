@@ -14,21 +14,19 @@ export const FavoritesProvider = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const [favorites, setFavorites] = useState([]);
-
+  const fetchFavorites = async () => {
+    axios.defaults.withCredentials = true;
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/get-favourite"
+      );
+      setFavorites(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+    }
+  };
   useEffect(() => {
     if (!isLoggedIn) return;
-
-    const fetchFavorites = async () => {
-      axios.defaults.withCredentials = true;
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/get-favourite"
-        );
-        setFavorites(response.data.data || []);
-      } catch (error) {
-        console.error("Error fetching favorites:", error);
-      }
-    };
 
     fetchFavorites();
   }, [isLoggedIn]);
@@ -68,7 +66,7 @@ export const FavoritesProvider = ({ children }) => {
   };
 
   return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite }}>
+    <FavoritesContext.Provider value={{ favorites, toggleFavorite,fetchFavorites }}>
       {children}
     </FavoritesContext.Provider>
   );

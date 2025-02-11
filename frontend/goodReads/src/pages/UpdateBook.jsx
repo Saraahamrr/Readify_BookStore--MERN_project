@@ -9,6 +9,7 @@ import BooksContext from "../context/books";
 import Loader from "../components/Loader/Loader";
 import axios from "axios";
 import { fetchData } from "./AddBook/AddBook";
+import AuthorsContext from "../context/authors";
 
 export default function UpdateBook() {
     const navigate = useNavigate()
@@ -33,6 +34,10 @@ export default function UpdateBook() {
     const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
     const [newCategory, setNewCategory] = useState("");
     const [categoryError, setCategoryError] = useState("");
+    const { fetchCategories } = useContext(CategoryContext);
+    const { fetchAuthors } = useContext(AuthorsContext);
+
+
 
 
     const { books, setBooks, loading } = useContext(BooksContext);
@@ -99,7 +104,9 @@ export default function UpdateBook() {
                         theme: "colored",
                         transition: Bounce,
                     });
-                    navigate("/allbooks")
+                    fetchCategories();
+                    fetchAuthors();
+                    navigate("/allbooks");
                     formik.resetForm();
                 }
             } catch (error) {

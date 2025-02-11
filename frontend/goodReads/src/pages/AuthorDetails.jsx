@@ -23,7 +23,7 @@ export default function AuthorDetails() {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const role = useSelector((state) => state.auth.role);
     const navigate = useNavigate();
-    const { authors, setAuthors } = useContext(AuthorsContext);
+    const { authors, setAuthors,fetchAuthors } = useContext(AuthorsContext);
     useEffect(() => {
         axios.get(`http://localhost:3000/api/authors/${id}`)
             .then((res) => {
@@ -63,6 +63,7 @@ export default function AuthorDetails() {
               theme: "colored",
               transition: Bounce,
             });
+            fetchAuthors();
             setAuthors((prevAuthors) => [...prevAuthors, prevAuthors])
             navigate("/authors");
           }

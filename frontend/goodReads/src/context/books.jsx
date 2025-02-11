@@ -6,23 +6,23 @@ const BooksContext = createContext();
 export const BooksProvider = ({ children }) => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/books");
+      setBooks(response.data.books);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/books");
-        setBooks(response.data.books);
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchBooks();
   }, []); 
 
   return (
-    <BooksContext.Provider value={{ books, setBooks, loading }}>
+    <BooksContext.Provider value={{ books, setBooks, loading,fetchBooks }}>
       {children}
     </BooksContext.Provider>
   );

@@ -9,6 +9,7 @@ import { Bounce } from "react-toastify";
 import BooksContext from "../../context/books";
 import AuthorsContext from "../../context/authors";
 import './AddBook.css'
+import CategoryContext from "../../context/category";
 
 
 export const fetchData = async (setCategories, setAuthors) => {
@@ -42,6 +43,9 @@ const AddBook = () => {
   const [authorError, setAuthorError] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const { books,setBooks } = useContext(BooksContext);
+  const { fetchCategories } = useContext(CategoryContext);
+
+
 
 
   useEffect(() => {
@@ -183,6 +187,7 @@ const AddBook = () => {
           ...formik.values.categories,
           categoryId,
         ]);
+        fetchCategories()
         setNewCategory("");
         setShowNewCategoryInput(false);
       }

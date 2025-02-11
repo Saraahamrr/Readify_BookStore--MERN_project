@@ -13,6 +13,8 @@ import { use } from "react";
 export default function UpdateAuthor() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const {fetchAuthors } = useContext(AuthorsContext);
+
     const [author, setAuthor] = useState({
         name: "",
         image: "",
@@ -65,6 +67,7 @@ export default function UpdateAuthor() {
                         theme: "colored",
                         transition: Bounce,
                     });
+                    fetchAuthors()
                     navigate("/authors");
                     formik.resetForm();
                 }
