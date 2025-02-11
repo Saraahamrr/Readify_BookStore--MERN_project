@@ -254,7 +254,7 @@ export default function BookDetails() {
           ) : (
             <p>No reviews yet. Be the first to review!</p>
           )}
-          {role === "user" && (
+          {isLoggedIn && role === "user" && (
             <div className="add-review">
               <h4>Add Your Review</h4>
               <div className="rating-input">
