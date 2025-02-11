@@ -66,10 +66,20 @@ const deleteCategory = asyncWrapper(async (req, res, next) => {
   });
 });
 
+const Book = require("../models/book"); 
+
+const getBooksByCategory = asyncWrapper(async (req, res, next) => {
+    const { categoryId } = req.params;
+    const books = await Book.find({ categories: categoryId });
+
+    res.json({ status: httpStatusText.SUCCESS, books });
+});
+
 module.exports = {
   getAllCategories,
   getCategory,
   addCategory,
   updateCategory,
   deleteCategory,
+  getBooksByCategory
 };

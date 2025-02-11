@@ -8,7 +8,9 @@ import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
 import AddBook from "./pages/AddBook";
 import Authors from "./components/Home/Authors";
+import Categories from './pages/Categories'
 import { FavoritesProvider } from "./context/fav";
+import { CategoryProvider } from "./context/category";
 import { CartProvider } from "./context/CartContext";
 import OTP from "./pages/VerifyOtp/OTP";
 import { ToastContainer } from "react-toastify";
@@ -24,6 +26,8 @@ import BookManagement from "./components/Profile/BookManagement/BookManagement";
 import AllOrders from "./pages/AllOrders";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import PaymentSuccess from "./pages/checkout/PaymentSuccess";
+import CategoryResults from "./pages/CategoryResults";
+
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
 const BookDetails = lazy(() => import("./pages/BookDetails"));
@@ -61,12 +65,16 @@ function App() {
         <AuthorsProvider>
           <FavoritesProvider>
             <CartProvider>
+              <CategoryProvider>
               <Header />
               <Suspense fallback={<div className="loading">Loading...</div>}>
                 <Routes>
                   <Route exact path="/" element={<Home />} />
                   <Route path="/allbooks" element={<AllBooks />} />
                   <Route path="/authors" element={<Authors />} />
+                  <Route path="/categories" element={<Categories />} />
+                  <Route path="/categories/:categoryId/books" element={<CategoryResults />} />
+
                   <Route path="/BookDetails/:id" element={<BookDetails />} />
                   <Route path="/payment" element={<PaymentPage />} />
                   <Route path="/paymentSuccess" element={<PaymentSuccess />} />
@@ -121,6 +129,7 @@ function App() {
               </Suspense>
 
               <Footer />
+              </CategoryProvider>
             </CartProvider>
           </FavoritesProvider>
         </AuthorsProvider>
