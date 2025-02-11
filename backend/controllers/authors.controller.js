@@ -62,6 +62,7 @@ const updateAuthor = asyncWrapper(async (req, res, next) => {
   res.status(200).json({
     status: httpStatusText.SUCCESS,
     data: { updatedAuthor },
+    msg: "Author updated successfully"
   });
 });
 
@@ -74,9 +75,9 @@ const deleteAuthor = asyncWrapper(async (req, res, next) => {
 
   await Author.deleteOne({ _id: req.params.authorId });
 
-  res.json({
+  res.status(200).json({
     status: httpStatusText.SUCCESS,
-    message: "Author deleted successfully",
+    msg: "Author deleted successfully",
   });
 });
 

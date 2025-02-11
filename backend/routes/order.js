@@ -69,9 +69,7 @@ router.get('/get-order-history', authToken, async (req, res) => {
 router.get('/get-all-orders', authToken, async (req, res) => {
     try{
         const userData = await Order.find()
-        .populate({
-            path: 'book'
-        })
+        .populate('books')
         .populate({
             path: 'user'
         })

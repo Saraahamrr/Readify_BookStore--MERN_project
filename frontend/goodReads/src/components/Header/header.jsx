@@ -32,6 +32,7 @@ export default function Header() {
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },
     { title: "Authors", link: "/authors" },
+    { title: "Categories", link: "/categories" }
   ];
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);

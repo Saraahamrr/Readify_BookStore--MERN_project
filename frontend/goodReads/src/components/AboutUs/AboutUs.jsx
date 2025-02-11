@@ -20,7 +20,7 @@ export default function AboutUs() {
           Whether you’re looking for fiction, non-fiction, or academic books, we’ve got you covered.
         </p>
 
-        <Link to="/allbooks" className="cta-button">
+        <Link to="/categories" className="cta-button">
           Explore Our Collection
         </Link>
       </div>

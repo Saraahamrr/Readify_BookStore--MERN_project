@@ -15,6 +15,7 @@ router
     ],
     categoryController.addCategory
   );
+router.get("/:categoryId/books", categoryController.getBooksByCategory);
 
 router
   .route("/:categoryId")

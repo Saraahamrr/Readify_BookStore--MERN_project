@@ -25,16 +25,32 @@ const addCategory = asyncWrapper(async (req, res, next) => {
     return next(appError.create(errors.array(), 400, httpStatusText.FAIL));
   }
 
+  const existingCategory = await Category.findOne({ name: req.body.name });
+  if (existingCategory) {
+    return next(appError.create("Category name must be unique", 400, httpStatusText.FAIL));
+  }
+
   const newCategory = new Category(req.body);
   await newCategory.save();
 
   res.status(201).json({
     status: httpStatusText.SUCCESS,
-     category: newCategory ,
+    category: newCategory,
   });
 });
 
+
 const updateCategory = asyncWrapper(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(appError.create(errors.array(), 400, httpStatusText.FAIL));
+  }
+
+  const existingCategory = await Category.findOne({ name: req.body.name });
+  if (existingCategory && existingCategory._id.toString() !== req.params.categoryId) {
+    return next(appError.create("Category name must be unique", 400, httpStatusText.FAIL));
+  }
+
   const updatedCategory = await Category.findOneAndUpdate(
     { _id: req.params.categoryId },
     req.body,
@@ -47,9 +63,10 @@ const updateCategory = asyncWrapper(async (req, res, next) => {
 
   res.status(200).json({
     status: httpStatusText.SUCCESS,
-    data: {category: updatedCategory },
+    data: { category: updatedCategory },
   });
 });
+
 
 const deleteCategory = asyncWrapper(async (req, res, next) => {
   const category = await Category.findOne({ _id: req.params.categoryId });
@@ -66,10 +83,20 @@ const deleteCategory = asyncWrapper(async (req, res, next) => {
   });
 });
 
+const Book = require("../models/book"); 
+
+const getBooksByCategory = asyncWrapper(async (req, res, next) => {
+    const { categoryId } = req.params;
+    const books = await Book.find({ categories: categoryId }).populate("authors");
+
+    res.json({ status: httpStatusText.SUCCESS, books });
+});
+
 module.exports = {
   getAllCategories,
   getCategory,
   addCategory,
   updateCategory,
   deleteCategory,
+  getBooksByCategory
 };
