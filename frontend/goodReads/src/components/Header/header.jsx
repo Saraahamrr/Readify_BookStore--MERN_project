@@ -185,19 +185,17 @@ export default function Header() {
               </button>
             )}
             {isLoggedIn && role === "user" && (
-              <li className="nav-item">
-                <Link to={"/cart"}>
-                  <FontAwesomeIcon
-                    icon={faShoppingCart}
-                    style={{
-                      color: "black",
-                      fontSize: "20px",
-                      marginRight: "5px",
-                    }}
-                  />
-                  <span>{cart.length}</span>
-                </Link>
-              </li>
+              <button
+                id="fav-btn"
+                className="nav-item"
+                onClick={() => navigate("/cart")}
+              >
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  style={{ color: "black", fontSize: "20px", marginRight: "5px" }}
+                />
+                <span>{cart.length}</span>
+              </button>
             )}
             {isLoggedIn && (
               <li className="nav-item">

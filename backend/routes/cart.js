@@ -82,52 +82,6 @@ router.put('/remove-from-cart', authToken, async (req, res) => {
 });
 
 
-
-
-// // Remove book from cart
-// router.put('/remove-from-cart', authToken, async (req, res) => {
-//     try {
-//         const { id, bookid } = req.body;
-
-//         // Validate id and bookid
-//         if (!bookid) {
-//             return res.status(400).json({ message: "Missing bookid" });
-//         }
-
-//         if (!id) {
-//             return res.status(400).json({ message: "Missing id" });
-//         }
-
-//         if (!mongoose.Types.ObjectId.isValid(id)) {
-//             return res.status(400).json({ message: "Invalid user id" });
-//         }
-
-//         const userData = await User.findById(id);
-//         if (!userData) {
-//             return res.status(404).json({ message: "User not found" });
-//         }
-
-//         console.log("User cart before removal:", userData.cart); // Debugging
-
-//         // const isBookInCart = userData.cart.includes(bookid);
-//         // if (!isBookInCart) {
-//         //     return res.status(404).json({ message: "Book not found in cart" });
-//         // }
-
-//         if (!userData.cart.includes(bookid)) {
-//             return res.status(404).json({ message: "Book not found in cart" });
-//         }
-
-//         await User.findByIdAndUpdate(id, { $pull: { cart: bookid } });
-
-//         return res.json({ status: "success", message: "Book removed from cart" });
-
-//     } catch (error) {
-//         console.error("Error:", error);
-//         return res.status(500).json({ message: "An error occurred" });
-//     }
-// });
-
 //get cart of particular user
 router.get('/get-user-cart', authToken, async (req, res) => {
     try {
@@ -141,6 +95,41 @@ router.get('/get-user-cart', authToken, async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'An error occurred' });
+    }
+});
+
+//update quantity 
+router.put('/update-cart-quantity', authToken, async (req, res) => {
+    try {
+        const { id, bookid, quantity } = req.body;
+
+        if (!id || !bookid || quantity < 1) {
+            return res.status(400).json({ message: "Invalid request" });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(bookid)) {
+            return res.status(400).json({ message: "Invalid user ID or book ID" });
+        }
+
+        const userData = await User.findById(id);
+        if (!userData) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Find the book in cart and update quantity
+        const existingItem = userData.cart.find(item => item.bookid.toString() === bookid);
+        if (!existingItem) {
+            return res.status(404).json({ message: "Book not found in cart" });
+        }
+
+        // Update quantity field
+        existingItem.quantity = quantity;
+        await userData.save();
+
+        return res.json({ status: "success", message: "Cart updated", bookid, quantity });
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(500).json({ message: "An error occurred" });
     }
 });
 
