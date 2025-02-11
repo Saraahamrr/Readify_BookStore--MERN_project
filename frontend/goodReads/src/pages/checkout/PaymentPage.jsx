@@ -94,15 +94,6 @@ if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
     theme: "colored",
   });
 
-  // // Step 3: Send OTP with order details
-  // const orderDetails = { books: [cartTitles], totalPrice };
-  // await axios.post("http://localhost:3000/api/otp/send-otp", {
-  //   email: formData.email,
-  //   orderDetails,
-  //   totalPrice,
-  //   cartTitles
-  // });
-
   //Step 1: Send Order to Backend
   const userId = localStorage.getItem("userId"); // Ensure user ID is stored when logging in
 
@@ -112,6 +103,32 @@ if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
   });
 
   console.log("Order Response:", response.data);
+  
+  const sendConfirmationEmail = async (email) => {
+    try {
+      const response = await axios.post("http://localhost:3000/api/payment/send-confirm-email", {
+        email: formData.email
+      });
+  
+      toast.success(response.data.msg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
+    } catch (error) {
+      toast.error(error.data.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "colored",
+      });
+    }
+  };
+  sendConfirmationEmail();
+  
 
   // Redirect after a short delay
   setTimeout(() => navigate("/paymentSuccess"), 3000);

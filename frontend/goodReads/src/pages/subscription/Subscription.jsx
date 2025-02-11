@@ -25,7 +25,7 @@ const CheckoutForm = () => {
     email: "",
   });
   const [otp, setOtp] = useState("");
-  const [orderDetails, setOrderDetails] = useState(""); 
+  const [orderDetails, setOrderDetails] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,6 +40,33 @@ const CheckoutForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const sendConfirmationEmail = async (email) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/payment/send-confirm-email",
+        {
+          email,
+        }
+      );
+
+      toast.success(response.data.msg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "Failed to send email", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "colored",
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -48,7 +75,6 @@ const CheckoutForm = () => {
       return;
     }
 
-    // Get the card number element
     const cardNumberElement = elements.getElement(CardNumberElement);
     if (!cardNumberElement) {
       console.error("CardNumberElement not found.");
@@ -56,10 +82,8 @@ const CheckoutForm = () => {
     }
 
     try {
-      // Step 1: Create a payment intent
       const { data } = await createPayment({ amount: totalPrice, currency: "usd" });
 
-      // Step 2: Confirm the payment
       const result = await stripe.confirmCardPayment(data.clientSecret, {
         payment_method: {
           card: cardNumberElement,
@@ -68,16 +92,13 @@ const CheckoutForm = () => {
 
       if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
         setPaymentSuccess(true);
-
-        // Success Toast
         toast.success("Payment Successful!", {
           position: "top-right",
           autoClose: 3000,
           theme: "colored",
         });
 
-        // Step 3: Send Order to Backend
-        const userId = localStorage.getItem("userId"); // Ensure userId exists
+        const userId = localStorage.getItem("userId");
 
         try {
           const response = await axios.post("http://localhost:3000/api/order/subscribe", {
@@ -87,7 +108,10 @@ const CheckoutForm = () => {
           console.log("Order Response:", response.data);
           localStorage.setItem("isSubscribed", "true");
 
-          // Redirect after a short delay
+          if (formData.email) {
+            sendConfirmationEmail(formData.email);
+          }
+
           setTimeout(() => navigate("/subscription-success"), 3000);
         } catch (error) {
           console.error("Subscription error:", error);
@@ -145,6 +169,33 @@ const CheckoutForm = () => {
               <h3 className="shipping">Payment Details</h3>
 
               <div className="input-group">
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="input-group">
                 <label>Card Number</label>
                 <CardNumberElement className="card-input" />
               </div>
@@ -178,3 +229,4 @@ const Subscription = () => (
 );
 
 export default Subscription;
+

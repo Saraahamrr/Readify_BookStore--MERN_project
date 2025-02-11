@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
+import { toast } from "react-toastify";
+import { Bounce } from "react-toastify";
 // Create a context for the cart
 const CartContext = createContext();
 
@@ -40,7 +41,17 @@ export const CartProvider = ({ children }) => {
 
       if (response.data.status === "success") {
         setCart((prevCart) => [...prevCart, response.data.data]);
-        alert("Book added to cart");
+        toast.success("Book added to cart", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       }
     } catch (error) {
       console.error("Error adding to cart:", error);

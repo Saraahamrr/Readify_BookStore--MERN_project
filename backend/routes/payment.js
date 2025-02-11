@@ -2,6 +2,7 @@ const express = require("express");
 const Stripe = require("stripe");
 const Order = require('../models/orders.js');
 const dotenv = require("dotenv");
+const {ConfirmationEmail} = require('../controllers/confirmationEmail.js');
 
 dotenv.config();
 const router = express.Router();
@@ -38,5 +39,8 @@ router.post("/create-payment", async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 });
+
+router.post("/send-confirm-email", ConfirmationEmail);
+// in payment routes file
 
 module.exports = router;
