@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo3.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { useCart } from "../../context/CartContext";
 import "../Header/header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,10 +26,6 @@ export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
   const { favorites } = useFavorites();
-
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const role = useSelector((state) => state.auth.role);
-
   const dispatch = useDispatch();
   const { cart } = useCart();
   const links = [
@@ -39,6 +34,8 @@ export default function Header() {
     { title: "Authors", link: "/authors" },
   ];
 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
   console.log(isLoggedIn);
 
   if (!isLoggedIn) {
@@ -225,31 +222,7 @@ export default function Header() {
             )}
           </ul>
         </div>
-
-      <ul className="navbar-nav ms-auto">
-        {links.map((item, i) => (
-          <li key={i} className="nav-item">
-            <Link to={item.link} className="nav-link">{item.title}</Link>
-          </li>
-        ))}
-
-        {isLoggedIn&& role === "user" &&   (<li className="nav-item">
-          <FontAwesomeIcon icon={faHeart} style={{ color: "red", fontSize: "20px", marginRight: "5px" }} />
-          <span>{favorites.length}</span>
-          <Link to={'/cart'}>
-          <FontAwesomeIcon  icon={faShoppingCart} style={{ color: "black", fontSize: "20px", marginRight: "5px" }} />
-          <span>{cart.length}</span>
-          </Link>
-        </li>)}
-        
-          <li className="nav-item">
-            <Link className="btn sign-btn" to="/signup">
-              Sign Up
-            </Link>
-          </li>
-        
-      </ul>
-    </div>
-    </nav >
+      </div>
+    </nav>
   );
 }

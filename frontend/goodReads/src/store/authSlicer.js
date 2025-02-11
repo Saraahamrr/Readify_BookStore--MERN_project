@@ -5,11 +5,7 @@ import Cookies from "js-cookie";
 const authSlice = createSlice({
     name: "auth",
     initialState: {
-<<<<<<< HEAD
-        isLoggedIn: true,
-=======
         isLoggedIn: !!Cookies.get("token"),
->>>>>>> 541a2cbac6fc121a1cfff1501083aec22a08ebdd
         role: "user",
     },
     reducers: {

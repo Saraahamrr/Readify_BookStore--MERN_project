@@ -1,7 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,8 +13,8 @@ import { useCart } from "../../context/CartContext";
 export default function Card({ book, author }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
-  const { favorites, toggleFavorite } = useFavorites();
   const { addToCart } = useCart();
+  const { favorites, toggleFavorite } = useFavorites();
 
   if (!book && !author) {
     return <div>Loading...</div>;
@@ -78,50 +77,17 @@ export default function Card({ book, author }) {
                     />
                   </button>
                 )}
-                        <Link
-                            className="details-btn"
-                            to={`/BookDetails/${book._id}`}
-                            state={{ book }}
-                            style={{
-                                display: "inline-block",
-                                backgroundColor: "#fbb02d",
-                                color: "#fff",
-                                padding: "10px 15px",
-                                borderRadius: "5px",
-                                textDecoration: "none",
-                                fontSize: "0.9rem",
-                                fontWeight: "bold",
-                                transition: "0.3s ease-in-out",
-                                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"
-                            }}
-                        >
-                            More Details
-                        </Link>
 
-            {isLoggedIn === true && role === "user" && <div className="btn-group">
-                            <button 
-                                className="like-button" 
-                                onClick={() => toggleFavorite(book._id)}
-                                style={{ background: "none", border: "none" }}
-                            >
-                                <FontAwesomeIcon 
-                                    icon={faHeart} 
-                                    style={{ fontSize: "20px", color: isFavorite ? "red" : "gray" }} 
-                                />
-                            </button>
-
-                  <button
-                    className="cart-button"
-                    onClick={() => addToCart(book._id)}
-                  >
-                    <FontAwesomeIcon
-                      icon={faShoppingCart}
-                      style={{ fontSize: "20px", color: "#000000" }}
-                    />
-                  </button>
-                </div>}
-                     
-                    </div>
+                <button
+                  className="cart-button"
+                  onClick={() => addToCart(book._id)}
+                >
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    style={{ fontSize: "20px", color: "#000000" }}
+                  />
+                </button>
+              </div>
             )}
           </div>
         </>
