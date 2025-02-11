@@ -99,21 +99,37 @@ router.get('/get-all-orders', authToken, async (req, res) => {
     }
 });
 
-//update order -- admin
+// Update order status -- Admin Only
 router.put('/update-status/:id', authToken, async (req, res) => {
-    try{
-        const {id} = req.params;
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
 
-        await Order.findByIdAndUpdate(id, {status: req.body.status});
+        // Validate status
+        const validStatuses = ['order placed', 'completed', 'out for delivery', 'delivered', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: "Invalid status value" });
+        }
+
+        // Check if order exists
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        // Update order status
+        order.status = status;
+        await order.save();
 
         return res.json({
             status: 'success',
-            message: 'status updated successfully'
+            message: 'Order status updated successfully',
+            updatedOrder: order
         });
-        
-    } catch(error){
-        console.log(error);
-        return res.status(500).json({message: 'an err occured'});
+
+    } catch (error) {
+        console.error("Error updating order status:", error);
+        return res.status(500).json({ message: 'An error occurred while updating the order status' });
     }
 });
 
