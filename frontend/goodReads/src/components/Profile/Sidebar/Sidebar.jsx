@@ -13,6 +13,7 @@ import { authActions } from "../../../store/authSlicer";
 export default function Sidebar(props) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
+  const status = useSelector((state) => state.auth.status);
   const data = props.data;
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ export default function Sidebar(props) {
         transition: Bounce,
       });
       dispatch(authActions.logout());
+      dispatch(authActions.changeStatus("unauthorized"));
       localStorage.setItem("isSubscribed", "false");
       navigate("/");
     } catch (error) {
@@ -49,6 +51,40 @@ export default function Sidebar(props) {
       });
     }
   };
+  // const handleverifyEmail = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:3000/api/send-verify-email"
+  //     );
+  //     toast.success(response.data.msg, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: false,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //       transition: Bounce,
+  //     });
+  //     dispatch(authActions.logout());
+  //     localStorage.setItem("isSubscribed", "false");
+  //     navigate("/");
+  //   } catch (error) {
+  //     toast.error(error.response.data.msg, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: false,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "colored",
+  //       transition: Bounce,
+  //     });
+  //   }
+  // };
 
   return (
     <div className="bg-light p-2 rounded d-flex flex-column align-items-center justify-content-between w-75 h-100">
@@ -90,8 +126,18 @@ export default function Sidebar(props) {
             >
               Settings
             </Link>
+            {status === "unauthorized" && (
+              <Link
+                to="/verifyEmail"
+                className="w-100 py-1 rounded p-link"
+                style={{ fontSize: "1.3rem", textAlign: "center" }}
+              >
+                Verify Email
+              </Link>
+            )}
           </>
         )}
+
         {isLoggedIn && role === "admin" && (
           <>
             <Link

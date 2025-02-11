@@ -7,6 +7,7 @@ const authSlice = createSlice({
     initialState: {
         isLoggedIn: !!Cookies.get("token"),
         role: "user",
+        status: "unauthorized",
     },
     reducers: {
         login(state) {
@@ -17,6 +18,9 @@ const authSlice = createSlice({
         },
         changeRole(state, action) {
             state.role = action.payload;
+        },
+        changeStatus(state, action) {
+            state.status = action.payload;
         },
     },
 });

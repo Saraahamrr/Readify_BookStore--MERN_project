@@ -26,6 +26,7 @@ export default function BookDetails() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
+  const status = useSelector((state) => state.auth.status);
 
   const [isSubscribed, setIsSubscribed] = useState(
     localStorage.getItem("isSubscribed") === "true"
@@ -58,6 +59,19 @@ export default function BookDetails() {
   const handleSubscription = async () => {
     if (!isLoggedIn) {
       toast.error("Please log in to subscribe.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+      return;
+    }
+    if (status === "unauthorized") {
+      toast.error("Verify Email to subscribe.", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,

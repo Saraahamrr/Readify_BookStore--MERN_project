@@ -58,6 +58,7 @@ export default function Header() {
         transition: Bounce,
       });
       dispatch(authActions.logout());
+      dispatch(authActions.changeStatus("unauthorized"));
       localStorage.setItem("isSubscribed", "false");
       console.log(authActions.login());
       navigate("/");

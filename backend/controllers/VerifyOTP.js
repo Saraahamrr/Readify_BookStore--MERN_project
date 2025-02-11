@@ -4,7 +4,9 @@ const { authToken } = require('../middleWare/userAuth');
 
 
 const VerifyOtp = async (req, res) => {
+
     const { id, otp } = req.body;
+
 
     if (!otp ) {
         return res.status(400).json({ status: "error", msg: "otp is required" });
@@ -18,6 +20,8 @@ const VerifyOtp = async (req, res) => {
     if (!user) {
         return res.status(400).json({ status: "error", msg: "user not found" });
     }
+    // user.verifyOtp = otp;
+    // user.save();
     if (user.verifyOtp === "" || user.verifyOtp !== otp) {
         return res.status(400).json({ status: "error", msg: "Invalid OTP" });       
 

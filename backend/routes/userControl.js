@@ -8,6 +8,7 @@ const { SendverifyEmail } = require("../controllers/SendverifyEmail.js");
 const { VerifyOtp } = require("../controllers/VerifyOTP.js");
 const { forgetPassword, resetPassword } = require("../controllers/forgetPassword.js");
 const localStorage = require('node-localstorage');
+const { stat } = require("fs");
 
 
 //sign-up route
@@ -104,18 +105,19 @@ router.post("/sign-in" , async(req,res)=>{
                const token = jwt.sign({id : existingUser._id},process.env.JWT_SECRET,{expiresIn: "7d"});
              
                 res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" , maxAge: 1000*60*60*24*7});
-                res.cookie("isSubscribed", existingUser.isSubscribed, { 
-                    httpOnly: true, 
-                    secure: false, 
-                    sameSite: "Lax", 
-                    maxAge: 1000 * 60 * 60 * 24 * 7  
-                  });
+                // res.cookie("status", existingUser.status, { 
+                //     httpOnly: false, 
+                //     secure: false, 
+                //     sameSite: "Lax", 
+                //     maxAge: 1000 * 60 * 60 * 24 * 7  
+                //   });
                 return res
                 .status(200)
                 .json(
                     {
                         role : existingUser.role ,
                         isSubscribed : existingUser.isSubscribed,
+                        status : existingUser.status,
                         msg : "User signed-in successfully"
 
                     })
@@ -139,6 +141,7 @@ router.post("/sign-out", (req,res)=>{
     try{
         res.clearCookie('token');
         res.clearCookie('isSubscribed');
+        res.clearCookie('status');
         return res.status(200).json({msg: "User signed-out successfully"});
     }
     catch(err){

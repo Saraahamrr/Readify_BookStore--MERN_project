@@ -39,10 +39,10 @@ const resetPassword = async (req, res) => {
     const { email, otp, password } = req.body;
 
     if (!otp ) {
-        return res.status(400).json({ status: "error", msg: "otp is required" });
+        return res.status(400).json({ status: "error", msg: "OTPp is required" });
     }
     if (!email) {
-        return res.status(400).json({ status: "error", msg: "email is required" });
+        return res.status(400).json({ status: "error", msg: "OTP expired , Try again" });
     }
     if (!password) {
         return res.status(400).json({ status: "error", msg: "password is required" });

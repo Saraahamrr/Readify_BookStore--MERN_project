@@ -23,6 +23,7 @@ import Settings from "./components/Profile/Settings";
 import BookManagement from "./components/Profile/BookManagement/BookManagement";
 import AllOrders from "./pages/AllOrders";
 import PaymentPage from "./pages/checkout/PaymentPage";
+import VerifyEmail from "./pages/forgetPassword/Verifyemail";
 import PaymentSuccess from "./pages/checkout/PaymentSuccess";
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -70,6 +71,7 @@ function App() {
                   <Route path="/BookDetails/:id" element={<BookDetails />} />
                   <Route path="/payment" element={<PaymentPage />} />
                   <Route path="/paymentSuccess" element={<PaymentSuccess />} />
+                  <Route path="/verifyEmail" element={<VerifyEmail />} />
 
                   <Route
                     path="/AuthorDetails/:id"

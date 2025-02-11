@@ -22,12 +22,8 @@ const SendverifyEmail = async (req, res) => {
         const subject = `Welcome ${username} to Readify`;
         const message = `Please Verify Your Email
         Your OTP is ${otp}`;
-        // const variables = {
-        //     "name": username,
-        //     "otp": otp
-        // };
         await sendEmail(recipients , subject , message);
-        res.status(200).json({ status: "success", msg: "User signed-up successfully,please Verify Your email"} );
+        res.status(200).json({ status: "success", msg: "OTP sent to your Email"} );
     } catch (error) {
         res.status(500).json({ status: "error", msg: error });
         console.log(error);
