@@ -56,15 +56,14 @@ export default function BookManagement() {
   const updateBook = (bookId) => {
     navigate(`/update-book/${bookId}`);
   };
-  const addBook = () => {
-    navigate("/profile/add-book");
-  };
   return (
-    <div className="p-5 d-flex flex-column align-items-center">
-      <table className="m-3 table table-striped table-hover table-light ">
+    <div className="d-flex flex-column align-items-center ">
+      <div className="table-responsive">
+
+      <table className="my-3 table table-striped table-hover table-light ">
         <thead className="thead-dark" style={{ position: "sticky", top: 0 }}>
           <tr>
-            <th scope="col">id</th>
+            <th className="id" scope="col">id</th>
             <th scope="col">title</th>
             <th scope="col">authors</th>
             <th scope="col">categories</th>
@@ -79,7 +78,7 @@ export default function BookManagement() {
           {books.length > 0 ? (
             books.map((book) => (
               <tr scope="row" key={book._id}>
-                <td>{book.id}</td>
+                <td className="id">{book.id}</td>
                 <td>{book.title}</td>
                 <td>{book.authors?.map((author) => author.name).join(", ")}</td>
                 <td>
@@ -88,7 +87,7 @@ export default function BookManagement() {
                 <td>
                   <div className="content-wrapper">{book.description}</div>
                 </td>
-                <td>{book.averageRating}</td>
+                <td>{(book.averageRating).toFixed(1)}</td>
                 <td>{book.language}</td>
                 <td>{book.price}</td>
                 <td>
@@ -112,21 +111,8 @@ export default function BookManagement() {
           )}
         </tbody>
       </table>
-      <div className="align-self-end">
-        <button
-          type="button"
-          style={{
-            backgroundColor: "#fbb02d",
-            border: 0,
-            color: "white",
-            fontWeight: "bold",
-          }}
-          className="custom-btn sign-btn"
-          onClick={() => addBook()}
-        >
-          + New book
-        </button>
       </div>
+      
     </div>
   );
 }

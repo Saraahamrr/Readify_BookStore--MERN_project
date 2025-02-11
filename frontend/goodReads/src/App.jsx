@@ -6,7 +6,7 @@ import Footer from "./components/Footer/Footer";
 import "./App.css";
 import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
-import AddBook from "./pages/AddBook";
+import AddBook from "./pages/AddBook/AddBook";
 import Authors from "./components/Home/Authors";
 import Categories from './pages/Categories'
 import { FavoritesProvider } from "./context/fav";
@@ -27,6 +27,7 @@ import AllOrders from "./pages/AllOrders";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import PaymentSuccess from "./pages/checkout/PaymentSuccess";
 import CategoryResults from "./pages/CategoryResults";
+import UpdateAuthor from "./pages/UpdateAuthor";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -38,8 +39,7 @@ const Cart = lazy(() => import("./pages/Cart/Cart"));
 const Profile = lazy(() => import("./pages/Profile"));
 const SearchResult = lazy(() => import("./pages/SearchResult"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const ReadBook = lazy(() => import("./pages/ReadBook"));
-
+const ReadBook = lazy(()=>import("./pages/ReadBook"))
 const UpdateBook = lazy(() => import("./pages/UpdateBook"));
 
 function App() {
@@ -107,17 +107,19 @@ function App() {
                         <>
                           <Route path="allOrders" element={<AllOrders />} />
                           <Route
-                            path="book-management"
+                          index
                             element={<BookManagement />}
                           />
+                          <Route path="/profile/add-book" element={<AddBook />} />
                         </>
                       )}
                     </Route>
                   )}
                   {isLoggedIn && role === "admin" && (
                     <>
-                      <Route path="/profile/add-book" element={<AddBook />} />
                       <Route path="/update-book/:id" element={<UpdateBook />} />
+                      <Route path="/update-author/:id" element={<UpdateAuthor/>} />
+
                     </>
                   )}
                   <Route path="/search" element={<SearchResult />} />

@@ -141,13 +141,13 @@ export default function Signup() {
     const errors = validateSignIn(signinValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
-      setIsSubmitted(true);
       try {
         const response = await axios.post(
           "http://localhost:3000/api/sign-in",
           signinValues,
           { withCredentials: true }
         );
+        localStorage.setItem("isSubscribed",response.data.isSubscribed)
 
         toast.success(response.data.msg, toastOptions);
         console.log(response);

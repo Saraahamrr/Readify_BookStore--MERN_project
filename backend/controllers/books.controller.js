@@ -67,7 +67,7 @@ const updateBook = asyncWrapper(async (req, res, next) => {
   const { id, ...bookData } = req.body;
 
   const updatedBook = await Book.findOneAndUpdate(
-    { _id: Number(req.params.bookId) },
+    { _id: req.params.bookId },
     bookData,
     { new: true, runValidators: true }
   );
@@ -78,7 +78,7 @@ const updateBook = asyncWrapper(async (req, res, next) => {
   }
   return res
     .status(200)
-    .json({ status: httpStatusText.SUCCESS, data: { bookLog: updatedBook } });
+    .json({ status: httpStatusText.SUCCESS, data: { book: updatedBook } });
 });
 
 const deleteBook = asyncWrapper(async (req, res, next) => {

@@ -24,7 +24,6 @@ export default function BookDetails() {
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
 
   const [isSubscribed, setIsSubscribed] = useState(
@@ -161,7 +160,7 @@ export default function BookDetails() {
               alt={book.title || "Unknown Title"}
             />
           </div>
-
+  
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
             <p>
@@ -190,13 +189,13 @@ export default function BookDetails() {
             <p>
               <strong>Language:</strong> {book.language || "Unknown"}
             </p>
+            <p>
+              <strong>Price:</strong> ${book.price || 0}
+            </p>
 
             {isLoggedIn && role === "user" && (
               <>
-                <button
-                  className="like-button"
-                  onClick={() => toggleFavorite(id)}
-                >
+                <button className="like-button" onClick={() => toggleFavorite(id)}>
                   <FontAwesomeIcon
                     icon={faHeart}
                     style={{
@@ -207,27 +206,21 @@ export default function BookDetails() {
                     }}
                   />
                 </button>
-
+  
                 <button className="cart-button">
-                  <FontAwesomeIcon
-                    icon={faShoppingCart}
-                    style={{ fontSize: "30px", color: "#000000" }}
-                  />
+                  <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
                 </button>
               </>
             )}
             {role === "user" && (
               <button className="subscribe-button" onClick={handleSubscription}>
-                {isSubscribed ? " Read Now" : "Subscribe to Read"}
+                {isSubscribed ? "Read Now" : "Subscribe to Read"}
               </button>
             )}
 
             {isLoggedIn && role === "admin" && (
               <div className="d-flex mt-3">
-                <button
-                  className="editButton me-2"
-                  onClick={() => updateBook(id)}
-                >
+                <button className="editButton me-2" onClick={() => updateBook(id)}>
                   <FontAwesomeIcon icon={faPen} />
                 </button>
                 <button className="trashButton" onClick={() => deleteBook(id)}>
@@ -292,6 +285,8 @@ export default function BookDetails() {
           )}
         </div>
       </div>
+
     </div>
   );
-}
+  
+  }

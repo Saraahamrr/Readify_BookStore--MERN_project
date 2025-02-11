@@ -95,12 +95,16 @@ export default function Sidebar(props) {
         {isLoggedIn && role === "admin" && (
           <>
             <Link
-              to="/profile/book-management"
+              to="/profile"
               className="w-100 py-1 rounded p-link"
               style={{ fontSize: "1.3rem", textAlign: "center" }}
             >
               Manage Books
             </Link>
+            <Link to="/profile/add-book"
+             className="w-100 py-1 rounded p-link"
+             style={{ fontSize: "1.3rem", textAlign: "center" }}
+            >Add Book</Link>
             <Link
               to="/profile/allOrders"
               className="w-100 py-1 rounded p-link"

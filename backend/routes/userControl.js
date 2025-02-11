@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {authToken} = require("../middleWare/userAuth.js");
+const { authToken } = require("../middleWare/userAuth.js");
 const { SendverifyEmail } = require("../controllers/SendverifyEmail.js");
 const { VerifyOtp } = require("../controllers/VerifyOTP.js");
 const { forgetPassword, resetPassword } = require("../controllers/forgetPassword.js");
@@ -12,44 +12,44 @@ const localStorage = require('node-localstorage');
 
 //sign-up route
 // localhost:3000/api/v1/sign-up
-router.post("/sign-up" , async(req,res)=>{
-    try{
-        const{username,email,password,address} = req.body;
+router.post("/sign-up", async (req, res) => {
+    try {
+        const { username, email, password, address } = req.body;
         //check if name is more than 4 characters
-        if(username.length < 4){
+        if (username.length < 4) {
             return res
-            .status(400)
-            .json({msg: "UserName should be more than 4 characters"});
+                .status(400)
+                .json({ msg: "UserName should be more than 4 characters" });
         }
         //check if name already exists
         // mesh fhamaha lesa 
-        const userExists = await User.findOne({username: username});
-        if(userExists){
+        const userExists = await User.findOne({ username: username });
+        if (userExists) {
             return res
-            .status(400)
-            .json({msg: "UserName already exists"});
+                .status(400)
+                .json({ msg: "UserName already exists" });
         }
         //check if email already exists
-        const emailExists = await User.findOne({email: email});
-        if(emailExists){
+        const emailExists = await User.findOne({ email: email });
+        if (emailExists) {
             return res
-            .status(400)
-            .json({msg: "Email already exists"});
+                .status(400)
+                .json({ msg: "Email already exists" });
         }
         //check if password is more than 6 characters
-        if(password.length < 6){
+        if (password.length < 6) {
             return res.status(400)
-            .json({msg: "Password should be more than 6 characters"});
+                .json({ msg: "Password should be more than 6 characters" });
         }
 
         //hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         //create a new user
         const newUser = new User({
-            username : username,
-            email   : email,
-            address : address,
+            username: username,
+            email: email,
+            address: address,
             password: hashedPassword
         });
 
@@ -59,57 +59,57 @@ router.post("/sign-up" , async(req,res)=>{
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
         console.log(token);
         //save Token in cookie
-        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" , maxAge: 1000*60*60*24*7}); 
-        SendverifyEmail(req,res);
-    }catch(err){
+        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax", maxAge: 1000 * 60 * 60 * 24 * 7 });
+        SendverifyEmail(req, res);
+    } catch (err) {
         console.log(err);
-        res.status(500).json({msg: "Internal server error"});
+        res.status(500).json({ msg: "Internal server error" });
     }
 });
 
 
 //sign-in route
 // localhost:3000/api/v1/sign-in
-router.post("/sign-in" , async(req,res)=>{
-    try{
-        const{username,password} = req.body;
+router.post("/sign-in", async (req, res) => {
+    try {
+        const { username, password } = req.body;
         //check if name is more than 4 characters
-        if(username.length < 4){
+        if (username.length < 4) {
             return res
-            .status(400)
-            .json({msg: "UserName should be more than 4 characters"});
+                .status(400)
+                .json({ msg: "UserName should be more than 4 characters" });
         }
         //check if name already exists
-        const existingUser = await User.findOne({username});
-        if(!existingUser){
+        const existingUser = await User.findOne({ username });
+        if (!existingUser) {
             return res
-            .status(400)
-            .json({msg: "UserName does not exist"});
+                .status(400)
+                .json({ msg: "UserName does not exist" });
         }
         //check if password is more than 6 characters
-        if(password.length < 6){
+        if (password.length < 6) {
             return res.status(400)
-            .json({msg: "Password should be more than 6 characters"});
+                .json({ msg: "Password should be more than 6 characters" });
         }
 
         //compare the password
         // compare gives a boolean value(0 or 1 or true or false)(search for it)
-        await bcrypt.compare(password, existingUser.password,(err, result)=>{
-            if(result){
+        await bcrypt.compare(password, existingUser.password, (err, result) => {
+            if (result) {
                 const authUserdata = {
-                name : existingUser.username,
-                email: existingUser.email,
-                role : existingUser.role
-            };
-               const token = jwt.sign({id : existingUser._id},process.env.JWT_SECRET,{expiresIn: "7d"});
-             
-                res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax" , maxAge: 1000*60*60*24*7});
-                res.cookie("isSubscribed", existingUser.isSubscribed, { 
-                    httpOnly: true, 
-                    secure: false, 
-                    sameSite: "Lax", 
-                    maxAge: 1000 * 60 * 60 * 24 * 7  
-                  });
+                    name: existingUser.username,
+                    email: existingUser.email,
+                    role: existingUser.role
+                };
+                const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+                res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "Lax", maxAge: 1000 * 60 * 60 * 24 * 7 });
+                // res.cookie("isSubscribed", existingUser.isSubscribed, { 
+                //     httpOnly: true, 
+                //     secure: false, 
+                //     sameSite: "Lax", 
+                //     maxAge: 1000 * 60 * 60 * 24 * 7  
+                //   });
                 return res
                 .status(200)
                 .json(
@@ -121,29 +121,29 @@ router.post("/sign-in" , async(req,res)=>{
                     })
 
             }
-            else{
-                return res.status(400).json({msg: "Password is incorrect"});
+            else {
+                return res.status(400).json({ msg: "Password is incorrect" });
 
             }
         });
 
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.status(500).json({msg: "Internal server error"});
+        res.status(500).json({ msg: "Internal server error" });
     }
 });
 
 //sign-out route
 // localhost:3000/api/v1/sign-out
-router.post("/sign-out", (req,res)=>{
-    try{
+router.post("/sign-out", (req, res) => {
+    try {
         res.clearCookie('token');
         res.clearCookie('isSubscribed');
-        return res.status(200).json({msg: "User signed-out successfully"});
+        return res.status(200).json({ msg: "User signed-out successfully" });
     }
-    catch(err){
+    catch (err) {
         console.log(err);
-        res.status(500).json({msg: "Internal server error"});
+        res.status(500).json({ msg: "Internal server error" });
     }
 });
 
@@ -158,7 +158,7 @@ router.get("/user-info", authToken , async(req,res)=>{
     return res.status(200).json(data);
     }catch(err){
         console.log(err);
-        res.status(500).json({msg: "Internal server error"});
+        res.status(500).json({ msg: "Internal server error" });
     }
 });
 
@@ -190,28 +190,28 @@ router.put("/update-user-info", authToken, async (req, res) => {
 
 // send-verify-email route
 // localhost:3000/api/v1/send-verify-email
-router.post("/send-verify-email", authToken,SendverifyEmail);
+router.post("/send-verify-email", authToken, SendverifyEmail);
 // verify-otp route 
-router.post("/verify-otp", authToken,VerifyOtp);
+router.post("/verify-otp", authToken, VerifyOtp);
 // is-authourized route
-router.post("/is-authourized", authToken, async(req,res)=>{
+router.post("/is-authourized", authToken, async (req, res) => {
     const { id } = req.body;
     const user = await User.findById(id);
-    if(!user){
-        return res.status(400).json({msg: "User not found"});
+    if (!user) {
+        return res.status(400).json({ msg: "User not found" });
     }
-    try{
-        if(user.status === "authorized"){
-            return res.status(200).json({msg: "User is authorized"});
+    try {
+        if (user.status === "authorized") {
+            return res.status(200).json({ msg: "User is authorized" });
         }
-        return res.status(400).json({msg: "User is not authorized"});
-    }catch(err){
+        return res.status(400).json({ msg: "User is not authorized" });
+    } catch (err) {
         console.log(err);
-        res.status(500).json({msg: "Internal server error"});
+        res.status(500).json({ msg: "Internal server error" });
     }
 });
 // forget-password route
-router.post("/forget-password",forgetPassword);
+router.post("/forget-password", forgetPassword);
 // reset-password route
-router.post("/reset-password",resetPassword);
+router.post("/reset-password", resetPassword);
 module.exports = router;
