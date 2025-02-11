@@ -1,5 +1,31 @@
+// const CartItem = ({ product, onRemove, onUpdateQuantity }) => {
+//     const { _id, title, author, coverImage, price, quantity } = product;
+
+//     return (
+//         <div className="cart-item">
+//             <div className="product-info">
+//                 <img className='bookImage' src={coverImage} alt={title} />
+//                 <div className="details">
+//                     <p className="title">{title}</p>
+//                     <button className="remove-btn" onClick={() => onRemove(_id)}>Remove</button>
+//                 </div>
+//             </div>
+            
+//             <div className="quantity">
+//                 <button className="qty-btn" onClick={() => onUpdateQuantity(_id, quantity - 1)} disabled={quantity <= 1}>-</button>
+//                 <span>{quantity}</span>
+//                 <button className="qty-btn" onClick={() => onUpdateQuantity(_id, quantity + 1)}>+</button>
+//             </div>
+
+//             <p className="price">{price} EGP</p>
+//             <p className="total">{price * quantity} EGP</p>
+//         </div>
+//     );
+// };
+
+
 const CartItem = ({ product, quantity, onRemove, onUpdateQuantity }) => {
-    const { id, title, author, coverImage, price } = product;
+    const { _id, title, author, coverImage, price } = product;
 
     return (
         <div className="cart-item">
@@ -7,14 +33,14 @@ const CartItem = ({ product, quantity, onRemove, onUpdateQuantity }) => {
                 <img className='bookImage' src={coverImage} alt={title} />
                 <div className="details">
                     <p className="title">{title}</p>
-                    <button className="remove-btn" onClick={() => onRemove(id)}>Remove</button>
+                    <button className="remove-btn" onClick={() => onRemove(_id)}>Remove</button>
                 </div>
             </div>
             
             <div className="quantity">
-                <button className="qty-btn" onClick={() => onUpdateQuantity(id, quantity - 1)} disabled={quantity <= 1}>-</button>
+                <button className="qty-btn" onClick={() => onUpdateQuantity(_id, quantity - 1)} disabled={quantity <= 1}>-</button>
                 <span>{quantity}</span>
-                <button className="qty-btn" onClick={() => onUpdateQuantity(id, quantity + 1)}>+</button>
+                <button className="qty-btn" onClick={() => onUpdateQuantity(_id, quantity + 1)}>+</button>
             </div>
 
             <p className="price">{price} EGP</p>
@@ -24,3 +50,4 @@ const CartItem = ({ product, quantity, onRemove, onUpdateQuantity }) => {
 };
 
 export default CartItem;
+

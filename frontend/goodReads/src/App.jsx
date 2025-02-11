@@ -27,6 +27,8 @@ import AllOrders from "./pages/AllOrders";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import VerifyEmail from "./pages/forgetPassword/Verifyemail";
 import PaymentSuccess from "./pages/checkout/PaymentSuccess";
+import Subsription from './pages/subscription/Subscription';
+import PaymentSuccessSubscribe from './pages/subscription/PaymentSuccessSubscribe';
 import CategoryResults from "./pages/CategoryResults";
 import UpdateAuthor from "./pages/UpdateAuthor";
 
@@ -79,7 +81,14 @@ function App() {
                   <Route path="/BookDetails/:id" element={<BookDetails />} />
                   <Route path="/payment" element={<PaymentPage />} />
                   <Route path="/paymentSuccess" element={<PaymentSuccess />} />
-                  <Route path="/verifyEmail" element={<VerifyEmail />} />
+                  <Route
+                    path="/subscription"
+                    element={<Subsription />}
+                  />
+                  <Route
+                    path="/subscription-success"
+                    element={<PaymentSuccessSubscribe />}
+                  />                  <Route path="/verifyEmail" element={<VerifyEmail />} />
 
                   <Route
                     path="/AuthorDetails/:id"

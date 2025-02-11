@@ -71,8 +71,8 @@ const user = new mongoose.Schema({
     isSubscribed :{
         type: Boolean,
         default: false,
-    }
-
+    },
+    subscriptionExpiresAt: { type: Date, default: null } // New field for expiration
 }, {
     timestamps: true
 });

@@ -15,6 +15,8 @@ import {
 import axios from "axios";
 import "./BookDetails.css";
 import { useFavorites } from "../context/fav";
+import { useCart } from "../context/CartContext";
+
 
 export default function BookDetails() {
   const { id } = useParams();
@@ -25,7 +27,7 @@ export default function BookDetails() {
   const [newReview, setNewReview] = useState("");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
-  const status = useSelector((state) => state.auth.status);
+  const { addToCart } = useCart();  const status = useSelector((state) => state.auth.status);
 
   const [isSubscribed, setIsSubscribed] = useState(
     localStorage.getItem("isSubscribed") === "true"
@@ -84,17 +86,8 @@ export default function BookDetails() {
     }
 
     if (isLoggedIn && !isSubscribed) {
-      toast.success("Temporary alert make navigate in code", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-        transition: Bounce,
-      });
       //navigate("/payment");
+      navigate("/subscription");
     }
     if (isSubscribed) {
       navigate(`/read/${id}`);
@@ -220,9 +213,15 @@ export default function BookDetails() {
                     }}
                   />
                 </button>
-  
-                <button className="cart-button">
-                  <FontAwesomeIcon icon={faShoppingCart} style={{ fontSize: "30px", color: "#000000" }} />
+
+                <button
+                  className="cart-button"
+                  onClick={() => addToCart(book._id)}
+                >
+                  <FontAwesomeIcon
+                    icon={faShoppingCart}
+                    style={{ fontSize: "20px", color: "#000000" }}
+                  />
                 </button>
               </>
             )}
@@ -234,7 +233,10 @@ export default function BookDetails() {
 
             {isLoggedIn && role === "admin" && (
               <div className="d-flex mt-3">
-                <button className="editButton me-2" onClick={() => updateBook(id)}>
+                <button
+                  className="editButton me-2"
+                  onClick={() => updateBook(id)}
+                >
                   <FontAwesomeIcon icon={faPen} />
                 </button>
                 <button className="trashButton" onClick={() => deleteBook(id)}>
@@ -302,5 +304,4 @@ export default function BookDetails() {
 
     </div>
   );
-  
-  }
+}

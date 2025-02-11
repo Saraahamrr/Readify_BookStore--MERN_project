@@ -1,57 +1,68 @@
 const router = require('express').Router();
-const { authToken } = require('../middleWare/userAuth');
+
+const { authToken } = require('../middleWare/userAuth.js');
 const Book = require('../models/book.js');
 const Order = require('../models/orders.js');
 const User = require('../models/user.js');
 
 //place order
 router.post('/place-order', authToken, async (req, res) => {
-    try{
-        const {id} = req.headers;
-        const {order} = req.body;
+    try {
+        console.log("Received order:", req.body);
+        const {id, totalPrice, books} = req.body;
 
-        for(const orderDate of order){
-            const newOrder = new Order({user: id, book: orderDate._id});
-            const orderDateFromDB = await newOrder.save();
-
-            //save order in user model
-            await User.findByIdAndUpdate(id, {
-                $push: {orders: orderDateFromDB._id}
-            });
-
-            //clear cart
-            await User.findByIdAndUpdate(id, {
-                $pull: {cart: orderDate._id}
-            });
+        if (!books || books.length === 0) {
+            return res.status(400).json({ message: "Cart is empty, cannot place order" });
         }
 
-        return res.json({
-            status: 'success',
-            message: 'order placed successfully'
+        // Extract book IDs
+        const bookIds = books.map(item => item._id);
+
+        // Fetch book details from DB
+        const fetchedBooks = await Book.find({ _id: { $in: bookIds } });
+
+        if (fetchedBooks.length !== bookIds.length) {
+            return res.status(404).json({ message: "One or more books not found" });
+        }
+
+        const newOrder = new Order({
+            user: id,
+            books: bookIds,
+            totalPrice: totalPrice
         });
-        
-    } catch (error){
-        console.log(error);
-        return res.status(500).json({message: 'an error occurred'});
-    }
+
+        const orderFromDB = await newOrder.save();
+
+        // Save order in user model
+       // Update user document: Add order & clear cart
+       await User.findByIdAndUpdate(id, {
+        $push: { orders: orderFromDB._id },
+        $pull: { cart: { $in: bookIds } }
+    });
+
+    return res.status(201).json({
+        status: 'success',
+        message: 'Order placed successfully',
+        order: orderFromDB
+    });
+
+} catch (error) {
+    console.error("Error placing order:", error);
+    return res.status(500).json({ message: 'An error occurred while placing the order' });
+}
 });
 
-//get order history of particular user
+
+// Get order history of a user
 router.get('/get-order-history', authToken, async (req, res) => {
     try {
-        const userId = req.body.id; 
-        if (!userId) {
-            return res.status(400).json({ message: "User ID is required" });
-        }
+        const id = req.body.id;
+        const userData = await User.findById(id).populate({
+            path: 'orders',
+            populate: { path: 'books' }
+        });
 
-        const userData = await User.findById(userId)
-            .populate("orders");
-
-        if (!userData) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        const ordersData = userData.orders.reverse() || [];
+        const ordersData = userData.orders.length > 0 ? userData.orders.reverse() : [];
 
         return res.json({
             status: 'success',
@@ -106,5 +117,34 @@ router.put('/update-status/:id', authToken, async (req, res) => {
     }
 });
 
+// Subscribe a user
+router.post('/subscribe', authToken, async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const subscriptionExpiryDate = new Date();
+        subscriptionExpiryDate.setFullYear(subscriptionExpiryDate.getFullYear() + 1);
+
+        const user = await User.findByIdAndUpdate(id, { isSubscribed: true, subscriptionExpiresAt: subscriptionExpiryDate }, { new: true });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json({
+            status: 'success',
+            message: 'User subscribed successfully',
+            data: user
+        });
+
+    } catch (error) {
+        console.error("Error subscribing user:", error);
+        return res.status(500).json({ message: 'An error occurred' });
+    }
+});
 
 module.exports = router;

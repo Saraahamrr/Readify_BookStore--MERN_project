@@ -14,7 +14,13 @@ import {
   CardCvcElement,
 } from "@stripe/react-stripe-js";
 import "./PaymentPage.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Bounce } from "react-toastify";
+import { sendOtp, verifyOtp } from "../../services/api"; 
+import axios from "axios";
+import { useCart } from "../../context/CartContext";
+
 
 // Load Stripe
 const stripePromise = loadStripe(
@@ -26,14 +32,19 @@ const CheckoutForm = () => {
     firstName: "",
     lastName: "",
     email: "",
-    address1: "",
-    address2: "",
-    zip: "",
+    address: "",
     city: "",
-    state: "",
     promoCode: "",
+    number: "",
+    state: ""
   });
+  const [otp, setOtp] = useState("");
+  const [orderDetails, setOrderDetails] = useState(""); // Example: "Book A, Book B"
+  const location = useLocation();
+  const totalPrice = location.state?.totalPrice || 0; // Fallback to 0 if undefined
+  const cart = location.state?.cart;
 
+console.log('cart', cart);
   const stripe = useStripe();
   const elements = useElements();
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -41,7 +52,7 @@ const CheckoutForm = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+console.log('location', location.state.cart)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -65,25 +76,105 @@ const CheckoutForm = () => {
       const result = await stripe.confirmCardPayment(data.clientSecret, {
         payment_method: {
           card: cardNumberElement,
-        },
-      });
+  },
+});
 
-      if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
-        setPaymentSuccess(true);
-        alert("Payment Successful!");
-        navigate("/paymentSuccess");
-      } else {
-        console.error(result.error.message);
+
+if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
+  setPaymentSuccess(true);
+
+  // Display success toast notification
+  toast.success("Payment Successful!", {
+    position: "top-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "colored",
+  });
+
+  //Step 1: Send Order to Backend
+  const userId = localStorage.getItem("userId"); // Ensure user ID is stored when logging in
+
+  const response = await axios.post("http://localhost:3000/api/order/place-order", {
+    books: cart,
+    totalPrice: totalPrice
+  });
+
+  console.log("Order Response:", response.data);
+  
+  const sendConfirmationEmail = async (email) => {
+    try {
+      const response = await axios.post("http://localhost:3000/api/payment/send-confirm-email", {
+        email: formData.email
+      });
+  
+      toast.success(response.data.msg, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      });
+    } catch (error) {
+      toast.error(error.data.msg, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "colored",
+      });
+    }
+  };
+  sendConfirmationEmail();
+  
+
+  // Redirect after a short delay
+  setTimeout(() => navigate("/paymentSuccess"), 3000);
+} else {
+  toast.error(result.error.message, {
+    position: "top-right",
+    autoClose: 5000,
+    theme: "colored",
+  });
+}
+} catch (error) {
+toast.error("Payment failed. Please try again.", {
+  position: "top-right",
+  autoClose: 5000,
+  theme: "colored",
+});
+console.error("Payment failed:", error);
+}
+  };
+
+  const handleSendOtp = async () => {
+    try {
+      await sendOtp({ email: formData.email, totalPrice, orderDetails });
+      alert("OTP sent to your email!");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+  };
+  
+  const handleVerifyOtp = async () => {
+    try {
+      const response = await verifyOtp({ email, otp });
+      if (response.data.message === "OTP verified successfully!") {
+        alert("OTP Verified! Proceeding to Payment.");
+        handleSubmitPayment();
       }
     } catch (error) {
-      console.error("Payment failed:", error);
+      console.error("OTP Verification Failed:", error);
+      alert("Invalid OTP!");
     }
   };
 
   return (
     <>
-      <div>
-        <h2>Checkout</h2>
+      <div className="checkout-container">
+      <h2 className="checkoutHead">Checkout</h2>
         <div className="checkout-content">
           <div className="left-section">
             <h3 className="shipping">Shipping Address</h3>
@@ -116,28 +207,21 @@ const CheckoutForm = () => {
               </div>
               <input
                 type="text"
-                name="address1"
-                placeholder="Address 1 - City, Street"
-                value={formData.address1}
+                name="address"
+                placeholder="Address"
+                value={formData.address}
                 onChange={handleChange}
                 required
               />
               <input
                 type="text"
-                name="address2"
-                placeholder="Address 2 - Building, Apt, Floor"
-                value={formData.address2}
+                name="number"
+                placeholder="Phone Number"
+                value={formData.number}
                 onChange={handleChange}
+                required
               />
               <div className="input-group">
-                <input
-                  type="text"
-                  name="zip"
-                  placeholder="ZIP Code"
-                  value={formData.zip}
-                  onChange={handleChange}
-                  required
-                />
                 <input
                   type="text"
                   name="city"
@@ -157,6 +241,27 @@ const CheckoutForm = () => {
                   <option value="NY">Giza</option>
                 </select>
               </div>
+
+              {/* <div>
+                <button type="button" onClick={handleSendOtp}>
+                  Send OTP
+                </button>
+
+                <div className="input-group">
+                  <label>Enter OTP</label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <button type="button" onClick={handleVerifyOtp}>
+                  Verify OTP & Pay
+                </button>
+
+              </div> */}
 
               <h3 className="shipping">Payment Details</h3>
 
@@ -180,6 +285,10 @@ const CheckoutForm = () => {
               </button>
             </form>
           </div>
+          <div className="order-summary">
+            <p className="amount">Total Amount: <span className="content-det">{totalPrice} EGP</span></p>
+            {/* <p className="order-details">Order details: <br /> <span className="content-det">{cartTitles}</span></p> */}
+          </div>
         </div>
       </div>
     </>
@@ -189,7 +298,7 @@ const CheckoutForm = () => {
 // Wrap CheckoutForm with Stripe Elements
 const PaymentPage = () => (
   <Elements stripe={stripePromise}>
-    <CheckoutForm />
+    <CheckoutForm/>
   </Elements>
 );
 
