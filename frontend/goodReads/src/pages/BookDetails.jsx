@@ -190,6 +190,9 @@ export default function BookDetails() {
             <p>
               <strong>Language:</strong> {book.language || "Unknown"}
             </p>
+            <p>
+              <strong>Price:</strong> ${book.price || 0}
+            </p>
 
             {isLoggedIn && role === "user" && (
               <>
@@ -212,7 +215,7 @@ export default function BookDetails() {
             )}
             {role === "user" && (
               <button className="subscribe-button" onClick={handleSubscription}>
-                {isSubscribed ? " Now" : "Subscribe to Read"}
+                {isSubscribed ? "Read Now" : "Subscribe to Read"}
               </button>
             )}
 

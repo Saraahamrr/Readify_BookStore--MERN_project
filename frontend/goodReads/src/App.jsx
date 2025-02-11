@@ -6,7 +6,7 @@ import Footer from "./components/Footer/Footer";
 import "./App.css";
 import { BooksProvider } from "./context/books";
 import { AuthorsProvider } from "./context/authors";
-import AddBook from "./pages/AddBook";
+import AddBook from "./pages/AddBook/AddBook";
 import Authors from "./components/Home/Authors";
 import { FavoritesProvider } from "./context/fav";
 import { CartProvider } from "./context/CartContext";
@@ -98,16 +98,16 @@ function App() {
                         <>
                           <Route path="allOrders" element={<AllOrders />} />
                           <Route
-                            path="book-management"
+                          index
                             element={<BookManagement />}
                           />
+                          <Route path="/profile/add-book" element={<AddBook />} />
                         </>
                       )}
                     </Route>
                   )}
                   {isLoggedIn && role === "admin" && (
                     <>
-                      <Route path="/profile/add-book" element={<AddBook />} />
                       <Route path="/update-book/:id" element={<UpdateBook />} />
                     </>
                   )}

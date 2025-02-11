@@ -1,0 +1,14 @@
+@media (max-width: 750px) {
+    .mb-3.w-100.d-flex.gap-4.align-items-start {
+        display: flex;
+        flex-wrap: wrap; /* Allows wrapping only when necessary */
+        align-items: flex-start; /* Ensures top alignment */
+        gap: 1rem; /* Keeps spacing between items */
+      }
+      
+      .mb-3.w-100 {
+        flex: 1 1 auto; /* Allows dynamic resizing */
+        min-width: 300px; /* Ensures a reasonable minimum width */
+      }
+      
+}

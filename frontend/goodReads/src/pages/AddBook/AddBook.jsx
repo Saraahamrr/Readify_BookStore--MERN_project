@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
+import BooksContext from "../../context/books";
+import './AddBook.css'
+
 
 export const fetchData = async (setCategories, setAuthors) => {
   try {
@@ -12,8 +16,16 @@ export const fetchData = async (setCategories, setAuthors) => {
       axios.get("http://localhost:3000/api/categories"),
       axios.get("http://localhost:3000/api/authors"),
     ]);
-    setCategories(responseCat.data.categories);
-    setAuthors(responseAuthors.data.authors);
+    const sortedCategories = responseCat.data.categories.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    const sortedAuthors = responseAuthors.data.authors.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    setCategories(sortedCategories);
+    setAuthors(sortedAuthors);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -28,6 +40,8 @@ const AddBook = () => {
   const [newAuthor, setNewAuthor] = useState({ name: "" });
   const [authorError, setAuthorError] = useState("");
   const [categoryError, setCategoryError] = useState("");
+  const { books,setBooks } = useContext(BooksContext);
+
 
   useEffect(() => {
     fetchData(setCategories, setAuthors);
@@ -92,6 +106,7 @@ const AddBook = () => {
             theme: "colored",
             transition: Bounce,
           });
+          setBooks((prevBooks) => [...prevBooks, bookData]); 
           formik.resetForm(); // Reset form
         }
       } catch (error) {

@@ -1,6 +1,28 @@
 table{
     table-layout: fixed;
+    width: 100%;
+    min-width: 800px;
+    max-height: 70vh;
+    overflow-y: auto;
 }
+.table-responsive {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+  @media (max-width: 1544px) {
+    table {
+      font-size: 12px;
+    }
+    th, td {
+      padding: 8px;
+    }
+    .editButton, .trashButton {
+      font-size: 14px;
+      padding: 4px;
+    }
+  }
 button.trashButton{
     padding: 0;
     margin: 0;
@@ -30,5 +52,8 @@ td .content-wrapper{
 }
 .content-wrapper {
     scrollbar-width: thin; 
-    scrollbar-color: #888 #414040;
 }
+.id{
+    width: 3%; /* Smallest possible width */
+    padding: 5px;
+    white-space: nowrap; /* Prevents wrapping */}
