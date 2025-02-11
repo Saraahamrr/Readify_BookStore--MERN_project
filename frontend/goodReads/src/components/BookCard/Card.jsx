@@ -102,7 +102,7 @@ export default function Card({ book, author }) {
             style={{ height: "300px", objectFit: "cover" }}
           />
           <h5 className="card-title">{authorName}</h5>
-          <p className="card-text">{authorBio}</p>
+          {/* <p className="card-text">{authorBio}</p> */}
           <Link
             className="details-btn"
             to={`/AuthorDetails/${author._id}`}

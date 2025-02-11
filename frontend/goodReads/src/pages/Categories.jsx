@@ -8,14 +8,17 @@ export default function Categories() {
     if (loading) return <div>Loading categories...</div>;
 
     return (
-        <div className='d-flex flex-column align-items-center'>
-            <h1 className='title text-start m-5 fw-bold'> Categories </h1>
+        <div className='container text-center'>
+            <h1 className='title text-start my-5 fw-bold'> Categories </h1>
 
-            <div className="row align-self-start mx-5">
+            <div className="d-flex flex-wrap justify-content-center gap-3">
                 {categories.length > 0 ? categories.map((category) => (
-                    <div key={category._id} className="card mx-2 my-4 p-3 text-center" style={{ width: '200px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '2px 2px 10px rgba(0,0,0,0.1)' }}>
-                        <h3>{category.name}</h3>
-                        <Link to={`/categories/${category._id}/books`} className="btn btn-warning mt-2">
+                    <div key={category._id} 
+                         className="d-flex align-items-center px-4 py-2 rounded-pill bg-light shadow-sm"
+                         style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                        <span className="me-3">{category.name}</span>
+                        <Link to={`/categories/${category._id}/books`} 
+                              className="btn btn-sm btn-warning">
                             Show Books
                         </Link>
                     </div>

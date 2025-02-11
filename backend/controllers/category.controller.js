@@ -70,7 +70,7 @@ const Book = require("../models/book");
 
 const getBooksByCategory = asyncWrapper(async (req, res, next) => {
     const { categoryId } = req.params;
-    const books = await Book.find({ categories: categoryId });
+    const books = await Book.find({ categories: categoryId }).populate("authors");
 
     res.json({ status: httpStatusText.SUCCESS, books });
 });
