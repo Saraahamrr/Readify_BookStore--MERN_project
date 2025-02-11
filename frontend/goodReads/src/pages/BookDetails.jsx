@@ -83,7 +83,7 @@ export default function BookDetails() {
         theme: "colored",
         transition: Bounce,
       });
-      //navigate("/payment");
+      navigate("/subscription");
     }
     if (isSubscribed) {
       navigate(`/read/${id}`);

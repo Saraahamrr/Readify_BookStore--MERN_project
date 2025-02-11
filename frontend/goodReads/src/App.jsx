@@ -24,6 +24,8 @@ import BookManagement from "./components/Profile/BookManagement/BookManagement";
 import AllOrders from "./pages/AllOrders";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import PaymentSuccess from "./pages/checkout/PaymentSuccess";
+import Subsription from './pages/subscription/Subscription';
+import PaymentSuccessSubscribe from './pages/subscription/PaymentSuccessSubscribe';
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
 const BookDetails = lazy(() => import("./pages/BookDetails"));
@@ -70,7 +72,14 @@ function App() {
                   <Route path="/BookDetails/:id" element={<BookDetails />} />
                   <Route path="/payment" element={<PaymentPage />} />
                   <Route path="/paymentSuccess" element={<PaymentSuccess />} />
-
+                  <Route
+                    path="/subscription"
+                    element={<Subsription />}
+                  />
+                  <Route
+                    path="/subscription-success"
+                    element={<PaymentSuccessSubscribe />}
+                  />
                   <Route
                     path="/AuthorDetails/:id"
                     element={<AuthorDetails />}

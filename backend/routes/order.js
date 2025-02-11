@@ -111,4 +111,34 @@ router.put('/update-status/:id', authToken, async (req, res) => {
     }
 });
 
+// Subscribe a user
+router.post('/subscribe', authToken, async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const subscriptionExpiryDate = new Date();
+        subscriptionExpiryDate.setFullYear(subscriptionExpiryDate.getFullYear() + 1);
+
+        const user = await User.findByIdAndUpdate(id, { isSubscribed: true, subscriptionExpiresAt: subscriptionExpiryDate }, { new: true });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json({
+            status: 'success',
+            message: 'User subscribed successfully',
+            data: user
+        });
+
+    } catch (error) {
+        console.error("Error subscribing user:", error);
+        return res.status(500).json({ message: 'An error occurred' });
+    }
+});
+
 module.exports = router;
