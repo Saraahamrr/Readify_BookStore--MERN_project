@@ -15,6 +15,8 @@ import {
 import axios from "axios";
 import "./BookDetails.css";
 import { useFavorites } from "../context/fav";
+import { useCart } from "../context/CartContext";
+
 
 export default function BookDetails() {
   const { id } = useParams();
@@ -26,7 +28,7 @@ export default function BookDetails() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
-
+  const { addToCart } = useCart();
   const [isSubscribed, setIsSubscribed] = useState(
     localStorage.getItem("isSubscribed") === "true"
   );
@@ -208,10 +210,13 @@ export default function BookDetails() {
                   />
                 </button>
 
-                <button className="cart-button">
+                <button
+                  className="cart-button"
+                  onClick={() => addToCart(book._id)}
+                >
                   <FontAwesomeIcon
                     icon={faShoppingCart}
-                    style={{ fontSize: "30px", color: "#000000" }}
+                    style={{ fontSize: "20px", color: "#000000" }}
                   />
                 </button>
               </>

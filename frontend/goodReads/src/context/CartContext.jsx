@@ -22,7 +22,7 @@ export const CartProvider = ({ children }) => {
       );
 
       if (response.data.status === "success") {
-        setCart((prevCart) => [...prevCart, response.data.data]);
+        setCart((prevCart) => [...prevCart, response.data.bookid]);
         alert("Book added to cart");
       }
     } catch (error) {
