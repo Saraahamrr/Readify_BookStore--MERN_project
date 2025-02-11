@@ -90,7 +90,7 @@ const removeItem = async (bookId) => {
 //     }
 // };
 
-  
+
 const updateQuantity = async (_id, newQuantity) => {
   if (newQuantity <= 0) {
       removeItem(_id);
@@ -138,7 +138,7 @@ const updateQuantity = async (_id, newQuantity) => {
 
   // Calculate total price
   const totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
-
+console.log('cart',cart);
   return (
     <div className="cart-container">
       <h2 className="cartTitle">Shopping Cart</h2>
@@ -163,7 +163,21 @@ const updateQuantity = async (_id, newQuantity) => {
         <button
           className="checkout"
           onClick={() => {
-            navigate("/payment");
+            if(totalPrice > 0){
+              navigate("/payment", { state: { cart, totalPrice } });
+            } else {
+              toast.info("Please Add Some Books Your Cart Is Empty", {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+              });
+            }
           }}
         >
           Checkout

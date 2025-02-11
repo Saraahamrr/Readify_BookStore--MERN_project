@@ -8,56 +8,61 @@ const User = require('../models/user.js');
 // Place order
 router.post('/place-order', authToken, async (req, res) => {
     try {
-        const { id } = req.body;
-        const { order } = req.body;
+        console.log("Received order:", req.body);
+        const {id, totalPrice, books} = req.body;
 
-        let totalPrice = 0;
-        let bookIds = [];
+        if (!books || books.length === 0) {
+            return res.status(400).json({ message: "Cart is empty, cannot place order" });
+        }
 
-        for (const orderItem of order) {
-            const book = await Book.findById(orderItem._id);
-            if (book) {
-                totalPrice += book.price; // Sum up book prices
-                bookIds.push(book._id);
-            }
+        // Extract book IDs
+        const bookIds = books.map(item => item._id);
+
+        // Fetch book details from DB
+        const fetchedBooks = await Book.find({ _id: { $in: bookIds } });
+
+        if (fetchedBooks.length !== bookIds.length) {
+            return res.status(404).json({ message: "One or more books not found" });
         }
 
         const newOrder = new Order({
             user: id,
             books: bookIds,
-            totalPrice
+            totalPrice: totalPrice
         });
 
         const orderFromDB = await newOrder.save();
 
         // Save order in user model
-        await User.findByIdAndUpdate(id, {
-            $push: { orders: orderFromDB._id },
-            $pull: { cart: { $in: bookIds } } // Clear cart items that are ordered
-        });
+       // Update user document: Add order & clear cart
+       await User.findByIdAndUpdate(id, {
+        $push: { orders: orderFromDB._id },
+        $pull: { cart: { $in: bookIds } }
+    });
 
-        return res.json({
-            status: 'success',
-            message: 'Order placed successfully',
-            order: orderFromDB
-        });
+    return res.status(201).json({
+        status: 'success',
+        message: 'Order placed successfully',
+        order: orderFromDB
+    });
 
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'An error occurred' });
-    }
+} catch (error) {
+    console.error("Error placing order:", error);
+    return res.status(500).json({ message: 'An error occurred while placing the order' });
+}
 });
+
 
 // Get order history of a user
 router.get('/get-order-history', authToken, async (req, res) => {
     try {
-        const { id } = req.headers;
+        const id = req.body.id;
         const userData = await User.findById(id).populate({
             path: 'orders',
             populate: { path: 'books' }
         });
 
-        const ordersData = userData.orders.reverse();
+        const ordersData = userData.orders.length > 0 ? userData.orders.reverse() : [];
 
         return res.json({
             status: 'success',

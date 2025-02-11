@@ -9,15 +9,22 @@ export default function UserOrderHistory() {
    useEffect(() => {
       const fetchData = async () => {
          try {
-            axios.defaults.withCredentials = true;
-            const response = await axios.get("http://localhost:3000/api/order/get-order-history");
-            setOrderHistory(response.data.data);
+           axios.defaults.withCredentials = true;
+           const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
+       
+           const response = await axios.get("http://localhost:3000/api/order/get-order-history", {
+             body: { id: userId } // Send user ID in headers
+           });
+       
+           setOrderHistory(response.data.data);
+           console.log('res',response.data.data);
          } catch (error) {
-            console.log("Error fetching order history:", error);
+           console.log("Error fetching order history:", error);
          } finally {
-            setLoading(false);
+           setLoading(false);
          }
-      };
+       };
+       
 
       fetchData();
    }, []);
@@ -45,7 +52,20 @@ export default function UserOrderHistory() {
                <ul className="order-list">
                   {orderHistory.map((order, index) => (
                      <li key={index} className="order-item">
-                        Order ID: {order.id} - Total: ${order.total}
+                        <p className='order-det'>
+                           Order Details: <br />
+                           <span className='det'>
+                              {order.books.map((item) => item.title).join(' - ')}
+
+                           </span>                        </p>
+                        <p className='order-det'>
+                           Total: <br />
+                           <span className='det'>
+                              ${order.totalPrice}
+
+                           </span>
+                        </p>
+                        <hr />
                      </li>
                   ))}
                </ul>
