@@ -1,0 +1,17 @@
+.p-link:hover {
+    background-color: #d6d6d6; 
+  }
+.logout-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  background-color:#fbb02d ;
+  margin-bottom: 3.5em;
+  color: white;
+}
+
+.logout-btn:hover {
+  transform: scale(1.1);
+}
