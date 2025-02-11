@@ -39,7 +39,7 @@ router.post('/place-order', authToken, async (req, res) => {
 //get order history of particular user
 router.get('/get-order-history', authToken, async (req, res) => {
     try {
-        const userId = req.body.id; // استخدم req.body.id بدل req.body فقط
+        const userId = req.body.id; 
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
         }

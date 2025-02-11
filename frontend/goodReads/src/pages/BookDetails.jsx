@@ -218,7 +218,7 @@ export default function BookDetails() {
             )}
             {role === "user" && (
               <button className="subscribe-button" onClick={handleSubscription}>
-                {isSubscribed ? " Now" : "Subscribe to Read"}
+                {isSubscribed ? " Read Now" : "Subscribe to Read"}
               </button>
             )}
 
