@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
+import BooksContext from "../../context/books";
+import AuthorsContext from "../../context/authors";
+import './AddBook.css'
+
 
 export const fetchData = async (setCategories, setAuthors) => {
   try {
@@ -12,8 +17,16 @@ export const fetchData = async (setCategories, setAuthors) => {
       axios.get("http://localhost:3000/api/categories"),
       axios.get("http://localhost:3000/api/authors"),
     ]);
-    setCategories(responseCat.data.categories);
-    setAuthors(responseAuthors.data.authors);
+    const sortedCategories = responseCat.data.categories.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    const sortedAuthors = responseAuthors.data.authors.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    setCategories(sortedCategories);
+    setAuthors(sortedAuthors);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -21,13 +34,15 @@ export const fetchData = async (setCategories, setAuthors) => {
 
 const AddBook = () => {
   const [categories, setCategories] = useState([]);
-  const [authors, setAuthors] = useState([]);
+  const { authors, setAuthors } = useContext(AuthorsContext);
   const [showNewAuthorInput, setShowNewAuthorInput] = useState(false);
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [newAuthor, setNewAuthor] = useState({ name: "" });
   const [authorError, setAuthorError] = useState("");
   const [categoryError, setCategoryError] = useState("");
+  const { books,setBooks } = useContext(BooksContext);
+
 
   useEffect(() => {
     fetchData(setCategories, setAuthors);
@@ -92,6 +107,7 @@ const AddBook = () => {
             theme: "colored",
             transition: Bounce,
           });
+          setBooks((prevBooks) => [...prevBooks, bookData]); 
           formik.resetForm(); // Reset form
         }
       } catch (error) {
@@ -152,7 +168,17 @@ const AddBook = () => {
         setCategories([...categories, response.data.category]);
         console.log(response.data);
         const categoryId = response.data.category["_id"];
-        alert("Category added successfully!");
+        toast.success(response.data.msg, {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: false,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce,
+                    });
         formik.setFieldValue("categories", [
           ...formik.values.categories,
           categoryId,
@@ -162,7 +188,17 @@ const AddBook = () => {
       }
     } catch (error) {
       console.error("Error adding new category:", error);
-      alert("Error Adding new category");
+      toast.error(error.response.data.msg, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                  transition: Bounce,
+                });
     }
   };
   const handleNewAuthorSubmit = async () => {
@@ -186,19 +222,32 @@ const AddBook = () => {
           ...formik.values.authors,
           response.data.author._id,
         ]);
-        alert("Author added successfully!");
-        setNewAuthor({
-          name: "",
-          image: "",
-          dateOfBirth: "",
-          gender: "",
-          bio: "",
-        });
+      toast.success(response.data.msg, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                  });
         setShowNewAuthorInput(false);
       }
     } catch (error) {
       console.error("Error adding new author:", error);
-      alert("Error adding new author");
+      toast.error(error.response.data.msg, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                  transition: Bounce,
+                });
     }
   };
 

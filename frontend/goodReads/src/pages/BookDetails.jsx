@@ -26,9 +26,9 @@ export default function BookDetails() {
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
-  const { addToCart } = useCart();
+  const { addToCart } = useCart();  const status = useSelector((state) => state.auth.status);
+
   const [isSubscribed, setIsSubscribed] = useState(
     localStorage.getItem("isSubscribed") === "true"
   );
@@ -71,8 +71,32 @@ export default function BookDetails() {
       });
       return;
     }
+    if (status === "unauthorized") {
+      toast.error("Verify Email to subscribe.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+      return;
+    }
 
     if (isLoggedIn && !isSubscribed) {
+      toast.success("Temporary alert make navigate in code", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+      //navigate("/payment");
       navigate("/subscription");
     }
     if (isSubscribed) {
@@ -153,7 +177,7 @@ export default function BookDetails() {
               alt={book.title || "Unknown Title"}
             />
           </div>
-
+  
           <div className="book-info">
             <h3>{book.title || "Unknown Title"}</h3>
             <p>
@@ -182,13 +206,13 @@ export default function BookDetails() {
             <p>
               <strong>Language:</strong> {book.language || "Unknown"}
             </p>
+            <p>
+              <strong>Price:</strong> ${book.price || 0}
+            </p>
 
             {isLoggedIn && role === "user" && (
               <>
-                <button
-                  className="like-button"
-                  onClick={() => toggleFavorite(id)}
-                >
+                <button className="like-button" onClick={() => toggleFavorite(id)}>
                   <FontAwesomeIcon
                     icon={faHeart}
                     style={{
@@ -213,7 +237,7 @@ export default function BookDetails() {
             )}
             {role === "user" && (
               <button className="subscribe-button" onClick={handleSubscription}>
-                {isSubscribed ? " Now" : "Subscribe to Read"}
+                {isSubscribed ? "Read Now" : "Subscribe to Read"}
               </button>
             )}
 
@@ -256,7 +280,7 @@ export default function BookDetails() {
           ) : (
             <p>No reviews yet. Be the first to review!</p>
           )}
-          {role === "user" && (
+          {isLoggedIn && role === "user" && (
             <div className="add-review">
               <h4>Add Your Review</h4>
               <div className="rating-input">
@@ -287,6 +311,7 @@ export default function BookDetails() {
           )}
         </div>
       </div>
+
     </div>
   );
 }

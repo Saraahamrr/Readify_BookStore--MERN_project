@@ -8,7 +8,7 @@ import { Bounce } from "react-toastify";
 import BooksContext from "../context/books";
 import Loader from "../components/Loader/Loader";
 import axios from "axios";
-import { fetchData } from "./AddBook";
+import { fetchData } from "./AddBook/AddBook";
 
 export default function UpdateBook() {
     const navigate = useNavigate()

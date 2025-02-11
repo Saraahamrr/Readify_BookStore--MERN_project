@@ -32,6 +32,7 @@ export default function Header() {
     { title: "Home", link: "/" },
     { title: "Books", link: "/allbooks" },
     { title: "Authors", link: "/authors" },
+    { title: "Categories", link: "/categories" }
   ];
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -58,6 +59,7 @@ export default function Header() {
         transition: Bounce,
       });
       dispatch(authActions.logout());
+      dispatch(authActions.changeStatus("unauthorized"));
       localStorage.setItem("isSubscribed", "false");
       console.log(authActions.login());
       navigate("/");

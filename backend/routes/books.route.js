@@ -39,7 +39,7 @@ const validation = [[
 
   router.get("/recent-books", async (req, res) => {
     try {
-      const books = await Book.find().sort({ createdAt: -1 }).limit(5).populate("authors")
+      const books = await Book.find().sort({ createdAt: -1 }).limit(6).populate("authors")
       .populate("categories"); //  fetch last 5 books
       res.status(200).json({ success: true, books });
     } catch (error) {

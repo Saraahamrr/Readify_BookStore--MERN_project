@@ -5,7 +5,7 @@ const Book = require('../models/book.js');
 const Order = require('../models/orders.js');
 const User = require('../models/user.js');
 
-// Place order
+//place order
 router.post('/place-order', authToken, async (req, res) => {
     try {
         console.log("Received order:", req.body);
@@ -68,46 +68,52 @@ router.get('/get-order-history', authToken, async (req, res) => {
             status: 'success',
             data: ordersData
         });
+
     } catch (error) {
-        console.error(error);
+        console.error("Error fetching order history:", error);
         return res.status(500).json({ message: 'An error occurred' });
     }
 });
 
-// Get all orders -- admin
+
+//get all orders -- admin
 router.get('/get-all-orders', authToken, async (req, res) => {
-    try {
-        const orders = await Order.find()
-            .populate('books')
-            .populate('user')
-            .sort({ createdAt: -1 });
+    try{
+        const userData = await Order.find()
+        .populate('books')
+        .populate({
+            path: 'user'
+        })
+        .sort({
+            createdAt: -1
+        });
 
         return res.json({
             status: 'success',
-            data: orders
+            data: userData
         });
 
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'An error occurred' });
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({message: 'an err occured'});
     }
 });
 
-// Update order status -- admin
+//update order -- admin
 router.put('/update-status/:id', authToken, async (req, res) => {
-    try {
-        const { id } = req.params;
+    try{
+        const {id} = req.params;
 
-        await Order.findByIdAndUpdate(id, { status: req.body.status });
+        await Order.findByIdAndUpdate(id, {status: req.body.status});
 
         return res.json({
             status: 'success',
-            message: 'Status updated successfully'
+            message: 'status updated successfully'
         });
-
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'An error occurred' });
+        
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({message: 'an err occured'});
     }
 });
 

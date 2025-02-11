@@ -13,21 +13,15 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce } from "react-toastify";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../store/authSlicer";
 
 export default function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { email } = location.state || { email: "" };
-  const [OTPValues, setOTPValues] = useState({
-    OTP: "",
-    password: "",
-    email: email,
+  const [emailValues, setEmailValues] = useState({
+    email: "",
   });
   const [signinValues, setSigninValues] = useState({
     username: "",
@@ -36,20 +30,15 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const ValidateOTP = (values) => {
+  const validateEmail = (values) => {
     const errors = {};
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!values.OTP) {
-      errors.OTP = "OTP is required";
-    } else if (!/^\d{6}$/.test(values.OTP)) {
-      errors.OTP = "OTP must be a 6-digit number";
+    if (!values.email) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(values.email)) {
+      errors.email = "Invalid email format";
     }
-    if (!values.password) errors.password = "password is required";
-    else if (!passwordRegex.test(values.password))
-      errors.password =
-        "password must include uppercase, lowercase, special symbol, numbers";
 
     return errors;
   };
@@ -62,31 +51,24 @@ export default function Signup() {
     else if (/\s/.test(values.username))
       errors.username = "Username must not contain spaces";
 
-    if (!values.password) errors.password = "password is required";
+    if (!values.password) errors.password = "Password is required";
     else if (!passwordRegex.test(values.password))
       errors.password =
-        "password must include uppercase, lowercase, special symbol, numbers";
+        "Password must include uppercase, lowercase, special symbol, numbers";
     return errors;
   };
 
-  const handleOTP = async (e) => {
+  const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    const errors = ValidateOTP(OTPValues);
+    const errors = validateEmail(emailValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       setIsSubmitted(true);
       try {
-        console.log(OTPValues.email);
         const response = await axios.post(
-          "http://localhost:3000/api/reset-password",
-          {
-            email: OTPValues.email,
-            otp: OTPValues.OTP,
-            password: OTPValues.password,
-          },
-          {
-            withCredentials: true,
-          }
+          "http://localhost:3000/api/send-verify-email",
+          { email: emailValues.email },
+          { withCredentials: true }
         );
         toast.success(response.data.msg, {
           position: "top-right",
@@ -99,8 +81,11 @@ export default function Signup() {
           theme: "colored",
           transition: Bounce,
         });
+        setEmailValues({ email: "" });
+        if (response.data.status === "success") {
+          navigate("/otp", { state: { email: emailValues.email } });
+        }
       } catch (error) {
-        console.log(error);
         toast.error(error.response.data.msg, {
           position: "top-right",
           autoClose: 5000,
@@ -113,11 +98,6 @@ export default function Signup() {
           transition: Bounce,
         });
       }
-      setOTPValues({
-        OTP: "",
-        password: "",
-        email: "",
-      });
     } else {
       setIsSubmitted(false);
     }
@@ -171,9 +151,9 @@ export default function Signup() {
     }
   };
 
-  const handleChangeSignUp = (e) => {
+  const handleChangeEmail = (e) => {
     const { name, value } = e.target;
-    setOTPValues({ ...OTPValues, [name]: value });
+    setEmailValues({ ...emailValues, [name]: value });
   };
 
   const handleChangeSignIn = (e) => {
@@ -213,8 +193,12 @@ export default function Signup() {
           <div className="containerr right-panel-active" id="main">
             <div className="form-container">
               <div className="sign-up">
-                <form onSubmit={handleOTP}>
-                  <h1>Reset Password</h1>
+                <form onSubmit={handleEmailSubmit}>
+                  <h1>Veify Email</h1>
+                  <p>
+                    Please enter your Email to send OTP and start ressetting
+                    password
+                  </p>
                   <div className="social-container">
                     <a href="#" className="social">
                       <FontAwesomeIcon icon={faFacebookF} />
@@ -228,33 +212,18 @@ export default function Signup() {
                   </div>
                   <input
                     type="text"
-                    name="OTP"
-                    placeholder="Enter OTP"
-                    value={OTPValues.OTP}
-                    onChange={handleChangeSignUp}
+                    name="email"
+                    placeholder="Enter email"
+                    value={emailValues.email}
+                    onChange={handleChangeEmail}
                     required
                   />
-                  {formErrors.OTP && <p className="error">{formErrors.OTP}</p>}
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="New password"
-                    value={OTPValues.password}
-                    onChange={handleChangeSignUp}
-                    required
-                  />
-                  {formErrors.password && (
-                    <p className="error">{formErrors.password}</p>
+                  {formErrors.email && (
+                    <p className="error">{formErrors.email}</p>
                   )}
                   <button className="signUp" type="submit">
                     Confirm
                   </button>
-                  <p
-                    className="tryagain"
-                    onClick={() => navigate("/forget-pass")}
-                  >
-                    Try again ?
-                  </p>
                 </form>
               </div>
 
@@ -286,7 +255,7 @@ export default function Signup() {
                   <input
                     type="password"
                     name="password"
-                    placeholder="password"
+                    placeholder="Password"
                     value={signinValues.password}
                     onChange={handleChangeSignIn}
                     required
@@ -294,7 +263,7 @@ export default function Signup() {
                   {formErrors.password && (
                     <p className="error">{formErrors.password}</p>
                   )}
-                  <Link to="/forget-pass">Forget password?</Link>
+                  <Link to="/forget-pass">Forget Password?</Link>
                   <button className="signIn" type="submit">
                     Sign In
                   </button>
@@ -306,14 +275,14 @@ export default function Signup() {
               <div className="overlay">
                 <div className="overlay-right">
                   <h1>Hello, Reader</h1>
-                  <p>Enter your OTP and start your journey with us</p>
-                  <button className="signUp">Confirm OTP</button>
+                  <p>Enter your email to Reset Password</p>
+                  <button className="signUp">Reset Password</button>
                 </div>
                 <div className="overlay-left">
                   <h1>Welcome !</h1>
                   <p>
                     To keep connected with us please login with your personal
-                    info after Confirming OTP
+                    info after Confirming email
                   </p>
                   <button className="signIn">Sign In</button>
                 </div>

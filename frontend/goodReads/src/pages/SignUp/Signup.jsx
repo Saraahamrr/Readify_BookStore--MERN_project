@@ -95,7 +95,7 @@ export default function Signup() {
           "http://localhost:3000/api/sign-up",
           signupValues
         );
-        toast.success(response.data.msg, {
+        toast.success("User signed-up successfully", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -106,10 +106,11 @@ export default function Signup() {
           theme: "colored",
           transition: Bounce,
         });
-        if (
-          response.data.msg ===
-          "User signed-up successfully,please Verify Your email"
-        ) {
+        toast.warn("Please Verify Email", toastOptions);
+        // if (isLoggedIn) {
+        //   toast.success("Please Verify Your email", toastOptions);
+        // }
+        if (response.data.msg === "OTP sent to your Email") {
           navigate("/otp");
         }
       } catch (error) {
@@ -141,19 +142,24 @@ export default function Signup() {
     const errors = validateSignIn(signinValues);
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
-      setIsSubmitted(true);
       try {
         const response = await axios.post(
           "http://localhost:3000/api/sign-in",
           signinValues,
           { withCredentials: true }
         );
+        localStorage.setItem("isSubscribed",response.data.isSubscribed)
 
         toast.success(response.data.msg, toastOptions);
+        if (response.data.status === "unauthorized") {
+          toast.warn("please verify Email", toastOptions);
+        }
         console.log(response);
         localStorage.setItem("isSubscribed", response.data.isSubscribed);
         dispatch(authActions.login());
         dispatch(authActions.changeRole(response.data.role));
+        dispatch(authActions.changeStatus(response.data.status));
+
         console.log(authActions.login());
 
         navigate("/");

@@ -7,6 +7,7 @@ import BooksContext from '../context/books';
 export default function AllBooks() {
   const { books, loading } = useContext(BooksContext);
   if (loading) return <Loader />;
+  useEffect(()=>{},[])
 
   return (
     <div className='d-flex flex-column align-items-center'>
