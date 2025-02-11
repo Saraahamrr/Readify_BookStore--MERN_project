@@ -6,7 +6,6 @@ export default function UserOrderHistory() {
   const [orderHistory, setOrderHistory] = useState(null);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< HEAD
    useEffect(() => {
       const fetchData = async () => {
          try {
@@ -26,22 +25,6 @@ export default function UserOrderHistory() {
          }
        };
        
-=======
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        axios.defaults.withCredentials = true;
-        const response = await axios.get(
-          "http://localhost:3000/api/order/get-order-history"
-        );
-        setOrderHistory(response.data.data);
-      } catch (error) {
-        console.log("Error fetching order history:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
->>>>>>> 78e5017aad79bf31c0f66b619a638c378e8111aa
 
     fetchData();
   }, []);
@@ -63,7 +46,6 @@ export default function UserOrderHistory() {
         </div>
       )}
 
-<<<<<<< HEAD
          {!loading && orderHistory?.length > 0 && (
             <div className="history-container">
                <h1 className="history-title">Your Order History</h1>
@@ -91,20 +73,4 @@ export default function UserOrderHistory() {
          )}
       </>
    );
-=======
-      {!loading && orderHistory?.length > 0 && (
-        <div className="history-container">
-          <h1 className="history-title">Your Order History</h1>
-          <ul className="order-list">
-            {orderHistory.map((order, index) => (
-              <li key={index} className="order-item">
-                Order ID: {order.id} - Total: ${order.total}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </>
-  );
->>>>>>> 78e5017aad79bf31c0f66b619a638c378e8111aa
 }

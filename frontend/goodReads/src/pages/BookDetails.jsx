@@ -86,16 +86,6 @@ export default function BookDetails() {
     }
 
     if (isLoggedIn && !isSubscribed) {
-      toast.success("Temporary alert make navigate in code", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-        transition: Bounce,
-      });
       //navigate("/payment");
       navigate("/subscription");
     }

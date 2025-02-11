@@ -8,28 +8,29 @@ import { toast } from "react-toastify";
 import { Bounce } from "react-toastify";
 
 const Cart = () => {
-  const [cart, setCart] = useState([]);
+  // const [cart, setCart] = useState([]);
   const navigate = useNavigate();
+  const {cart, fetchCart, setCart} = useCart();
 
   useEffect(() => {
-    const fetchCart = async () => {
-      axios.defaults.withCredentials = true;
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/cart/get-user-cart"
-        );
-        setCart(response.data.data);
+    // const fetchCart = async () => {
+    //   axios.defaults.withCredentials = true;
+    //   try {
+    //     const response = await axios.get(
+    //       "http://localhost:3000/api/cart/get-user-cart"
+    //     );
+    //     setCart(response.data.data);
 
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      }
-    };
+    //   } catch (error) {
+    //     console.error("Error fetching cart:", error);
+    //   }
+    // };
 
     fetchCart();
   }, []);
 
   // Calculate quantity dynamically
-  const quantities = cart.reduce((acc, item) => {
+  const quantities = cart?.reduce((acc, item) => {
     acc[item._id] = (acc[item._id] || 0) + 1;
     return acc;
   }, {});

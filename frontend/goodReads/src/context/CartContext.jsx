@@ -9,20 +9,20 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  const fetchCart = async () => {
+    axios.defaults.withCredentials = true;
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/cart/get-user-cart"
+      );
+      setCart(response.data.data);
+
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCart = async () => {
-      axios.defaults.withCredentials = true;
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/cart/get-user-cart"
-        );
-        setCart(response.data.data);
-
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      }
-    };
-
     fetchCart();
   }, []);
 
@@ -88,7 +88,7 @@ export const CartProvider = ({ children }) => {
 
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, fetchCart, setCart}}>
       {children}
     </CartContext.Provider>
   );

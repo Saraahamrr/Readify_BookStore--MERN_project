@@ -26,6 +26,7 @@ export default function Header() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navigate = useNavigate();
   const { favorites } = useFavorites();
+  
   const dispatch = useDispatch();
   const { cart } = useCart();
   const links = [
