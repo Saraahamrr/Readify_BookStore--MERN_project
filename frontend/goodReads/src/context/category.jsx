@@ -11,7 +11,10 @@ export function CategoryProvider({ children }) {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/categories");
-                setCategories(response.data.categories);
+                const sortedCategories = response.data.categories.sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                  );
+                setCategories(sortedCategories);
             } catch (error) {
                 console.error("Error fetching categories:", error);
             } finally {

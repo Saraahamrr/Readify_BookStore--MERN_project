@@ -13,8 +13,18 @@ export function AuthorsProvider({ children }) {
         const fetchAuthors = async () => {
             try {
                 const response = await axios.get("http://localhost:3000/api/authors");
-                setAuthors(response.data.authors);
-            } catch (error) {
+                console.log(response);
+                const sortedAuthors = response.data.authors.sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                  );
+              
+                setAuthors(
+                    sortedAuthors.map(author => ({
+                      ...author,
+                      dateOfBirth: author?.dateOfBirth?.split('T')[0]
+                    }))
+                  );           
+                } catch (error) {
                 console.error("Error fetching authors:", error);
             } finally {
                 setLoading(false);

@@ -24,7 +24,6 @@ export default function BookDetails() {
   const [newRating, setNewRating] = useState(0);
   const [newReview, setNewReview] = useState("");
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userId = useSelector((state) => state.auth.userId);
   const role = useSelector((state) => state.auth.role);
 
   const [isSubscribed, setIsSubscribed] = useState(

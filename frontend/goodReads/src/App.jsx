@@ -27,6 +27,7 @@ import AllOrders from "./pages/AllOrders";
 import PaymentPage from "./pages/checkout/PaymentPage";
 import PaymentSuccess from "./pages/checkout/PaymentSuccess";
 import CategoryResults from "./pages/CategoryResults";
+import UpdateAuthor from "./pages/UpdateAuthor";
 
 const Home = lazy(() => import("./pages/Home"));
 const AllBooks = lazy(() => import("./pages/AllBooks"));
@@ -117,6 +118,8 @@ function App() {
                   {isLoggedIn && role === "admin" && (
                     <>
                       <Route path="/update-book/:id" element={<UpdateBook />} />
+                      <Route path="/update-author/:id" element={<UpdateAuthor/>} />
+
                     </>
                   )}
                   <Route path="/search" element={<SearchResult />} />
