@@ -20,6 +20,10 @@ const user = new mongoose.Schema({
         type: String,
         required: true
     },
+    phone: {
+        type: String,
+        required: true
+    },
     avatar: {
         type: String,
         default: 'https://png.pngtree.com/png-vector/20231202/ourmid/pngtree-avatar-icon-personal-png-image_10852101.png'

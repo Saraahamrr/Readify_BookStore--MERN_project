@@ -25,6 +25,7 @@ export default function Signup() {
     username: "",
     email: "",
     password: "",
+    phone: "",
     address: "",
   });
   const [signinValues, setSigninValues] = useState({
@@ -39,6 +40,7 @@ export default function Signup() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 
     if (!values.username) errors.username = "Username is required";
     else if (/\s/.test(values.username))
@@ -55,6 +57,11 @@ export default function Signup() {
     if (!values.address) errors.address = "Address is required";
     else if (values.address.length < 10)
       errors.address = "Address must be at least 10 characters";
+    if (!values.phone) {
+      errors.phone = "Phone number is required";
+    } else if (!phoneRegex.test(values.phone)) {
+      errors.phone = "Invalid phone number format";
+    }
 
     return errors;
   };
@@ -130,6 +137,7 @@ export default function Signup() {
         username: "",
         email: "",
         password: "",
+        phone: "",
         address: "",
       });
     } else {
@@ -148,7 +156,7 @@ export default function Signup() {
           signinValues,
           { withCredentials: true }
         );
-        localStorage.setItem("isSubscribed",response.data.isSubscribed)
+        localStorage.setItem("isSubscribed", response.data.isSubscribed);
 
         toast.success(response.data.msg, toastOptions);
         if (response.data.status === "unauthorized") {
@@ -251,6 +259,17 @@ export default function Signup() {
                   />
                   {formErrors.email && (
                     <p className="error">{formErrors.email}</p>
+                  )}
+                  <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    value={signupValues.phone}
+                    onChange={handleChangeSignUp}
+                    required
+                  />
+                  {formErrors.phone && (
+                    <p className="error">{formErrors.phone}</p>
                   )}
                   <input
                     type="password"
