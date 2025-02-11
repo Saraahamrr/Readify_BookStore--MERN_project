@@ -15,7 +15,7 @@ const { stat } = require("fs");
 // localhost:3000/api/v1/sign-up
 router.post("/sign-up", async (req, res) => {
     try {
-        const { username, email, password, address } = req.body;
+        const { username, email, password, address ,phone } = req.body;
         //check if name is more than 4 characters
         if (username.length < 4) {
             return res
@@ -37,6 +37,13 @@ router.post("/sign-up", async (req, res) => {
                 .status(400)
                 .json({ msg: "Email already exists" });
         }
+        const phoneExists = await User.findOne({ phone: phone });
+        if (phoneExists) {
+            return res
+                .status(400)
+                .json({ msg: "Email already exists" });
+        }
+
         //check if password is more than 6 characters
         if (password.length < 6) {
             return res.status(400)
@@ -50,6 +57,7 @@ router.post("/sign-up", async (req, res) => {
         const newUser = new User({
             username: username,
             email: email,
+            phone : phone,
             address: address,
             password: hashedPassword
         });

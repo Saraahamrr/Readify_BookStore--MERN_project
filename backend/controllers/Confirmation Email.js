@@ -2,7 +2,7 @@ const express = require('express');
 const { sendEmail } = require('../config/nodemailer');
 const User = require('../models/user');
 
-const SendverifyEmail = async (req, res) => {
+const ConfirmationEmail = async (req, res) => {
     try {
         const { email } = req.body;
         const user = await User.findOne({ email });
@@ -13,21 +13,20 @@ const SendverifyEmail = async (req, res) => {
         if (user.status === "verified") {
             return res.status(400).json({ status: "error", msg: "Email is already verified" });
         }
-        const otp = String(Math.floor(Math.random()*900000+100000));
-        user.verifyOtp = otp;
-        user.verifyOtpExpires = Date.now() + 24*60*60*1000;
-        await user.save();
 
         const recipients = email;
-        const subject = `Welcome ${username} to Readify`;
-        const message = `Please Verify Your Email
-        Your OTP is ${otp}`;
+        const subject = `ThankYou ${username} for your order`;
+        const message = `
+        This is your order confirmation
+        ThankYou ${username} for your order,
+        Hope you enjoy your book
+        `;
         await sendEmail(recipients , subject , message);
-        res.status(200).json({ status: "success", msg: "OTP sent to your Email"} );
+        res.status(200).json({ status: "success", msg: "Confirmation order sent to your Email"} );
     } catch (error) {
         res.status(500).json({ status: "error", msg: error });
         console.log(error);
     }
 }
 
-module.exports = { SendverifyEmail };
+module.exports = { ConfirmationEmail };
