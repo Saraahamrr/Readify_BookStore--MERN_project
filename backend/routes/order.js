@@ -38,22 +38,32 @@ router.post('/place-order', authToken, async (req, res) => {
 
 //get order history of particular user
 router.get('/get-order-history', authToken, async (req, res) => {
-    try{
-        const id = req.body;
-        const userData = await User.findById(id).populate(
-           "Book").populate("orders");
+    try {
+        const userId = req.body.id; // استخدم req.body.id بدل req.body فقط
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
 
-        const ordersData = userData.orders.reverse();
+        const userData = await User.findById(userId)
+            .populate("orders");
+
+        if (!userData) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const ordersData = userData.orders.reverse() || [];
 
         return res.json({
             status: 'success',
             data: ordersData
         });
-    } catch(error){
-        console.log(error);
-        return res.status(500).json({message: 'an err occured'});
+
+    } catch (error) {
+        console.error("Error fetching order history:", error);
+        return res.status(500).json({ message: 'An error occurred' });
     }
 });
+
 
 //get all orders -- admin
 router.get('/get-all-orders', authToken, async (req, res) => {
