@@ -77,7 +77,6 @@ export default function Card({ book, author }) {
                     />
                   </button>
                 )}
-
                 <button
                   className="cart-button"
                   onClick={() => addToCart(book._id)}

@@ -1,59 +1,68 @@
 .checkout-container {
-    max-width: 900px;
-    margin-left: 450px;
-    padding: 20px;
-  }
+  display: flex;
+  flex-direction: column;
+  margin-top: 70px;
+  margin-bottom: 70px;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically (if height is defined) */
+}
+.checkoutHead{
+  align-self: center;
+  margin-bottom: 20px;
+}
+.checkout-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+}
+.order-summary{
+  width: 400px;
+  height: max-content;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.content-det{
+  color: gray;
+  font-weight: 500;
+}
+.amount, .order-details{
+  font-size: 17px;
+  font-weight: 900;
+}
 
-  .shipping{
-    font-size: 18px;
-  }
-  
-  .checkout-content {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .left-section {
-    width: 60%;
-    height: 100%;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .right-section {
-    width: 35%;
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .input-group {
-    display: flex;
-    gap: 10px;
-  }
-  
-  input, select {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-  }
-  
-  .continue-btn {
-    width: 100%;
-    padding: 12px;
-    background: #000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .summary-details, .cart-items {
-    margin-top: 20px;
-  }
+.left-section {
+  width: 100%; /* Full width */
+  max-width: 500px; /* Restrict width */
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 50px;
+  height: max-content;
+}
 
-  .checkout-form{
-    height: 100%;
-  }
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.pay-btn {
+  width: 100%;
+  padding: 12px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
