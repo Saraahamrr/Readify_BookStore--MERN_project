@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
     axios.defaults.withCredentials = true;
     try {
       const response = await axios.get(
-        "https://readify.railway.internal/api/cart/get-user-cart"
+        "https://readify-production.up.railway.app/api/cart/get-user-cart"
       );
       setCart(response.data.data);
 
@@ -30,7 +30,7 @@ export const CartProvider = ({ children }) => {
     axios.defaults.withCredentials = true;
     try {
       const response = await axios.put(
-        "https://readify.railway.internal/api/cart/add-to-cart",
+        "https://readify-production.up.railway.app/api/cart/add-to-cart",
         { bookid: bookId }, // Correctly send id & bookid in body
         {
           headers: {
@@ -65,7 +65,7 @@ export const CartProvider = ({ children }) => {
     axios.defaults.withCredentials = true;
     try {
       const response = await axios.put(
-        "https://readify.railway.internal/api/cart/remove-from-cart",
+        "https://readify-production.up.railway.app/api/cart/remove-from-cart",
         { bookid: bookId }, // Correctly send id & bookid in body
         {
           headers: {

@@ -99,7 +99,7 @@ export default function Signup() {
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.post(
-          "https://readify.railway.internal/api/sign-up",
+          "https://readify-production.up.railway.app/api/sign-up",
           signupValues
         );
         toast.success("User signed-up successfully", {
@@ -152,7 +152,7 @@ export default function Signup() {
     if (Object.keys(errors).length === 0) {
       try {
         const response = await axios.post(
-          "https://readify.railway.internal/api/sign-in",
+          "https://readify-production.up.railway.app/api/sign-in",
           signinValues,
           { withCredentials: true }
         );

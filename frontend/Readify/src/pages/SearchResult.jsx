@@ -12,7 +12,7 @@ export default function SearchPage() {
 
     if (query) {
       axios
-        .get(`https://readify.railway.internal/api/search?query=${query}`)
+        .get(`https://readify-production.up.railway.app/api/search?query=${query}`)
         .then((response) => {
           //console.log("API Response:", response.data);
           setBooks(response.data.results || []);

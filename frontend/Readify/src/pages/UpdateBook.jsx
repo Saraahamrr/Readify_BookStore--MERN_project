@@ -87,7 +87,7 @@ export default function UpdateBook() {
             try {
                 axios.defaults.withCredentials = true;
                 const response = await axios.patch(
-                    `https://readify.railway.internal/api/books/${id}`,
+                    `https://readify-production.up.railway.app/api/books/${id}`,
                     bookData,
 
                 );
@@ -186,7 +186,7 @@ export default function UpdateBook() {
         }
         try {
             const response = await axios.post(
-                "https://readify.railway.internal/api/categories",
+                "https://readify-production.up.railway.app/api/categories",
                 { name: newCategory }
             );
             if (response.status === 201) {
@@ -238,7 +238,7 @@ export default function UpdateBook() {
             console.log(newAuthor);
 
             const response = await axios.post(
-                "https://readify.railway.internal/api/authors",
+                "https://readify-production.up.railway.app/api/authors",
                 newAuthor
             );
             if (response.status === 201) {

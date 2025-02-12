@@ -18,7 +18,7 @@ export const FavoritesProvider = ({ children }) => {
     axios.defaults.withCredentials = true;
     try {
       const response = await axios.get(
-        "https://readify.railway.internal/api/get-favourite"
+        "https://readify-production.up.railway.app/api/get-favourite"
       );
       setFavorites(response.data.data || []);
     } catch (error) {
@@ -37,13 +37,13 @@ export const FavoritesProvider = ({ children }) => {
 
     try {
       if (favorites.some((book) => book._id === bookId)) {
-        await axios.delete("https://readify.railway.internal/api/remove-favourite", {
+        await axios.delete("https://readify-production.up.railway.app/api/remove-favourite", {
           headers: { bookid: bookId },
         });
         setFavorites((prev) => prev.filter((book) => book._id !== bookId));
         return false; // Book was removed
       } else {
-        await axios.put("https://readify.railway.internal/api/add-favourite", null, {
+        await axios.put("https://readify-production.up.railway.app/api/add-favourite", null, {
           headers: { bookid: bookId },
         });
         setFavorites((prev) => [...prev, { _id: bookId }]); // Assuming only _id is needed

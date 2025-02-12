@@ -97,7 +97,7 @@ if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
   //Step 1: Send Order to Backend
   const userId = localStorage.getItem("userId"); // Ensure user ID is stored when logging in
 
-  const response = await axios.post("https://readify.railway.internal/api/order/place-order", {
+  const response = await axios.post("https://readify-production.up.railway.app/api/order/place-order", {
     books: cart,
     totalPrice: totalPrice
   });
@@ -106,7 +106,7 @@ if (result.paymentIntent && result.paymentIntent.status === "succeeded") {
   
   const sendConfirmationEmail = async (email) => {
     try {
-      const response = await axios.post("https://readify.railway.internal/api/payment/send-confirm-email", {
+      const response = await axios.post("https://readify-production.up.railway.app/api/payment/send-confirm-email", {
         email: formData.email
       });
   

@@ -17,7 +17,7 @@ const Cart = () => {
     //   axios.defaults.withCredentials = true;
     //   try {
     //     const response = await axios.get(
-    //       "https://readify.railway.internal/api/cart/get-user-cart"
+    //       "https://readify-production.up.railway.app/api/cart/get-user-cart"
     //     );
     //     setCart(response.data.data);
 
@@ -38,7 +38,7 @@ const Cart = () => {
 const removeItem = async (bookId) => {
   axios.defaults.withCredentials = true;
   try {
-    await axios.put("https://readify.railway.internal/api/cart/remove-from-cart", { bookid: bookId });
+    await axios.put("https://readify-production.up.railway.app/api/cart/remove-from-cart", { bookid: bookId });
     setCart((prevCart) => prevCart.filter((book) => book._id !== bookId));
 
     toast.info("Book removed from cart", {
@@ -70,7 +70,7 @@ const removeItem = async (bookId) => {
 //         console.log("Removing book with ID:", bookId); // Debugging
 
 //         const response = await axios.put(
-//             "https://readify.railway.internal/api/cart/remove-from-cart",
+//             "https://readify-production.up.railway.app/api/cart/remove-from-cart",
 //             { bookid: bookId },
 //             {
 //                 headers: {
@@ -101,7 +101,7 @@ const updateQuantity = async (_id, newQuantity) => {
   try {
       axios.defaults.withCredentials = true;
       const response = await axios.put(
-          "https://readify.railway.internal/api/cart/update-cart-quantity",
+          "https://readify-production.up.railway.app/api/cart/update-cart-quantity",
           { bookid: _id, quantity: newQuantity },
           {
               headers: {

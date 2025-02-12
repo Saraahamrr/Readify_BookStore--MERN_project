@@ -16,7 +16,7 @@ const deleteBook = async (bookId, setBooks,fetchBooks) => {
   try {
     axios.defaults.withCredentials = true;
     const response = await axios.delete(
-      `https://readify.railway.internal/api/books/${bookId}`
+      `https://readify-production.up.railway.app/api/books/${bookId}`
     );
     console.log(response); // Debugging
     if (response.status === 200) {

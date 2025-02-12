@@ -12,7 +12,7 @@ export default function UserOrderHistory() {
            axios.defaults.withCredentials = true;
            const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
        
-           const response = await axios.get("https://readify.railway.internal/api/order/get-order-history", {
+           const response = await axios.get("https://readify-production.up.railway.app/api/order/get-order-history", {
              body: { id: userId } // Send user ID in headers
            });
        

@@ -47,7 +47,7 @@ export default function Header() {
   const handleSignout = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("httpss://readify.railway.internal/api/sign-out");
+      const response = await axios.post("https://readify-production.up.railway.app/api/sign-out");
       toast.success(response.data.msg, {
         position: "top-right",
         autoClose: 5000,

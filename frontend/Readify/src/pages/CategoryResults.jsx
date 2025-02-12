@@ -16,7 +16,7 @@ export default function CategoryResults() {
     const fetchBooks = async () => {
       try {
         const response = await axios.get(
-          `httpss://readify.railway.internal/api/categories/${categoryId}/books`
+          `https://readify-production.up.railway.app/api/categories/${categoryId}/books`
         );
 
         if (response.data?.books) {

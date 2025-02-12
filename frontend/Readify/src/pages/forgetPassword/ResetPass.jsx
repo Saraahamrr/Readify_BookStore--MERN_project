@@ -78,7 +78,7 @@ export default function Signup() {
       try {
         console.log(OTPValues.email);
         const response = await axios.post(
-          "https://readify.railway.internal/api/reset-password",
+          "https://readify-production.up.railway.app/api/reset-password",
           {
             email: OTPValues.email,
             otp: OTPValues.OTP,
@@ -141,7 +141,7 @@ export default function Signup() {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
-          "https://readify.railway.internal/api/sign-in",
+          "https://readify-production.up.railway.app/api/sign-in",
           signinValues,
           { withCredentials: true }
         );

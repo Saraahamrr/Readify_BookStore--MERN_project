@@ -66,7 +66,7 @@ export default function Signup() {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
-          "https://readify.railway.internal/api/forget-password",
+          "https://readify-production.up.railway.app/api/forget-password",
           { email: emailValues.email },
           { withCredentials: true }
         );
@@ -121,7 +121,7 @@ export default function Signup() {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
-          "https://readify.railway.internal/api/sign-in",
+          "https://readify-production.up.railway.app/api/sign-in",
           signinValues,
           { withCredentials: true }
         );

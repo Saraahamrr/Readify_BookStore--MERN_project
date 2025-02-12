@@ -48,7 +48,7 @@ export default function BookDetails() {
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.get(
-          `https://readify.railway.internal/api/books/${id}`
+          `https://readify-production.up.railway.app/api/books/${id}`
         );
         setBook(response.data.book);
       } catch (error) {
@@ -104,7 +104,7 @@ export default function BookDetails() {
     try {
       axios.defaults.withCredentials = true;
       const response = await axios.delete(
-        `https://readify.railway.internal/api/books/${bookId}`
+        `https://readify-production.up.railway.app/api/books/${bookId}`
       );
       if (response.status === 200) {
         toast.success(response.data.msg, {
@@ -139,7 +139,7 @@ export default function BookDetails() {
   const handleAddReview = async () => {
     try {
       axios.defaults.withCredentials = true;
-      await axios.post(`https://readify.railway.internal/api/books/${id}/rate`, {
+      await axios.post(`https://readify-production.up.railway.app/api/books/${id}/rate`, {
         ratingValue: newRating,
         review: newReview,
       });

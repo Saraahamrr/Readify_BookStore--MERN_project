@@ -35,7 +35,7 @@ export default function ReadBook() {
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.get(
-          `https://readify.railway.internal/api/books/${id}`
+          `https://readify-production.up.railway.app/api/books/${id}`
         );
         setBook(response.data.book);
       } catch (error) {

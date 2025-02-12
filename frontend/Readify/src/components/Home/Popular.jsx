@@ -10,7 +10,7 @@ export default function Popular() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("https://readify.railway.internal/api/books");
+                const response = await axios.get("https://readify-production.up.railway.app/api/books");
                 setData(response.data.books); 
             } catch (error) {
                 console.error("Error fetching books:", error);

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "https://readify.railway.internal/api" });
+const API = axios.create({ baseURL: "https://readify-production.up.railway.app/api" });
 
 export const createPayment = (data) => API.post("/payment/create-payment", data);
 

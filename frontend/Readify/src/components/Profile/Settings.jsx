@@ -13,7 +13,7 @@ export default function Settings() {
   useEffect(() => {
     const fetchProfile = async () => {
       axios.defaults.withCredentials = true;
-      const response = await axios.get("https://readify.railway.internal/api/user-info");
+      const response = await axios.get("https://readify-production.up.railway.app/api/user-info");
       setProfileData(response.data);
       setValue({ address: response.data.address });
     };
@@ -26,7 +26,7 @@ export default function Settings() {
   }
   const submitِِAddress = async ()=>{
     axios.defaults.withCredentials = true;
-    const response = await axios.put("https://readify.railway.internal/api/update-user-info",Value);
+    const response = await axios.put("https://readify-production.up.railway.app/api/update-user-info",Value);
     if (response.status === 200){
         toast.success(response.data.msg, {
             position: "top-right",

@@ -21,7 +21,7 @@ export default function Sidebar(props) {
   const handleSignout = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://readify.railway.internal/api/sign-out");
+      const response = await axios.post("https://readify-production.up.railway.app/api/sign-out");
       toast.success(response.data.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -55,7 +55,7 @@ export default function Sidebar(props) {
   //   e.preventDefault();
   //   try {
   //     const response = await axios.post(
-  //       "https://readify.railway.internal/api/send-verify-email"
+  //       "https://readify-production.up.railway.app/api/send-verify-email"
   //     );
   //     toast.success(response.data.msg, {
   //       position: "top-right",

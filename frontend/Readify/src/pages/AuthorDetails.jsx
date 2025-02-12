@@ -25,7 +25,7 @@ export default function AuthorDetails() {
     const navigate = useNavigate();
     const { authors, setAuthors,fetchAuthors } = useContext(AuthorsContext);
     useEffect(() => {
-        axios.get(`https://readify.railway.internal/api/authors/${id}`)
+        axios.get(`https://readify-production.up.railway.app/api/authors/${id}`)
             .then((res) => {
                 console.log("API Response:", res.data);
                 setAuthor(res.data.author);
@@ -47,7 +47,7 @@ export default function AuthorDetails() {
         try {
           axios.defaults.withCredentials = true;
           const response = await axios.delete(
-            `https://readify.railway.internal/api/authors/${id}`
+            `https://readify-production.up.railway.app/api/authors/${id}`
           );
           console.log(response);
           

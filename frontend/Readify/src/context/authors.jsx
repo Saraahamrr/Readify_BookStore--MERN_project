@@ -10,7 +10,7 @@ export function AuthorsProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const fetchAuthors = async () => {
         try {
-            const response = await axios.get("https://readify.railway.internal/api/authors");
+            const response = await axios.get("https://readify-production.up.railway.app/api/authors");
             console.log(response);
             const sortedAuthors = response.data.authors.sort((a, b) =>
                 a.name.localeCompare(b.name)

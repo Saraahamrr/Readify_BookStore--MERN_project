@@ -10,11 +10,16 @@ const [columnClass, setColumnClass] = useState("col-12 col-5 col-md-5");
 
   useEffect(() => {
     const fetch = async () => {
-      axios.defaults.withCredentials = true;
+          try {
+            axios.defaults.withCredentials = true;
 
-      const response = await axios.get("https://readify.railway.internal/api/user-info"
-      );
-      setProfile(response.data);
+            const response = await axios.get("https://readify-production.up.railway.app/api/user-info");
+            setProfile(response.data);
+
+          } catch (error) {
+            console.log(error);
+            
+          }
       
 
     }

@@ -11,7 +11,7 @@ export default function AllOrders() {
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.get(
-          "https://readify.railway.internal/api/order/get-all-orders"
+          "https://readify-production.up.railway.app/api/order/get-all-orders"
         );
         setAllOrders(response.data.data);
       } catch (error) {
@@ -26,7 +26,7 @@ export default function AllOrders() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const response = await axios.put(`https://readify.railway.internal/api/order/update-status/${orderId}`, {
+      const response = await axios.put(`https://readify-production.up.railway.app/api/order/update-status/${orderId}`, {
         status: newStatus,
       });
 

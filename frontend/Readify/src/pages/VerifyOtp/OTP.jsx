@@ -76,7 +76,7 @@ export default function Signup() {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
-          "https://readify.railway.internal/api/verify-otp",
+          "https://readify-production.up.railway.app/api/verify-otp",
           {
             otp: OTPValues.OTP,
           },
@@ -121,7 +121,7 @@ export default function Signup() {
       setIsSubmitted(true);
       try {
         const response = await axios.post(
-          "https://readify.railway.internal/api/sign-in",
+          "https://readify-production.up.railway.app/api/sign-in",
           signinValues,
           { withCredentials: true }
         );

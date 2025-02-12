@@ -8,7 +8,7 @@ export function CategoryProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const fetchCategories = async () => {
         try {
-            const response = await axios.get("https://readify.railway.internal/api/categories");
+            const response = await axios.get("https://readify-production.up.railway.app/api/categories");
             const sortedCategories = response.data.categories.sort((a, b) =>
                 a.name.localeCompare(b.name)
               );

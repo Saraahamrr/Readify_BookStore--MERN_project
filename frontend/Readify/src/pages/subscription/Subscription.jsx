@@ -43,7 +43,7 @@ const CheckoutForm = () => {
   const sendConfirmationEmail = async (email) => {
     try {
       const response = await axios.post(
-        "https://readify.railway.internal/api/payment/send-confirm-email",
+        "https://readify-production.up.railway.app/api/payment/send-confirm-email",
         {
           email,
         }
@@ -101,7 +101,7 @@ const CheckoutForm = () => {
         const userId = localStorage.getItem("userId");
 
         try {
-          const response = await axios.post("https://readify.railway.internal/api/order/subscribe", {
+          const response = await axios.post("https://readify-production.up.railway.app/api/order/subscribe", {
             userId,
           });
 

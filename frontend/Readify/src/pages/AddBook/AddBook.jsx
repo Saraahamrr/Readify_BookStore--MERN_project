@@ -15,8 +15,8 @@ import CategoryContext from "../../context/category";
 export const fetchData = async (setCategories, setAuthors) => {
   try {
     const [responseCat, responseAuthors] = await Promise.all([
-      axios.get("https://readify.railway.internal/api/categories"),
-      axios.get("https://readify.railway.internal/api/authors"),
+      axios.get("https://readify-production.up.railway.app/api/categories"),
+      axios.get("https://readify-production.up.railway.app/api/authors"),
     ]);
     const sortedCategories = responseCat.data.categories.sort((a, b) =>
       a.name.localeCompare(b.name)
@@ -95,7 +95,7 @@ const AddBook = () => {
       try {
         axios.defaults.withCredentials = true;
         const response = await axios.post(
-          "https://readify.railway.internal/api/books",
+          "https://readify-production.up.railway.app/api/books",
           bookData
         );
         console.log(response);
@@ -165,7 +165,7 @@ const AddBook = () => {
     }
     try {
       const response = await axios.post(
-        "https://readify.railway.internal/api/categories",
+        "https://readify-production.up.railway.app/api/categories",
         { name: newCategory }
       );
       if (response.status === 201) {
@@ -218,7 +218,7 @@ const AddBook = () => {
       console.log(newAuthor);
 
       const response = await axios.post(
-        "https://readify.railway.internal/api/authors",
+        "https://readify-production.up.railway.app/api/authors",
         newAuthor
       );
       if (response.status === 201) {
